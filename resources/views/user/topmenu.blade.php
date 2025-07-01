@@ -32,7 +32,7 @@ if (Auth::user()->dashboard_style == "light") {
 
     <!-- Navbar Header -->
     <nav class="navbar navbar-header navbar-expand-lg" data-background-color="{{$bgmenu}}">
-        
+
         <div class="container-fluid">
             <div class="text-center d-md-block d-none">
                 <a href="{{route('payment.form')}}" class="pricing-action btn btn-warning btn-sm">Fund your Account</a> &nbsp;
@@ -40,28 +40,28 @@ if (Auth::user()->dashboard_style == "light") {
                 {{-- <a href="{{route('withdrawalsdeposits')}}" class="rounded btn btn-info btn-sm">Buy a Plan</a> --}}
             </div>
             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-               
-                <li class="nav-item hidden-caret">
-                    <form action="javascript:void(0)" method="post" id="styleform" class="form-inline">
-                       
-                        <div class="form-group">
-                            <label class="style_switch">
-                                <input name="style" id="style" type="checkbox" value="true" class="modes">
-                                <span class="slider round"></span>
-                            </label>
-                        </div> 
-                        @if(Auth::user()->dashboard_style =='dark')
-                        <script>document.getElementById("style").checked= true;</script>
-                        @endif
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    </form>
-                </li>
+
+{{--                <li class="nav-item hidden-caret">--}}
+{{--                    <form action="javascript:void(0)" method="post" id="styleform" class="form-inline">--}}
+{{--                       --}}
+{{--                        <div class="form-group">--}}
+{{--                            <label class="style_switch">--}}
+{{--                                <input name="style" id="style" type="checkbox" value="true" class="modes">--}}
+{{--                                <span class="slider round"></span>--}}
+{{--                            </label>--}}
+{{--                        </div> --}}
+{{--                        @if(Auth::user()->dashboard_style =='dark')--}}
+{{--                        <script>document.getElementById("style").checked= true;</script>--}}
+{{--                        @endif--}}
+{{--                        <input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
+{{--                    </form>--}}
+{{--                </li>--}}
                 @if($settings->google_translate =='on')
                 <li class="nav-item hidden-caret">
                     <div id="google_translate_element"></div>
                 </li>
                 @endif
-               
+
                 @if($settings->enable_kyc =="yes")
                 <li class="nav-item dropdown hidden-caret">
                     <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
@@ -70,7 +70,7 @@ if (Auth::user()->dashboard_style == "light") {
                     <div class="dropdown-menu quick-actions quick-actions-info animated fadeIn">
                         <div class="quick-actions-header">
                             <span class="mb-1 title">KYC verification</span>
-                            @if(Auth::user()->account_verify == 'Verified')	
+                            @if(Auth::user()->account_verify == 'Verified')
                             <span class="subtitle op-8">
                              <a href="#" class="p-0 col-12" ><i class="glyphicon glyphicon-ok"></i> KYC status: Account verified</a>
                             </span>
@@ -118,7 +118,7 @@ if (Auth::user()->dashboard_style == "light") {
                                     </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     {{ csrf_field() }}
-                                </form> 
+                                </form>
                             </li>
                         </div>
                     </ul>
@@ -144,5 +144,5 @@ if (Auth::user()->dashboard_style == "light") {
 
         });
     });
-    
+
 </script>

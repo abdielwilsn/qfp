@@ -19,7 +19,7 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{$settings->site_name}} | {{$title}}</title>
     <link rel="icon" href="{{ asset('storage/app/public/photos/'.$settings->favicon)}}" type="image/png"/>
-	
+
 	@section('styles')
 			<!-- Fonts and icons -->
 		<script src="{{asset('dash/js/plugin/webfont/webfont.min.js')}}"></script>
@@ -36,8 +36,8 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.21/af-2.3.5/b-1.6.3/b-flash-1.6.3/b-html5-1.6.3/b-print-1.6.3/r-2.2.5/datatables.min.css"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>		
-			
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
 		<!-- Bootstrap Notify -->
 		<script src="{{ asset('dash/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}} "></script>
 		<script src="{{ asset('dash/js/plugin/sweetalert/sweetalert.min.js')}} "></script>
@@ -50,20 +50,20 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
             // Add your client ID and secret
             var PAYPAL_CLIENT = '{{$settings->pp_ci}}';
             var PAYPAL_SECRET = '{{$settings->pp_cs}}';
-            
+
             // Point your server to the PayPal API
             var PAYPAL_ORDER_API = 'https://api.paypal.com/v2/checkout/orders/';
         </script>
         <script src="https://www.paypal.com/sdk/js?client-id={{$settings->pp_ci}}"></script>
 	@show
-	
+
 </head>
 <body  style="background:url(https://metacryptofx.com/images/auth.jpg) !important">
-    <div id="google_translate_element"></div>
+{{--    <div id="google_translate_element"></div>--}}
     <div id="app">
-        
+
         <!--/PayPal-->
-            
+
         <!--Start of Tawk.to Script-->
         <script type="text/javascript">
         {{!! $settings->tawk_to !!}}
@@ -89,7 +89,7 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 		<script src="{{ asset('dash/js/core/popper.min.js')}}"></script>
 		<script src="{{ asset('dash/js/core/bootstrap.min.js')}} "></script>
 		<script src="{{ asset('dash/js/customs.js')}}"></script>
-		
+
 		<!-- jQuery UI -->
 		<script src="{{ asset('dash/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
 		<script src="{{ asset('dash/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
@@ -104,7 +104,7 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 		<script src="{{ asset('dash/js/plugin/sweetalert/sweetalert.min.js')}} "></script>
 		<!-- Bootstrap Notify -->
 		<script src="{{ asset('dash/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}} "></script>
-		
+
 		<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.21/af-2.3.5/b-1.6.3/b-flash-1.6.3/b-html5-1.6.3/b-print-1.6.3/r-2.2.5/datatables.min.js"></script>
 
 		<script src="{{asset('dash/js/atlantis.min.js')}}"></script>
@@ -118,9 +118,9 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 		</script>
 
 		<script type="text/javascript">
-			var badWords = [ 
+			var badWords = [
 				'<!--Start of Tawk.to Script-->',
-				'<script type="text/javascript">', 
+				'<script type="text/javascript">',
 				'<!--End of Tawk.to Script-->'
 						];
 			$(':input').on('blur', function(){
@@ -138,10 +138,10 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 					dom: 'Bfrtip',
 					buttons: [
 					'copy', 'csv', 'print', 'excel','pdf'
-				] 
+				]
 				});
 
-				
+
 				$(".dataTables_length select").addClass("bg-{{$bg}} text-{{$text}}");
 				$(".dataTables_filter input").addClass("bg-{{$bg}} text-{{$text}}");
 			} );
@@ -158,7 +158,7 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 		@stack('modals')
 		@livewireScripts
 	@show
-    
+
 </body>
 </html>
 

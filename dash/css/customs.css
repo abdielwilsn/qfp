@@ -288,6 +288,7 @@ input:checked+.s_slider:before {
 
 .slider.round {
     border-radius: 34px;
+    /*display: none;*/
 }
 
 .slider.round:before {

@@ -47,126 +47,124 @@ if (Auth::user()->dashboard_style == "light") {
                     </div>
                     <x-danger-alert/>
 					<x-success-alert/>
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="p-3 card bg-{{$bg}} shadow">
-                                <div class="d-flex align-items-center">
-                                    <span class="mr-3 stamp stamp-md bg-secondary">
-                                        <i class="fa fa-dollar-sign"></i>
-                                    </span>
-                                    <div>
-                                        <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format(Auth::user()->account_bal, 2, '.', ',')}}</b></h5>
-                                        <small class="text-muted">Account Balance</small>
-                                    </div>
-                                </div>
-                            </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="row justify-content-center mb-4">
+                        <div class="col-auto">
+                            <a href="{{route('payment.form')}}" class="btn btn-{{$bg == 'light' ? 'primary' : 'light'}} d-flex flex-column align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; text-decoration: none;">
+                                <i class="fa fa-download mb-1" style="font-size: 24px;"></i>
+                                <small class="text-center" style="font-size: 11px; line-height: 1.1;">Deposit</small>
+                            </a>
                         </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="p-3 card bg-{{$bg}} shadow">
-                                <div class="d-flex align-items-center">
-                                    <span class="mr-3 stamp stamp-md bg-success">
-                                        <i class="fa fa-coins"></i>
-                                    </span>
-                                    <div>
-                                        <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format(Auth::user()->roi, 2, '.', ',')}}</b></h5>
-                                        <small class="text-muted text-{{$text}}">Total Profit</small>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-auto mx-3">
+                            <a href="{{route('withdrawalsdeposits')}}" class="btn btn-{{$bg == 'light' ? 'secondary' : 'outline-light'}} d-flex flex-column align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; text-decoration: none;">
+                                <i class="fa fa-arrow-up mb-1" style="font-size: 24px;"></i>
+                                <small class="text-center" style="font-size: 11px; line-height: 1.1;">Withdraw</small>
+                            </a>
                         </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="p-3 card bg-{{$bg}} shadow">
-                                <div class="d-flex align-items-center">
-                                    <span class="mr-3 stamp stamp-md bg-secondary">
-                                        <i class="fa fa-gift"></i>
-                                    </span>
-                                    <div>
-                                        <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format(Auth::user()->bonus, 2, '.', ',')}}</b></h5>
-                                        <small class="text-muted text-{{$text}}">Total Bonus</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="p-3 card bg-{{$bg}} shadow">
-                                <div class="d-flex align-items-center">
-                                    <span class="mr-3 stamp stamp-md bg-info">
-                                        <i class="fa fa-retweet"></i>
-                                    </span>
-                                    <div>
-                                        <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format(Auth::user()->ref_bonus, 2, '.', ',')}}</b></h5>
-                                        <small class="text-muted text-{{$text}}">Total Referral Bonus</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="p-3 card bg-{{$bg}} shadow">
-                                <div class="d-flex align-items-center">
-                                    <span class="mr-3 stamp stamp-md bg-danger">
-                                        <i class="fa fa-envelope"></i>
-                                    </span>
-                                    <div>
-                                        <h5 class="mb-1 text-{{$text}}"><b>{{$user_plan->count()}}</b></h5>
-                                        <small class="text-muted text-{{$text}}">Total Investment Plans</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="p-3 card bg-{{$bg}} shadow">
-                                <div class="d-flex align-items-center">
-                                    <span class="mr-3 stamp stamp-md bg-success">
-                                        <i class="fa fa-envelope-open"></i>
-                                    </span>
-                                    <div>
-                                        <h5 class="mb-1 text-{{$text}}"><b>{{$user_plan_active->count()}}</b></h5>
-                                        <small class="text-muted text-{{$text}}">Total Active Investment Plans</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="p-3 card bg-{{$bg}} shadow">
-                                <div class="d-flex align-items-center">
-                                    <span class="mr-3 stamp stamp-md bg-warning">
-                                        <i class="fa fa-download"></i>
-                                    </span>
-                                    <div>
-                                        @foreach($deposited as $deposited)
-                                            @if(!empty($deposited->count))
-                                            <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format($deposited->count, 2, '.', ',')}}</b></h5>
-                                            @else
-                                            <h5 class="mb-1 text-{{$text}}">{{$settings->currency}}0.00</h5> 
-                                            @endif
-                                        @endforeach
-                                        
-                                        <small class="text-muted text-{{$text}}">Total Deposit</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="p-3 card bg-{{$bg}} shadow">
-                                <div class="d-flex align-items-center">
-                                    <span class="mr-3 stamp stamp-md bg-danger">
-                                        <i class="fa fa-arrow-alt-circle-up"></i>
-                                    </span>
-                                    <div>
-                                        @foreach($deposited as $deposited)
-                                            @if(!empty($deposited->count))
-                                            <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format($deposited->count, 2, '.', ',')}}</b></h5>
-                                            @else
-                                            <h5 class="mb-1 text-{{$text}}">{{$settings->currency}}0.00</h5> 
-                                            @endif
-                                        @endforeach
-                                        
-                                        <small class="text-muted text-{{$text}}">Total Withdrawals</small>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-auto">
+                            <a href="{{route('withdrawalsdeposits')}}" class="btn btn-{{$bg == 'light' ? 'success' : 'outline-success'}} d-flex flex-column align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; text-decoration: none;">
+                                <i class="fa fa-chart-line mb-1" style="font-size: 24px;"></i>
+                                <small class="text-center" style="font-size: 11px; line-height: 1.1;">Trade</small>
+                            </a>
                         </div>
                     </div>
+
+<div class="row">
+    <!-- Account Balance -->
+    <div class="col-6 col-sm-6 col-lg-3 mb-3">
+        <div class="p-3 card bg-{{$bg}} shadow h-100">
+            <div class="d-flex align-items-center h-100">
+                <span class="mr-3 stamp stamp-md bg-secondary">
+                    <i class="fa fa-dollar-sign"></i>
+                </span>
+                <div>
+                    <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format(Auth::user()->account_bal, 2, '.', ',')}}</b></h5>
+                    <small class="text-muted">Account Balance</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Profit -->
+    <div class="col-6 col-sm-6 col-lg-3 mb-3">
+        <div class="p-3 card bg-{{$bg}} shadow h-100">
+            <div class="d-flex align-items-center h-100">
+                <span class="mr-3 stamp stamp-md bg-success">
+                    <i class="fa fa-coins"></i>
+                </span>
+                <div>
+                    <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format(Auth::user()->roi, 2, '.', ',')}}</b></h5>
+                    <small class="text-muted text-{{$text}}">Total Profit</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Bonus -->
+    
+
+    <!-- Total Referral Bonus -->
+    {{-- <div class="col-6 col-sm-6 col-lg-3 mb-3">
+        <div class="p-3 card bg-{{$bg}} shadow h-100">
+            <div class="d-flex align-items-center h-100">
+                <span class="mr-3 stamp stamp-md bg-info">
+                    <i class="fa fa-retweet"></i>
+                </span>
+                <div>
+                    <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format(Auth::user()->ref_bonus, 2, '.', ',')}}</b></h5>
+                    <small class="text-muted text-{{$text}}">Total Referral Bonus</small>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+
+    <!-- Total Investment Plans -->
+    
+    <!-- Total Active Investment Plans -->
+    
+    <!-- Total Deposit -->
+    <div class="col-6 col-sm-6 col-lg-3 mb-3">
+        <div class="p-3 card bg-{{$bg}} shadow h-100">
+            <div class="d-flex align-items-center h-100">
+                <span class="mr-3 stamp stamp-md bg-warning">
+                    <i class="fa fa-download"></i>
+                </span>
+                <div>
+                    @foreach($deposited as $deposited)
+                        @if(!empty($deposited->count))
+                        <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format($deposited->count, 2, '.', ',')}}</b></h5>
+                        @else
+                        <h5 class="mb-1 text-{{$text}}">{{$settings->currency}}0.00</h5> 
+                        @endif
+                    @endforeach
+                    <small class="text-muted text-{{$text}}">Total Deposit</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Withdrawals -->
+    <div class="col-6 col-sm-6 col-lg-3 mb-3">
+        <div class="p-3 card bg-{{$bg}} shadow h-100">
+            <div class="d-flex align-items-center h-100">
+                <span class="mr-3 stamp stamp-md bg-danger">
+                    <i class="fa fa-arrow-alt-circle-up"></i>
+                </span>
+                <div>
+                    @foreach($deposited as $deposited)
+                        @if(!empty($deposited->count))
+                        <h5 class="mb-1 text-{{$text}}"><b>{{$settings->currency}}{{ number_format($deposited->count, 2, '.', ',')}}</b></h5>
+                        @else
+                        <h5 class="mb-1 text-{{$text}}">{{$settings->currency}}0.00</h5> 
+                        @endif
+                    @endforeach
+                    <small class="text-muted text-{{$text}}">Total Withdrawals</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                     
                     <div class="row">
                         <div class="pt-1 col-12">
@@ -177,5 +175,3 @@ if (Auth::user()->dashboard_style == "light") {
                 <!-- end of chart -->
             </div>
     @endsection
-   
-    

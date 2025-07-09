@@ -34,11 +34,11 @@ if (Auth::user()->dashboard_style == "light") {
     <nav class="navbar navbar-header navbar-expand-lg" data-background-color="{{$bgmenu}}">
 
         <div class="container-fluid">
-            <div class="text-center d-md-block d-none">
+            {{-- <div class="text-center d-md-block d-none">
                 <a href="{{route('payment.form')}}" class="pricing-action btn btn-warning btn-sm">Fund your Account</a> &nbsp;
                 <a href="{{route('withdrawalsdeposits')}}" class="pricing-action btn btn-danger btn-sm">Withdraw Funds</a>
                 {{-- <a href="{{route('withdrawalsdeposits')}}" class="rounded btn btn-info btn-sm">Buy a Plan</a> --}}
-            </div>
+            {{-- </div> --}}
             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 
 {{--                <li class="nav-item hidden-caret">--}}

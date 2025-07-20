@@ -14,7 +14,7 @@
         "bitpay/sdk": "^5.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
+        "guzzlehttp/guzzle": "^7.9",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^8.12",
         "laravel/jetstream": "^2.2",

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Settings;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TradeController;
+use App\Http\Controllers\CryptoPaymentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,14 +20,21 @@ require __DIR__.'/admin.php';
 require __DIR__.'/user.php';
 
 
-Route::group(['prefix' => 'payment'], function () {
-    Route::get('/', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
-    Route::post('/create', [PaymentController::class, 'createPayment'])->name('payment.create');
-    Route::get('/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
-    Route::get('/cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
-    Route::get('/partial/{order_id}', [PaymentController::class, 'paymentPartial'])->name('payment.partial');
-    Route::post('/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook');
-});
+// Route::group(['prefix' => 'payment'], function () {
+    // Route::get('/', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
+//     Route::post('/create', [PaymentController::class, 'createPayment'])->name('payment.create');
+//     Route::get('/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+//     Route::get('/cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
+//     Route::get('/partial/{order_id}', [PaymentController::class, 'paymentPartial'])->name('payment.partial');
+//     Route::post('/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook');
+// });
+
+Route::get('/payment', function () {
+    return view('payment.form');
+})->middleware('auth')->name('payment.form'); 
+
+Route::post('/crypto-pay', [CryptoPaymentController::class, 'create'])->name('crypto.create');
+Route::post('/crypto-callback', [CryptoPaymentController::class, 'callback'])->name('crypto.callback');
 
 // Route::get('/trade', [TradeController::class, 'index'])->name('trade');
 // Route::post('/trade/execute', [TradeController::class, 'executomoyemi760e'])->name('trade.execute');

@@ -24,6 +24,12 @@ return [
         'token' => env('POSTMARK_TOKEN'),
     ],
 
+    'nowpayments' => [
+    'api_key' => env('NOWPAYMENTS_API_KEY'),
+    'base_url' => env('NOWPAYMENTS_API_BASE', 'https://api.nowpayments.io/v1'),
+    ],
+
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),

@@ -6,24 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateActivitiesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('activities', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->bigIncrements('id');
+            $table->integer('user')->nullable();
+            $table->string('ip_address', 255)->nullable();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->string('device', 255)->nullable();
+            $table->string('browser', 255)->nullable();
+            $table->string('os', 255)->nullable();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('activities');

@@ -6,25 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateIpaddressesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('ipaddresses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('ipaddress');
+            $table->string('ipaddress', 255);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('ipaddresses');

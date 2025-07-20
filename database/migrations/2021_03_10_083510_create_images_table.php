@@ -6,28 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateImagesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('images', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('ref_key')->nullable();
-            $table->string('title')->nullable();
-            $table->text('description')->nullable();
-            $table->string('img_path')->nullable();
-            $table->timestamps();
+            $table->increments('id');
+            $table->string('ref_key', 255);
+            $table->string('title', 255);
+            $table->text('description');
+            $table->string('img_path', 255);
+            $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('images');

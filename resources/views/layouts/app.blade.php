@@ -46,7 +46,7 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 		@livewireStyles
 
 		 <!--PayPal-->
-		 <script>
+		 {{-- <script>
             // Add your client ID and secret
             var PAYPAL_CLIENT = '{{$settings->pp_ci}}';
             var PAYPAL_SECRET = '{{$settings->pp_cs}}';
@@ -54,7 +54,7 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
             // Point your server to the PayPal API
             var PAYPAL_ORDER_API = 'https://api.paypal.com/v2/checkout/orders/';
         </script>
-        <script src="https://www.paypal.com/sdk/js?client-id={{$settings->pp_ci}}"></script>
+        <script src="https://www.paypal.com/sdk/js?client-id={{$settings->pp_ci}}"></script> --}}
 	@show
 
 </head>
@@ -65,9 +65,9 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
         <!--/PayPal-->
 
         <!--Start of Tawk.to Script-->
-        <script type="text/javascript">
+        {{-- <script type="text/javascript">
         {{!! $settings->tawk_to !!}}
-        </script>
+        </script> --}}
         <!--End of Tawk.to Script-->
 		<div class="wrapper">
 			@yield('content')
@@ -156,6 +156,7 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 			} );
 		</script>
 		@stack('modals')
+		@stack('scripts')
 		@livewireScripts
 	@show
 

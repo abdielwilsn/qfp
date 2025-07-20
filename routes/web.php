@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\Settings;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TradeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,6 +27,20 @@ Route::group(['prefix' => 'payment'], function () {
     Route::get('/partial/{order_id}', [PaymentController::class, 'paymentPartial'])->name('payment.partial');
     Route::post('/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook');
 });
+
+// Route::get('/trade', [TradeController::class, 'index'])->name('trade');
+// Route::post('/trade/execute', [TradeController::class, 'executomoyemi760e'])->name('trade.execute');
+
+Route::get('/trade', [TradeController::class, 'index'])->name('trade');
+Route::post('/trade/execute', [TradeController::class, 'executeTrade'])->name('trade.execute');
+Route::get('/api/price/{symbol}', [TradeController::class, 'getPrice']);
+
+Route::middleware(['isadmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::match(['get', 'post'], '/trading-pairs', [TradeController::class, 'managePairs'])->name('trading-pairs');
+    Route::patch('/trading-pairs/toggle/{id}', [TradeController::class, 'togglePair'])->name('trading-pairs.toggle');
+});
+Route::get('/api/price/{symbol}', [TradeController::class, 'getApiPrice'])->name('api.price');
+    Route::get('/api/test-pairs', [TradeController::class, 'testPairs'])->name('api.test-pairs');
 
 //activate and deactivate Online Trader
 Route::any('/activate', function () {

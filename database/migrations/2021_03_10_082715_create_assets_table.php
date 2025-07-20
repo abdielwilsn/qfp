@@ -6,27 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateAssetsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('assets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->nullable();
-            $table->string('symbol')->nullable();
-            $table->string('category')->nullable();
+            $table->string('name', 255)->nullable();
+            $table->string('symbol', 255)->nullable();
+            $table->string('category', 255)->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('assets');

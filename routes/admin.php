@@ -24,7 +24,7 @@ use App\Http\Controllers\Admin\TwoFactorController;
 use App\Http\Controllers\Admin\ClearCacheController;
 use App\Http\Controllers\Admin\ManageAssetController;
 
-Route::prefix('adminlogin')->group(function () {
+Route::prefix('admin')->group(function () {
 	Route::get('login',[LoginController::class , 'showLoginForm'])->name('adminloginform');
 	Route::post('login', [LoginController::class , 'adminlogin'])->name('adminlogin');
 	Route::post('logout', [LoginController::class , 'adminlogout'])->name('adminlogout');

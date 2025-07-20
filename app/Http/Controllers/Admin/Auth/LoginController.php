@@ -54,11 +54,13 @@ class LoginController extends Controller
      */
     public function adminlogin(Request $request)
     {
+
          //$this->validator($request);
         $data =  $this->validate($request, [
             'email'    => 'required|email|exists:admins|min:5|max:191',
             'password' => 'required|string|min:4|max:255',
             ]);
+// dd($data);
 
         $email = $request->email;
         $password = $request->password;
@@ -66,13 +68,18 @@ class LoginController extends Controller
         if (Auth::guard('admin')->attempt(['email' => $email, 'password' => $password, 'status' => 'active'])) {
             $request->session()->regenerate();
 
+            // dd("hello");
+
             $settings=Settings::where('id', '=', '1')->first();
             $user = Admin::where('email',$request->email)->first();
             $useremail = $user->email;
 
+            // dd($useremail);
+
             if($user->enable_2fa == "enabled"){
 
                 $token  = mt_rand(10000,99999);
+
                 Admin::where('id', $user->id)
                 ->update([
                     'token_2fa' => $token,

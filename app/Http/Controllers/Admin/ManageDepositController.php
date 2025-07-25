@@ -86,13 +86,13 @@ class ManageDepositController extends Controller
             }
 
             //send email notification
-            $objDemo = new \stdClass();
-            $objDemo->message = "$user->name, This is to inform you that your deposit of $settings->currency$deposit->amount has been received and confirmed.";
-            $objDemo->sender = "$settings->site_name";
-            $objDemo->date = \Carbon\Carbon::Now();
-            $objDemo->subject = "Deposit processed!";
+            // $objDemo = new \stdClass();
+            // $objDemo->message = "$user->name, This is to inform you that your deposit of $settings->currency$deposit->amount has been received and confirmed.";
+            // $objDemo->sender = "$settings->site_name";
+            // $objDemo->date = \Carbon\Carbon::Now();
+            // $objDemo->subject = "Deposit processed!";
             
-            Mail::bcc($user->email)->send(new NewNotification($objDemo));
+            // Mail::bcc($user->email)->send(new NewNotification($objDemo));
     
         }
 

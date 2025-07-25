@@ -20,11 +20,19 @@ class CryptoPaymentController extends Controller
     $paymentData = [
         "price_amount" => $request->amount,
         "price_currency" => "usd",
-        "pay_currency" => "btc",
+        "pay_currency" => "usdttrc20",
         "ipn_callback_url" => route('crypto.callback'),
         "order_id" => uniqid('order_'),
         "order_description" => "Crypto deposit",
     ];
+
+    $minData = $this->nowPayments->getMinimumAmount('usd', 'usdttrc20');
+    $minAmount = $minData['min_amount'] ?? 1.00;
+
+    if ($request->amount < $minAmount) {
+        return redirect()->back()->with('error', "Minimum amount is \${$minAmount} USD for USDT payment.");
+    }
+
 
     $response = $this->nowPayments->createPayment($paymentData);
 

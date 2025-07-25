@@ -181,7 +181,9 @@ class DepositController extends Controller
     //Save deposit requests
     public function savedeposit(Request $request){
 
-        //dd($request['paymethd_method']);
+
+
+        // dd($request['paymethd_method']);
         $this->validate($request, [
             'proof' => 'image|mimes:jpg,jpeg,png|max:1000',
         ]);
@@ -191,39 +193,43 @@ class DepositController extends Controller
 
 
 
-        if($request->hasfile('proof'))
-        {
+
+
+        if($request->hasFile('proof')) {
             $file = $request->file('proof');
-            $name = $file->getClientOriginalName();
+            $originalName = $file->getClientOriginalName();
 
+            // Extract extension using pathinfo
+            $ext = strtolower($file->getClientOriginalExtension());
+            $whitelist = ['pdf', 'doc', 'jpeg', 'jpg', 'png'];
 
-            $ext = array_pop(explode(".", $name));
-            $whitelist = array('pdf','doc','jpeg','jpg','png');
-                
             if (in_array($ext, $whitelist)) {
 
-                if ($settings->location  == "Email") {
-                    $proofname = $strtxt . $name . time();
+                // Remove extension from original name and clean it
+                $basename = pathinfo($originalName, PATHINFO_FILENAME);
+                $timestamp = time();
+                $proofname = $strtxt . $basename . '_' . $timestamp . '.' . $ext;
+
+                if ($settings->location == "Email") {
                     $data = [
                         'document' => $file
                     ];
                     Mail::to($settings->contact_email)->send(new UserUpload($data));
-        
-                }elseif ($settings->location  == "Local") {
-                    $proofname = $strtxt . $name . time();
-                    // save to storage/app/uploads as the new $filename
+
+                } elseif ($settings->location == "Local") {
                     $path = $file->storeAs('public/photos', $proofname);
-                }else {
-                    $filePath = 'storage/' . $name;
+                    // dd($path); // use for debugging
+                } else {
+                    $filePath = 'storage/' . $proofname;
                     Storage::disk('s3')->put($filePath, file_get_contents($file));
                 }
 
             } else {
-                return redirect()->back()
-                    ->with('message', 'Unaccepted Image Uploaded');
+                return redirect()->back()->with('message', 'Unaccepted Image Uploaded');
             }
-
         }
+
+
 
 
         $dp=new Deposit();
@@ -234,23 +240,30 @@ class DepositController extends Controller
         $dp->user= Auth::user()->id;
         $dp->save();
 
+
         //get user
         $user=User::where('id',Auth::user()->id)->first();
+
+
     
         //send email notification
-        $objDemo = new \stdClass();
-        $objDemo->message = "This is to inform you of a successful Deposit of $settings->currency $request->amount, that just occured on your system. please login to process this deposit";
-        $objDemo->sender = $settings->site_name;
-        $objDemo->date = \Carbon\Carbon::Now();
-        $objDemo->subject ="Successful Deposit";
-        Mail::bcc($settings->contact_email)->send(new NewNotification($objDemo));
 
-        $objDemou = new \stdClass();
-        $objDemou->message = "This is to inform you of a successful deposit of $settings->currency $request->amount, that just occured on your account. please wait while we process this transaction, you will receive a notification of your transaction status.";
-        $objDemou->sender = $settings->site_name;
-        $objDemou->date = \Carbon\Carbon::Now();
-        $objDemou->subject ="Successful Deposit";
-        Mail::bcc($user->email)->send(new NewNotification($objDemou));
+        // $objDemo = new \stdClass();
+        // $objDemo->message = "This is to inform you of a successful Deposit of $settings->currency $request->amount, that just occured on your system. please login to process this deposit";
+        // $objDemo->sender = $settings->site_name;
+        // $objDemo->date = \Carbon\Carbon::Now();
+        // $objDemo->subject ="Successful Deposit";
+        // Mail::bcc($settings->contact_email)->send(new NewNotification($objDemo));
+
+        // $objDemou = new \stdClass();
+        // $objDemou->message = "This is to inform you of a successful deposit of $settings->currency $request->amount, that just occured on your account. please wait while we process this transaction, you will receive a notification of your transaction status.";
+        // $objDemou->sender = $settings->site_name;
+        // $objDemou->date = \Carbon\Carbon::Now();
+        // $objDemou->subject ="Successful Deposit";
+        // Mail::bcc($user->email)->send(new NewNotification($objDemou));
+
+
+        // dd("lotad");
 
         // Kill the session variables
         $request->session()->forget('payment_mode');

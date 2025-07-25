@@ -51,7 +51,7 @@ if (Auth::user()->dashboard_style == "light") {
                     <!-- Action Buttons -->
                     <div class="row justify-content-center mb-4">
                         <div class="col-auto">
-                            <a href="{{route('payment.form')}}" class="btn btn-{{$bg == 'light' ? 'primary' : 'light'}} d-flex flex-column align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; text-decoration: none;">
+                            <a href="{{route('deposits')}}" class="btn btn-{{$bg == 'light' ? 'primary' : 'light'}} d-flex flex-column align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; text-decoration: none;">
                                 <i class="fa fa-download mb-1" style="font-size: 24px;"></i>
                                 <small class="text-center" style="font-size: 11px; line-height: 1.1;">Deposit</small>
                             </a>

@@ -70,11 +70,11 @@
                                         <input value="{{$payment_mode}}"  type="hidden" name="method">
 
                                         @if (Auth::user()->sendotpemail == 'Yes')
-                                            <div class="form-group">
+                                            {{-- <div class="form-group">
                                                 <h5 class="text-{{$text}}">Enter OTP</h5>
                                                 <input class="form-control text-{{$text}} bg-{{$bg}}" placeholder="Enter Code" type="text" name="otpcode" required>
                                                 <small class="text-{{$text}}">OTP will be sent to your email when you request</small>
-                                            </div> 
+                                            </div>  --}}    
                                         @endif
                                         @if (!$default)
                                             @if ($methodtype == 'crypto')

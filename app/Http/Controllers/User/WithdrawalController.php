@@ -85,11 +85,11 @@ class WithdrawalController extends Controller
 
     public function completewithdrawal(Request $request){
 
-        if (Auth::user()->sendotpemail == "Yes") {
-            if ($request->otpcode != Auth::user()->withdrawotp) {
-                return redirect()->back()->with('message','OTP is incorrect, please recheck the code');
-            }
-        } 
+        // if (Auth::user()->sendotpemail == "Yes") {
+        //     if ($request->otpcode != Auth::user()->withdrawotp) {
+        //         return redirect()->back()->with('message','OTP is incorrect, please recheck the code');
+        //     }
+        // } 
         
         $settings=Settings::where('id','1')->first();
         if($settings->enable_kyc =="yes"){

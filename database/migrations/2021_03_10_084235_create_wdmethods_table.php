@@ -19,6 +19,27 @@ class CreateWdmethodsTable extends Migration
             $table->string('minimum')->nullable();
             $table->string('maximum')->nullable();
             $table->string('charges_fixed')->nullable();
+            // new stuff
+            
+            $table->string('charges_type')->nullable();
+            $table->string('methodtype')->nullable();
+            $table->string('img_url')->nullable();
+            // $table->string('img_url')->nullable();
+            $table->string('bankname')->nullable();
+            $table->string('account_name')->nullable();
+            $table->string('account_number')->nullable();
+            $table->string('swift_code')->nullable();
+            $table->string('barcode')->nullable();
+            $table->string('wallet_address')->nullable();
+            $table->string('network')->nullable();
+
+
+
+
+
+
+            $table->string('charges_amount')->nullable();
+            // new stuff
             $table->string('charges_percentage')->nullable();
             $table->string('duration')->nullable();
             $table->string('type')->nullable();

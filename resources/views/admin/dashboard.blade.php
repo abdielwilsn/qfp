@@ -28,7 +28,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                             <a href="{{route('mwithdrawals')}}" class="mr-2 btn btn-danger btn-border ">Withdrawals</a>
                             <a href="{{route('manageusers')}}" class="btn btn-secondary ">Users</a>
                             
-                            <a href="https://t.me/+VRumJJSKKGdjM2I0" class='mr-2 btn btn-danger btn-border'>For custmization help </a>
+                            {{-- <a href="https://t.me/+VRumJJSKKGdjM2I0" class='mr-2 btn btn-danger btn-border'>For custmization help </a> --}}
                         </div>
                     </div>
                 </div>

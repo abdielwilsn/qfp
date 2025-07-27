@@ -10,6 +10,8 @@ class User_plans extends Model
     use HasFactory;
 
     protected $dates = ['created_at', 'updated_at', 'activated_at', 'last_growth'];
+
+    protected $fillable = ['active'];
  
     public function dplan(){
         return $this->belongsTo(Plans::class, 'plan', 'id');

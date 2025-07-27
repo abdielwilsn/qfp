@@ -24,7 +24,7 @@ class ExpireUserPlans implements ShouldQueue
     {
         try {
             // Get all active user plans
-            $activePlans = User_plans::where('active', 'active')
+            $activePlans = User_plans::where('active', 'yes')
                 ->whereNotNull('activated_at')
                 ->whereNotNull('inv_duration')
                 ->get();
@@ -39,7 +39,7 @@ class ExpireUserPlans implements ShouldQueue
                 $activatedAt = Carbon::parse($plan->activated_at);
                 $duration = $this->parseDuration($plan->inv_duration);
 
-                dd($duration);
+                // dd($duration);
                 
                 if ($duration) {
                     $expirationDate = $activatedAt->add($duration['interval'], $duration['value']);

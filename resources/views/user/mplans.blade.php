@@ -18,7 +18,7 @@
 			<div class="content bg-{{$bg}}">
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
-						<h1 class="title1 text-{{$text}}">Available packages</h1>
+						<h1 class="title1 text-{{$text}}">Available plans</h1>
 					</div>
 					<x-danger-alert/>
 					<x-success-alert/>

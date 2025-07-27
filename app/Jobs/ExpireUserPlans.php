@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\User_plans;
+use App\Models\Plans;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,6 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ExpireUserPlans implements ShouldQueue
 {
@@ -23,7 +26,6 @@ class ExpireUserPlans implements ShouldQueue
     public function handle()
     {
         try {
-            // Get all active user plans
             $activePlans = User_plans::where('active', 'yes')
                 ->whereNotNull('activated_at')
                 ->whereNotNull('inv_duration')
@@ -31,76 +33,88 @@ class ExpireUserPlans implements ShouldQueue
 
             $expiredCount = 0;
 
-            // dd("hello");
-
-            // dd($activePlans);
-
             foreach ($activePlans as $plan) {
                 $activatedAt = Carbon::parse($plan->activated_at);
                 $duration = $this->parseDuration($plan->inv_duration);
 
-                // dd($duration);
-                
                 if ($duration) {
-                    $expirationDate = $activatedAt->add($duration['interval'], $duration['value']);
-                    
-                    // Check if the plan has expired
+                    $expirationDate = $activatedAt->copy()->add($duration['interval'], $duration['value']);
+
+                    // dd("yes");
+
                     if (Carbon::now()->greaterThan($expirationDate)) {
                         $plan->update([
                             'active' => 'expired',
                             'expire_date' => $expirationDate
                         ]);
-                        
+
                         $expiredCount++;
-                        
+
+
                         Log::info("User plan {$plan->id} expired for user {$plan->user}");
+
+                        $planDetails = Plans::find($plan->plan);
+                        if (!$planDetails) {
+                            Log::warning("Plan ID {$plan->plan} not found for user plan {$plan->plan}");
+                            continue;
+                        }
+
+                        $expectedReturn = (float) $planDetails->expected_return;
+
+                        $user = User::find($plan->user);
+                        if (!$user) {
+                            Log::warning("User ID {$plan->user} not found for user plan {$plan->plan}");
+                            continue;
+                        }
+
+           
+
+                        $bal = $user->account_bal;
+
+                        $returns = rand($planDetails->minr, $planDetails->maxr);
+
+                        // $bal += $returns;
+
+
+                        $user->account_bal += $returns;
+
+
+                        $user->save();
+
+                        $user->account_bal += $plan->amount;
+
+                        $user->save();
+
+
+
                     }
                 }
             }
 
-            Log::info("ExpireUserPlans job completed. {$expiredCount} plans expired.");
-
+            Log::info("Expired {$expiredCount} user plans.");
         } catch (\Exception $e) {
-            Log::error('Error in ExpireUserPlans job: ' . $e->getMessage());
-            throw $e;
+            Log::error('Error in ExpireUserPlans Job: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Parse duration string and return interval details
-     * 
-     * @param string $duration
-     * @return array|null
-     */
     private function parseDuration($duration)
     {
         $duration = strtolower(trim($duration));
-        
-        // Define patterns for different duration formats
+
         $patterns = [
-            // Hours
-            '/^(\d+)\s*hours?$/' => ['interval' => 'hour', 'multiplier' => 1],
-            '/^(\d+)\s*hrs?$/' => ['interval' => 'hour', 'multiplier' => 1],
-            '/^(\d+)\s*h$/' => ['interval' => 'hour', 'multiplier' => 1],
-            
-            // Days
-            '/^(\d+)\s*days?$/' => ['interval' => 'day', 'multiplier' => 1],
-            '/^(\d+)\s*d$/' => ['interval' => 'day', 'multiplier' => 1],
-            
-            // Weeks
-            '/^(\d+)\s*weeks?$/' => ['interval' => 'week', 'multiplier' => 1],
-            '/^(\d+)\s*w$/' => ['interval' => 'week', 'multiplier' => 1],
-            
-            // Months
-            '/^(\d+)\s*months?$/' => ['interval' => 'month', 'multiplier' => 1],
-            '/^(\d+)\s*m$/' => ['interval' => 'month', 'multiplier' => 1],
-            
-            // Years
-            '/^(\d+)\s*years?$/' => ['interval' => 'year', 'multiplier' => 1],
-            '/^(\d+)\s*y$/' => ['interval' => 'year', 'multiplier' => 1],
+            '/^(\d+)\s*hours?$/' => ['interval' => 'hour'],
+            '/^(\d+)\s*hrs?$/' => ['interval' => 'hour'],
+            '/^(\d+)\s*h$/' => ['interval' => 'hour'],
+            '/^(\d+)\s*days?$/' => ['interval' => 'day'],
+            '/^(\d+)\s*d$/' => ['interval' => 'day'],
+            '/^(\d+)\s*weeks?$/' => ['interval' => 'week'],
+            '/^(\d+)\s*w$/' => ['interval' => 'week'],
+            '/^(\d+)\s*months?$/' => ['interval' => 'month'],
+            '/^(\d+)\s*m$/' => ['interval' => 'month'],
+            '/^(\d+)\s*years?$/' => ['interval' => 'year'],
+            '/^(\d+)\s*y$/' => ['interval' => 'year'],
         ];
 
-        // Special word cases
         $wordPatterns = [
             'one hour' => ['interval' => 'hour', 'value' => 1],
             'two hours' => ['interval' => 'hour', 'value' => 2],
@@ -124,24 +138,20 @@ class ExpireUserPlans implements ShouldQueue
             'two years' => ['interval' => 'year', 'value' => 2],
         ];
 
-        // Check word patterns first
         if (isset($wordPatterns[$duration])) {
             return $wordPatterns[$duration];
         }
 
-        // Check numeric patterns
         foreach ($patterns as $pattern => $config) {
             if (preg_match($pattern, $duration, $matches)) {
                 return [
                     'interval' => $config['interval'],
-                    'value' => (int)$matches[1] * $config['multiplier']
+                    'value' => (int) $matches[1]
                 ];
             }
         }
 
-        // Log unrecognized duration format
         Log::warning("Unrecognized duration format: {$duration}");
-        
         return null;
     }
 }

@@ -207,7 +207,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                     </div>
                                     <div class="col-8 col-stats">
                                         <div class="numbers">
-                                            <p class="card-category">Investment Plans</p>
+                                            <p class="card-category">Trading Plans</p>
                                             <h4 class="card-title text-{{$text}}">{{$plans}}</h4> 
                                         </div>
                                     </div>

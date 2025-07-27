@@ -15,7 +15,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
 			<div class="content bg-{{$bg}}">
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
-						<h1 class="title1 text-{{$text}}">Add Investment Plan</h1>
+						<h1 class="title1 text-{{$text}}">Add Trading Plan</h1>
 					</div>
 					<x-danger-alert/>
                     <x-success-alert/>
@@ -28,11 +28,11 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                             <h5 class="text-{{$text}}">Plan Name</h5>
                                             <input  class="form-control text-{{$text}} bg-{{$bg}}" placeholder="Enter Plan name" type="text" name="name" required>
                                         </div>
-                                        <div class="form-group col-md-6">
+                                        {{-- <div class="form-group col-md-6">
                                             <h5 class="text-{{$text}}">Plan price({{$settings->currency}})</h5> 
                                             <input class="form-control text-{{$text}} bg-{{$bg}}" placeholder="Enter Plan price" type="text" name="price" required>   
                                             <small class="text-{{$text}}">This is the maximum amount a user can pay to invest in this plan</small>
-                                       </div>	
+                                       </div>	 --}}
                                        <div class="form-group col-md-6">
                                             <h5 class="text-{{$text}}">Plan Minimum Price ({{$settings->currency}})</h5> 			 
                                              <input placeholder="Enter Plan minimum price" class="form-control text-{{$text}} bg-{{$bg}}" type="text" name="min_price" required>  
@@ -41,7 +41,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                        <div class="form-group col-md-6">
                                              <h5 class="text-{{$text}}">Plan Maximum Price ({{$settings->currency}})</h5> 			 
                                              <input class="form-control text-{{$text}} bg-{{$bg}}" placeholder="Enter Plan maximum price" type="text" name="max_price" required> 
-                                            <small class="text-{{$text}}">Same as plan price</small> 
+                                            <small class="text-{{$text}}">This is the maximum amount a user can pay to invest in this plan</small> 
                                        </div>
                                        <div class="form-group col-md-6">
                                             <h5 class="text-{{$text}}">Minimum return ({{$settings->currency}})</h5> 
@@ -61,11 +61,11 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                        <div class="form-group col-md-6">
                                            <h5 class="text-{{$text}}">Top up Interval</h5> 	
                                            <select class="form-control text-{{$text}} bg-{{$bg}}" name="t_interval">
-                                               <option>Monthly</option>
-                                               <option>Weekly</option>
+                                               {{-- <option>Monthly</option> --}}
+                                               {{-- <option>Weekly</option> --}}
                                                <option>Daily</option>
-                                               <option>Hourly</option>
-                                               <option>Every 30 Minutes</option>
+                                               {{-- <option>Hourly</option> --}}
+                                               {{-- <option>Every 30 Minutes</option> --}}
                                            </select>  
                                            <small class="text-{{$text}}">This specifies how often the system should add profit(ROI) to user account.</small>    
                                        </div>
@@ -99,12 +99,12 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                             </div>
                                             <input type="hidden" name="duridden" id="duridden">
                                         </div> --}}
-                                       <div class="form-group col-md-6">
+                                       {{-- <div class="form-group col-md-6">
                                         <h5 class="text-{{$text}}">Investment Duration</h5> 
                                            <input class="form-control text-{{$text}} bg-{{$bg}}" placeholder="eg 1 Days, 2 Weeks, 1 Months" type="text" name="expiration" required> 
                                            <small class="text-{{$text}}">This specifies how long the investment plan will run. Please strictly follow the guide on <a href="" data-toggle="modal" data-target="#durationModal">how to setup investment duration</a> else it may not work. </small> 
                                             
-                                       </div>
+                                       </div> --}}
                                        <div class="form-group col-md-12">
                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                            <input type="submit" class="btn btn-primary" value="Add Plan">   

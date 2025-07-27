@@ -28,7 +28,7 @@
                 <li class="nav-item {{ (request()->routeIs('plans')) ? 'active' : '' }} {{ (request()->routeIs('newplan')) ? 'active' : '' }} {{ (request()->routeIs('editplan')) ? 'active' : '' }}">
                     <a href="{{ url('/admin/dashboard/plans') }}">
                         <i class="fas fa-cubes " aria-hidden="true"></i>
-                        <p>Investment Plans</p>
+                        <p>Trading Plans</p>
                     </a>
                 </li>
                 <li class="nav-item {{ (request()->routeIs('manageusers')) ? 'active' : '' }} {{(request()->routeIs('loginactivity')) ? 'active' : '' }} {{(request()->routeIs('user.plans')) ? 'active' : '' }} {{(request()->routeIs('viewuser')) ? 'active' : '' }}">

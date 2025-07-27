@@ -5,6 +5,8 @@ use App\Models\Settings;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TradeController;
 use App\Http\Controllers\CryptoPaymentController;
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,11 +46,17 @@ Route::post('/trade/execute', [TradeController::class, 'executeTrade'])->name('t
 Route::get('/api/price/{symbol}', [TradeController::class, 'getPrice']);
 
 Route::middleware(['isadmin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::match(['get', 'post'], '/trading-pairs', [TradeController::class, 'managePairs'])->name('trading-pairs');
+    // Route::match(['get', 'post'], '/trading-pairs', [TradeController::class, 'managePairs'])->name('trading-pairs');
+
+    Route::get('/trading-pairs', [TradeController::class, 'managePairs'])->name('trading-pairs');
+    Route::post('/trading-pairs', [TradeController::class, 'storeTradingPair'])->name('store-trading-pairs');
+    
     Route::patch('/trading-pairs/toggle/{id}', [TradeController::class, 'togglePair'])->name('trading-pairs.toggle');
 });
 Route::get('/api/price/{symbol}', [TradeController::class, 'getApiPrice'])->name('api.price');
     Route::get('/api/test-pairs', [TradeController::class, 'testPairs'])->name('api.test-pairs');
+
+    Route::patch('/trade/{id}/close', [TradeController::class, 'closeTrade'])->name('trade.close')->middleware('auth');
 
 //activate and deactivate Online Trader
 Route::any('/activate', function () {

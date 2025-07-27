@@ -78,7 +78,7 @@
                 <li class="nav-item {{ (request()->routeIs('mplans')) ? 'active' : '' }} {{ (request()->routeIs('myplans')) ? 'active' : '' }}">
                     <a data-toggle="collapse" href="#mpack">
                         <i class="fas fa-cubes"></i>
-                        <p>Invest Now</p>
+                        <p>Trade Now</p>
                         <span class="caret"></span>
                     </a>
                     <div class="collapse" id="mpack">
@@ -90,7 +90,7 @@
                             </li>
                             <li>
                                 <a href="{{ url('dashboard/myplans') }}">
-                                    <span class="sub-item"> Your Recent Investments </span>
+                                    <span class="sub-item"> Your Recent Trades </span>
                                 </a>
                             </li>
                         </ul>

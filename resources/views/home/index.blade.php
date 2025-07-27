@@ -880,7 +880,7 @@ var percent 	= [0.033];
                         </p>
                         <h4 class="steps-item__title">CHOOSE INVESTMENT PLAN                        </h4>
                         <div class="steps-item__description"> 
-                          <p>We provide a range of investment plans to align with your financial goals. Review your options and make a deposit to get started</p>
+                          <p>We provide a range of trading plans to align with your financial goals. Review your options and make a deposit to get started</p>
                         </div>
                       </div>
                     </div>

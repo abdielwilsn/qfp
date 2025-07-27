@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Traits\CPTrait;
 use App\Mail\NewNotification;
 use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 class InvPlanController extends Controller
 {
@@ -37,7 +38,7 @@ class InvPlanController extends Controller
        
         $plan=new Plans();
         $plan->name= $request['name'];
-        $plan->price= $request['price'];
+        $plan->price= $request['max_price'];
         $plan->min_price= $request['min_price'];
         $plan->max_price= $request['max_price'];
         $plan->minr=$request['minr'];
@@ -47,7 +48,10 @@ class InvPlanController extends Controller
         $plan->increment_type= $request['t_type'];
         $plan->increment_interval= $request['t_interval'];
         $plan->increment_amount= $request['t_amount'];
-        $plan->expiration= $request['expiration'];
+        $plan->expiration= "1 Day";
+
+        // $plan->expiration = Carbon::now()->addDay(); 
+
         $plan->type= 'Main';
         $plan->save();
         return redirect()->back()->with('success', 'Plan created Sucessfully!');
@@ -59,7 +63,7 @@ class InvPlanController extends Controller
         Plans::where('id', $request['id'])
         ->update([
             'name' => $request['name'],
-            'price' => $request['price'],
+            'price' => $request['max_price'],
             'min_price' => $request['min_price'],
             'max_price' => $request['max_price'],
             'minr' => $request['minr'],
@@ -70,7 +74,7 @@ class InvPlanController extends Controller
             'increment_amount' => $request['t_amount'],
             'increment_interval' => $request['t_interval'],
             'type' => 'Main',
-            'expiration' => $request['expiration'],
+            'expiration' => "1 Day",
         ]);
         return redirect()->back()->with('success', 'Plan Successfully Updated');
     }

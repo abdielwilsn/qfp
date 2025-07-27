@@ -13,7 +13,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
 			<div class="content bg-{{Auth('admin')->User()->dashboard_style}}">
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
-						<h1 class="title1 text-{{$text}} d-inline"> {{$user->name}} Investment Plans</h1>
+						<h1 class="title1 text-{{$text}} d-inline"> {{$user->name}} Trading Plans</h1>
 						<div class="d-inline">
 							<div class="float-right btn-group">
 								<a class="btn btn-primary btn-sm" href="{{route('viewuser', $user->id)}}"> <i class="fa fa-arrow-left"></i> back</a>

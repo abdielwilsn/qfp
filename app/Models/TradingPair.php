@@ -10,5 +10,6 @@ class TradingPair extends Model
         'base_currency',
         'quote_currency',
         'is_active',
+        'coingecko_id'
     ];
 }

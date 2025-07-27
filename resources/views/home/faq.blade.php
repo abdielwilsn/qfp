@@ -130,7 +130,7 @@
 1. REGISTRATION BUTTON<br>
 Click the Register button. Enter your details to quickly create a FREE {{$settings->site_name}} account.<br>
 2. OPEN A DEPOSIT<br>
-We offer different investment plans. You need to choose a plan that suits your financial goals. Make a deposit after reading.<br>
+We offer different trading plans. You need to choose a plan that suits your financial goals. Make a deposit after reading.<br>
 3. START EARNING<br>
 After depositing, watch your capital grow by accumulating daily profit in real time.<br></p>
                           </div>

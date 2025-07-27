@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\AutoTopup::class,
         Commands\CheckPlanDuration::class, 
+        \App\Console\Commands\ExpirePlans::class,
     ];
 
     /**
@@ -28,6 +29,12 @@ class Kernel extends ConsoleKernel
     {
         // Retrieve the global settings
         $settings = Settings::where('id', '=', 1)->first();
+
+        $schedule->job(new \App\Jobs\ExpireUserPlans)
+             ->hourly()
+             ->withoutOverlapping()
+             ->runInBackground();
+
 
         // Schedule the AutoTopup command
         if ($settings && $settings->weekend_trade === "true") {

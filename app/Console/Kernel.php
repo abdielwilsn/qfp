@@ -14,8 +14,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\AutoTopup::class,
-        Commands\CheckPlanDuration::class, 
+        // Commands\AutoTopup::class,
+        // Commands\CheckPlanDuration::class, 
         \App\Console\Commands\ExpirePlans::class,
     ];
 
@@ -37,16 +37,17 @@ class Kernel extends ConsoleKernel
 
 
         // Schedule the AutoTopup command
-        if ($settings && $settings->weekend_trade === "true") {
-            $schedule->command('auto:topup')
-                ->weekdays() // Monday to Friday
-                ->everyMinute();
-        } else {
-            $schedule->command('auto:topup')->everyMinute();
-        }
+
+        // if ($settings && $settings->weekend_trade === "true") {
+        //     $schedule->command('auto:topup')
+        //         ->weekdays() // Monday to Friday
+        //         ->everyMinute();
+        // } else {
+        //     $schedule->command('auto:topup')->everyMinute();
+        // }
 
         // Schedule the CheckPlanDuration command to run daily
-        $schedule->command('plans:check-duration')->daily();
+        // $schedule->command('plans:check-duration')->daily();
     }
 
     /**

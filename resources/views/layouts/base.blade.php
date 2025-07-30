@@ -62,13 +62,13 @@
                   </svg><span>Login</span></a>
                    <!--<li><a href="Howtobuy crypto">How to Buy Crypto</a></li>-->
 
-                  <div class="select-language js-dropdown"><div id="google_translate_element"></div></a>
+                  {{-- <div class="select-language js-dropdown"><div id="google_translate_element"></div></a>
                     <div class="select-language__dropdown">
                       <ul>
                                             <!--<li><a href="index?language=en">ENGLISH </a></li>-->
 					                      </ul>
                     </div>
-                  </div>
+                  </div> --}}
                 </div>
               </div>
               <div class="header__slogan">

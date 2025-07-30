@@ -240,7 +240,7 @@
  <!-- TradingView Widget END -->
  <br>
       
-            <section class="deposits">
+            {{-- <section class="deposits">
               <div class="container container-large">
                 <div class="section-intro"> 
                   <h3 class="title">Investment Proposals                  </h3>
@@ -451,7 +451,7 @@
                   </div>
                 </div>
               </div>
-            </section>
+            </section> --}}
 			
     <script src="temp/custom/js/jquery.min.js"></script>
 <script type="text/javascript">
@@ -644,7 +644,7 @@ var percent 	= [0.033];
 				                   </div>
               </div>
             </section>            <!---->
-            <section class="company">
+            {{-- <section class="company">
               <div class="container container-large">
                 <div class="company__block"> 
                   <div class="company__row"> 
@@ -700,7 +700,7 @@ var percent 	= [0.033];
                         </table>
                       </div>
                     </div>
-                    <div class="company__col"> 
+                    {{-- <div class="company__col"> 
                       <h3 class="company__title">Officially registered <strong>company</strong>
                       </h3>
                       <p class="company__count"><a href="">#12636776</a>
@@ -709,11 +709,11 @@ var percent 	= [0.033];
                         <blockquote>OFFICIAL LICENSE</blockquote>
                         <p>{{$settings->site_name}} Is officially authorized for investment and trading activities, and our company’s services are accessible to investors worldwide.</p>
                       </div>
-                    </div>
+                    </div> 
                   </div>
                 </div>
               </div>
-            </section>
+            </section> --}}
             <!---->
             <section class="statisticts-section">
               <div class="container container-large">

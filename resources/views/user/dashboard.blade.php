@@ -79,7 +79,7 @@ if (Auth::user()->dashboard_style == "light") {
 <div class="row">
     <!-- Account Balance -->
     <div class="col-6 col-sm-6 col-lg-3 mb-3">
-        <div class="p-3 card bg-{{$bg}} shadow h-100">
+        <div class="p-3 card bg-{{$bg}} shadow h-100" style="border-radius: 12px;">
             <div class="d-flex align-items-center h-100">
                 <span class="mr-3 stamp stamp-md bg-secondary">
                     <i class="fa fa-dollar-sign"></i>
@@ -94,7 +94,7 @@ if (Auth::user()->dashboard_style == "light") {
 
     <!-- Total Profit -->
     <div class="col-6 col-sm-6 col-lg-3 mb-3">
-        <div class="p-3 card bg-{{$bg}} shadow h-100">
+        <div class="p-3 card bg-{{$bg}} shadow h-100" style="border-radius: 12px;">
             <div class="d-flex align-items-center h-100">
                 <span class="mr-3 stamp stamp-md bg-success">
                     <i class="fa fa-coins"></i>
@@ -131,7 +131,7 @@ if (Auth::user()->dashboard_style == "light") {
     
     <!-- Total Deposit -->
     <div class="col-6 col-sm-6 col-lg-3 mb-3">
-        <div class="p-3 card bg-{{$bg}} shadow h-100">
+        <div class="p-3 card bg-{{$bg}} shadow h-100" style="border-radius: 12px;">
             <div class="d-flex align-items-center h-100">
                 <span class="mr-3 stamp stamp-md bg-warning">
                     <i class="fa fa-download"></i>
@@ -151,8 +151,8 @@ if (Auth::user()->dashboard_style == "light") {
     </div>
 
     <!-- Total Withdrawals -->
-    <div class="col-6 col-sm-6 col-lg-3 mb-3">
-        <div class="p-3 card bg-{{$bg}} shadow h-100">
+    <div class="col-6 col-sm-6 col-lg-3 mb-3" >
+        <div class="p-3 card bg-{{$bg}} shadow h-100" style="border-radius: 12px;">
             <div class="d-flex align-items-center h-100">
                 <span class="mr-3 stamp stamp-md bg-danger">
                     <i class="fa fa-arrow-alt-circle-up"></i>

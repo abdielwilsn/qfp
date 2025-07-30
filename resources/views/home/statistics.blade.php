@@ -16,7 +16,7 @@
                   <p><span class="color-primary">GET LIFE INCOME</span></p>
                     </div>
                   </div>
-                  <div class="page-intro__button"> <a class="btn btn--primary" href="login">OPEN DEPOSIT</a>
+                  <div class="page-intro__button"> <a class="btn btn--primary" href="login">Get Started</a>
                   </div>
                 </div>
               </div>

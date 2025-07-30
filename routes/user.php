@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\CoinPaymentsAPI;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\User\ViewsController;
@@ -90,7 +92,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')->group(func
 
 	// Investment, user buys plan
 	Route::post('joinplan', [UserInvPlanController::class, 'joinplan'])->name('joinplan');
-	Route::get('autoconfirm', 'CoinPaymentsAPI@autoconfirm')->name('autoconfirm');
+	// Route::get('autoconfirm', [CoinPaymentsAPI::class, 'autoconfirm'])->name('autoconfirm');
+	// Route::get('autoconfirm', 'CoinPaymentsAPI@autoconfirm')->name('autoconfirm');
 
 	// Verify account route
 	Route::post('verifyaccount', [VerifyController::class, 'verifyaccount'])->name('kycsubmit');

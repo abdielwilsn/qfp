@@ -25,7 +25,7 @@
                       </div>
 					  
 				  	  			   	
-					  <a class="btn btn--primary" href="login">OPEN DEPOSIT</a>
+					  <a class="btn btn--primary" href="login">Get Started</a>
 				   					  
                       <ul class="intro-icons"> 
                         <li>

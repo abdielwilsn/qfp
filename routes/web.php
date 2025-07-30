@@ -7,6 +7,8 @@ use App\Http\Controllers\TradeController;
 use App\Http\Controllers\CryptoPaymentController;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Mail;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -58,6 +60,20 @@ Route::get('/api/price/{symbol}', [TradeController::class, 'getApiPrice'])->name
 
     Route::patch('/trade/{id}/close', [TradeController::class, 'closeTrade'])->name('trade.close')->middleware('auth');
 
+
+    // In routes/web.php
+Route::get('/test-email', function () {
+    try {
+        Mail::raw('This is a test email from Laravel', function ($message) {
+            $message->to('test@example.com')
+                    ->subject('Laravel Mail Test');
+        });
+        return 'Email sent successfully!';
+    } catch (Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
 //activate and deactivate Online Trader
 Route::any('/activate', function () {
 	return view('activate.index',[
@@ -68,3 +84,4 @@ Route::any('/activate', function () {
 Route::any('/revoke', function () {
 	return view('revoke.index');
 });
+

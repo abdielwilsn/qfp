@@ -104,15 +104,63 @@ class Controller extends BaseController
 
      
     //Controller self ref issue
-    public function ref(Request $request, $id){
-      if(isset($id)){
-        $request->session()->flush();
-        if(count(User::where('username',$id)->first())==1){
-          $request->session()->put('ref_by', $id);
+    // public function ref(Request $request, $id){
+    //   if(isset($id)){
+    //     $request->session()->flush();
+    //     if(count(User::where('username',$id)->first())==1){
+    //       $request->session()->put('ref_by', $id);
+    //     }
+    //     return redirect()->route('register');
+    //   }
+    // }
+
+    public function ref(Request $request, $id)
+{
+    if (!empty($id)) {
+        $user = User::where('username', $id)->first();
+
+        if ($user) {
+            // Only store the referral ID — don't flush the entire session
+            $request->session()->put('ref_by', $user->username);
         }
+
         return redirect()->route('register');
-      }
     }
+
+    return redirect()->route('home');
+}
+
+
+
+//     public function ref(Request $request, $id)
+// {
+//   // dd("hwllo");
+//     if (isset($id)) {
+//         $request->session()->flush();
+
+//         $user = User::where('username', $id)->first(); // returns a User or null
+
+//         if ($user) {
+//             $request->session()->put('ref_by', $id);
+//         }
+
+//         return redirect()->route('register');
+//     }
+// }
+
+
+//     public function ref(Request $request, $id) {
+//     if (isset($id)) {
+//         $request->session()->flush();
+
+//         if (User::where('username', $id)->exists()) {
+//             $request->session()->put('ref_by', $id);
+//         }
+
+//         return redirect()->route('register');
+//     }
+// }
+
 
   
 

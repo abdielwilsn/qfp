@@ -109,12 +109,12 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 		<script src="{{asset('dash/js/atlantis.min.js')}}"></script>
 		<script src="{{asset('dash/js/atlantis.js')}}"></script>
 
-		<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-		<script type="text/javascript">
+		{{-- <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> --}}
+		{{-- <script type="text/javascript">
 			function googleTranslateElementInit() {
 			new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
 			}
-		</script>
+		</script> --}}
 
 		<script type="text/javascript">
 			var badWords = [ 

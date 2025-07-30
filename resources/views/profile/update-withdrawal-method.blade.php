@@ -1,7 +1,7 @@
 <form method="post" action="javascript:void(0)" id="updatewithdrawalinfo">
     @csrf
     @method('PUT')
-    <fieldset>
+    {{-- <fieldset>
         <legend>Bank Account</legend>
         <div class="form-row">
             <div class="form-group col-md-6">
@@ -21,7 +21,7 @@
                 <input type="text" name="swiftcode" value="{{Auth::user()->swift_code}}"  class="form-control text-{{$text}} bg-{{$bg}}" placeholder="Enter Swift Code">
             </div>
         </div>
-    </fieldset>
+    </fieldset> --}}
     <fieldset class="mt-2">
         <legend>Cryptocurrency</legend>
         <div class="form-row">

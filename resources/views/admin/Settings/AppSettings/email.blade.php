@@ -53,7 +53,7 @@
                 </div>
             </div>
             <hr>
-            <div class="form-row">
+            {{-- <div class="form-row">
                 <div class="col-md-12">
                     <h4>Google Login Credentials</h4>
                     <hr>
@@ -92,7 +92,7 @@
                     <h5 class="text-{{$text}}">Captcha Site-Key</h5>
                     <input type="text" name="capt_sitekey" class="form-control bg-{{$bg}} text-{{$text}}" value="{{$settings->capt_sitekey}}">
                     <small class="text-{{$text}}"> From https://www.google.com/recaptcha/admin/create</small>
-                </div>
+                </div> --}}
                 <div class="form-group col-md-12">
                     <input type="submit" class="px-5 btn btn-primary btn-lg" value="Save">
                 </div>

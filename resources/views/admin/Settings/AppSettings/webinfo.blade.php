@@ -26,7 +26,7 @@
                 </div> 
             </div>
             
-            <div class=" form-row">
+            {{-- <div class=" form-row">
                 <div class="form-group col-md-12">
                     <h5 class="text-{{$text}}">Announcement</h5>
                     <textarea name="update" class="form-control bg-{{$bg}} text-{{$text}}" rows="2">{{$settings->newupdate}}</textarea>
@@ -44,7 +44,7 @@
                         @endforeach 
                     </select>
                 </div>
-            </div>
+            </div> --}}
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <h5 class="text-{{$text}}">Logo (Recommended size; max width, 200px and max height 100px.)</h5>

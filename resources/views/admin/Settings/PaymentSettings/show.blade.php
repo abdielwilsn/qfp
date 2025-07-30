@@ -27,15 +27,15 @@ if (Auth('admin')->User()->dashboard_style == "light") {
 									<li class="nav-item">
 										<a href="#dep" class="nav-link active" data-toggle="tab">Payment Methods</a>
 									</li>
-									<li class="nav-item">
+									{{-- <li class="nav-item">
 										<a href="#with" class="nav-link" data-toggle="tab">Payment Preference</a>
-									</li>
-                                    <li class="nav-item">
+									</li> --}}
+                                    {{-- <li class="nav-item">
 										<a href="#coin" class="nav-link" data-toggle="tab">Coinpayment</a>
 									</li>
                                     <li class="nav-item">
 										<a href="#gate" class="nav-link" data-toggle="tab">Gateways</a>
-									</li>
+									</li> --}}
 								</ul>
                                 <div class="tab-content">
 									<div class="tab-pane fade show active" id="dep">

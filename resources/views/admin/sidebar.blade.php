@@ -112,11 +112,12 @@
                                     <span class="sub-item">App Settings</span>
                                 </a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('refsetshow')}}">
                                     <span class="sub-item">Referral Settings</span>
                                 </a>
-                            </li>
+
+                            </li> --}}
                             <li>
                                 <a href="{{route('paymentview')}}">
                                     <span class="sub-item">Payment Settings</span>
@@ -127,11 +128,11 @@
                                     <span class="sub-item">Exchange Settings</span>
                                 </a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('subview')}}">
                                     <span class="sub-item">Subscription Settings</span>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a href="{{ url('/admin/dashboard/frontpage') }}">
                                     <span class="sub-item">Frontend Settings</span>

@@ -367,4 +367,58 @@ namespace App\Http\Controllers;
                 ], 500);
             }
         }
+
+
+        public function userIndex()
+{
+// dd("hello");
+    $tradingPairs = TradingPair::active()->ordered()->get();
+        // dd($tradingPairs);
+
+    $settings = Settings::first();
+
+    // Update stale prices
+    $this->updateStalePrices($tradingPairs);
+
+    return view('user.mplans', compact('tradingPairs', 'settings'));
+}
+
+public function showPair(TradingPair $tradingPair)
+{
+    $settings = Settings::first();
+    return view('user.invest_pair', compact('tradingPair', 'settings'));
+}
+
+    public function invest(TradingPair $tradingPair)
+    {
+        $settings = Settings::first();
+        return view('user.invest-trading-pair', compact('tradingPair', 'settings'));
+    }
+
+    public function storeInvestment(Request $request, TradingPair $tradingPair)
+    {
+        $validator = Validator::make($request->all(), [
+            'amount' => ['required', 'numeric', 'min:' . $tradingPair->min_investment, 'max:' . $tradingPair->max_investment]
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            Investment::create([
+                'user_id' => auth()->id(),
+                'trading_pair_id' => $tradingPair->id,
+                'amount' => $request->amount,
+                'status' => 'active',
+                'start_date' => now(),
+                'end_date' => now()->addDays($tradingPair->investment_duration)
+            ]);
+
+            return redirect()->route('user.plans.index')->with('success', 'Investment placed successfully!');
+        } catch (\Exception $e) {
+            Log::error('Error creating investment: ' . $e->getMessage());
+            return back()->with('error', 'Failed to place investment.');
+        }
+    }
     }

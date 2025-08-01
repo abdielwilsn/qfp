@@ -84,7 +84,7 @@
                     <div class="collapse" id="mpack">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="{{ url('dashboard/buy-plan') }}">
+                                <a href="{{ url('dashboard/trading-pairs') }}">
                                     <span class="sub-item">Buy a Plan</span>
                                 </a>
                             </li>

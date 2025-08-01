@@ -14,6 +14,8 @@ use App\Http\Controllers\User\VerifyController;
 use App\Http\Controllers\User\SomeController;
 use App\Http\Controllers\User\SocialLoginController;
 use App\Http\Controllers\User\ExchangeController;
+use App\Http\Controllers\TradingPairsController;
+
 
 // Email verification routes
 Route::get('/verify-email', 'App\Http\Controllers\User\UsersController@verifyemail')->middleware('auth')->name('verification.notice');;
@@ -56,6 +58,18 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')->group(func
 	Route::get('referuser', [ViewsController::class, 'referuser'])->name('referuser');
 	Route::get('verify-account', [ViewsController::class, 'verifyaccount'])->name('account.verify');
 	Route::get('manage-account-security', [ViewsController::class, 'twofa'])->name('twofa');
+
+
+
+
+	// 
+
+
+	Route::get('/trading-pairs', [TradingPairsController::class, 'userIndex'])->name('trading.pairs');
+
+
+
+	// 
 
 	// Update withdrawal info
 	Route::put('updateacct', [ProfileController::class, 'updateacct'])->name('updateacount');

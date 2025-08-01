@@ -6,6 +6,8 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TradeController;
 use App\Http\Controllers\CryptoPaymentController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\TradingPairsController;
+
 
 use Illuminate\Support\Facades\Mail;
 
@@ -73,6 +75,16 @@ Route::get('/test-email', function () {
         return 'Error: ' . $e->getMessage();
     }
 });
+
+// Route::middleware(['auth'])->group(function () {
+    Route::get('/trading-pairs/{tradingPair}', [TradingPairsController::class, 'showPair'])->name('trading.pair.show');
+
+    Route::get('trading-pairs/{tradingPair}/invest', [TradingPairsController::class, 'invest'])->name('user.trading-pairs.invest');
+
+
+    Route::post('trading-pairs/{tradingPair}/invest', [TradingPairsController::class, 'storeInvestment'])->name('user.trading-pairs.store-investment');
+
+// });
 
 //activate and deactivate Online Trader
 Route::any('/activate', function () {

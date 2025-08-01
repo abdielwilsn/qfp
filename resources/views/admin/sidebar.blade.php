@@ -26,9 +26,9 @@
                 @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")
                     
                 <li class="nav-item {{ (request()->routeIs('plans')) ? 'active' : '' }} {{ (request()->routeIs('newplan')) ? 'active' : '' }} {{ (request()->routeIs('editplan')) ? 'active' : '' }}">
-                    <a href="{{ url('/admin/dashboard/plans') }}">
+                    <a href="{{ url('/admin/admin/trading-pairs') }}">
                         <i class="fas fa-cubes " aria-hidden="true"></i>
-                        <p>Trading Plans</p>
+                        <p>Trading Pairs</p>
                     </a>
                 </li>
                 <li class="nav-item {{ (request()->routeIs('manageusers')) ? 'active' : '' }} {{(request()->routeIs('loginactivity')) ? 'active' : '' }} {{(request()->routeIs('user.plans')) ? 'active' : '' }} {{(request()->routeIs('viewuser')) ? 'active' : '' }}">
@@ -123,31 +123,31 @@
                                     <span class="sub-item">Payment Settings</span>
                                 </a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('managecryptoasset')}}">
                                     <span class="sub-item">Exchange Settings</span>
                                 </a>
-                            </li>
+                            </li> --}}
                             {{-- <li>
                                 <a href="{{route('subview')}}">
                                     <span class="sub-item">Subscription Settings</span>
                                 </a>
                             </li> --}}
-                            <li>
+                            {{-- <li>
                                 <a href="{{ url('/admin/dashboard/frontpage') }}">
                                     <span class="sub-item">Frontend Settings</span>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a href="{{ route('termspolicy') }}">
                                     <span class="sub-item">Terms and Privacy</span>
                                 </a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="{{ url('/admin/dashboard/ipaddress') }}">
                                     <span class="sub-item">IP Address</span>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </li> 

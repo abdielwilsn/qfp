@@ -23,12 +23,18 @@ use App\Http\Controllers\Admin\IpaddressController;
 use App\Http\Controllers\Admin\TwoFactorController;
 use App\Http\Controllers\Admin\ClearCacheController;
 use App\Http\Controllers\Admin\ManageAssetController;
+use App\Http\Controllers\TradingPairsController;
 
 Route::prefix('admin')->group(function () {
 	Route::get('login',[LoginController::class , 'showLoginForm'])->name('adminloginform');
 	Route::post('login', [LoginController::class , 'adminlogin'])->name('adminlogin');
 	Route::post('logout', [LoginController::class , 'adminlogout'])->name('adminlogout');
 	Route::get('dashboard', [LoginController::class , 'validate_admin'])->name('validate_admin');
+
+
+
+
+
 });
 
 // Two Factor controller for Admin.
@@ -219,5 +225,36 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function()
 	Route::get('dashboard/useexchange/{value}', [ManageAssetController::class , 'useexchange'])->name('useexchange');
 
 	Route::post('dashboard/exchangefee', [ManageAssetController::class , 'exchangefee'])->name('exchangefee');
+
+		
+// Admin Trading Pairs Routes (Protected by admin middleware)
+Route::prefix('admin')->name('admin.')->group(function () {
+    
+    // Trading Pairs Management
+    Route::get('/trading-pairs', [TradingPairsController::class, 'index'])->name('trading-pairs.index');
+    Route::post('/trading-pairs', [TradingPairsController::class, 'store'])->name('trading-pairs.store');
+	Route::get('trading-pairs/create', [TradingPairsController::class, 'create'])->name('trading-pairs.create');
+
+    Route::get('/trading-pairs/{tradingPair}/edit', [TradingPairsController::class, 'edit'])->name('trading-pairs.edit');
+    Route::put('/trading-pairs/{tradingPair}', [TradingPairsController::class, 'update'])->name('trading-pairs.update');
+    Route::delete('/trading-pairs/{tradingPair}', [TradingPairsController::class, 'destroy'])->name('trading-pairs.destroy');
+    
+    // Trading Pairs Actions
+    Route::post('/trading-pairs/{tradingPair}/toggle-status', [TradingPairsController::class, 'toggleStatus'])->name('trading-pairs.toggle-status');
+    Route::get('/trading-pairs/refresh-prices', [TradingPairsController::class, 'refreshPrices'])->name('trading-pairs.refresh-prices');
+    Route::post('/trading-pairs/update-sort-order', [TradingPairsController::class, 'updateSortOrder'])->name('trading-pairs.update-sort-order');
+});
+
+// Public API Routes (for user interfaces)
+// Route::get('/api/trading-pairs', [TradingPairsController::class, 'getPublicTradingPairs'])->name('api.trading-pairs');
+
+// If you want to maintain compatibility with your existing plan routes, you can add redirects:
+// Route::get('/admin/dashboard/plans', function () {
+//     return redirect()->route('admin.trading-pairs.index');
+// })->name('plans'); // Redirect old plans route
+
+// Route::get('/admin/dashboard/newplan', function () {
+//     return redirect()->route('admin.trading-pairs.index');
+// })->name('newplan'); // Redirect old new plan route
 });
 // Everything About Admin Route ends here 

@@ -43,17 +43,17 @@ Route::post('/crypto-callback', [CryptoPaymentController::class, 'callback'])->n
 // Route::get('/trade', [TradeController::class, 'index'])->name('trade');
 // Route::post('/trade/execute', [TradeController::class, 'executomoyemi760e'])->name('trade.execute');
 
-Route::get('/trade', [TradeController::class, 'index'])->name('trade');
-Route::post('/trade/execute', [TradeController::class, 'executeTrade'])->name('trade.execute');
-Route::get('/api/price/{symbol}', [TradeController::class, 'getPrice']);
+// Route::get('/trade', [TradeController::class, 'index'])->name('trade');
+// Route::post('/trade/execute', [TradeController::class, 'executeTrade'])->name('trade.execute');
+// Route::get('/api/price/{symbol}', [TradeController::class, 'getPrice']);
 
 Route::middleware(['isadmin'])->prefix('admin')->name('admin.')->group(function () {
     // Route::match(['get', 'post'], '/trading-pairs', [TradeController::class, 'managePairs'])->name('trading-pairs');
 
-    Route::get('/trading-pairs', [TradeController::class, 'managePairs'])->name('trading-pairs');
-    Route::post('/trading-pairs', [TradeController::class, 'storeTradingPair'])->name('store-trading-pairs');
+    // Route::get('/trading-pairs', [TradeController::class, 'managePairs'])->name('trading-pairs');
+    // Route::post('/trading-pairs', [TradeController::class, 'storeTradingPair'])->name('store-trading-pairs');
     
-    Route::patch('/trading-pairs/toggle/{id}', [TradeController::class, 'togglePair'])->name('trading-pairs.toggle');
+    // Route::patch('/trading-pairs/toggle/{id}', [TradeController::class, 'togglePair'])->name('trading-pairs.toggle');
 });
 Route::get('/api/price/{symbol}', [TradeController::class, 'getApiPrice'])->name('api.price');
     Route::get('/api/test-pairs', [TradeController::class, 'testPairs'])->name('api.test-pairs');

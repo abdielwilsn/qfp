@@ -1,4 +1,4 @@
-<?php
+    <?php
     if (Auth::user()->dashboard_style == "light") {
         $bgmenu = "blue";
         $bg = "light";
@@ -18,6 +18,7 @@
             <div class="page-inner">
                 <div class="mt-2 mb-4">
                     <h1 class="title1 text-{{ $text }}">My Recent Trades</h1>
+                    <p class="text-{{ $text }}">Current Balance: {{ $settings->currency }}{{ number_format(auth()->user()->balance, 2) }}</p>
                 </div>
                 <x-danger-alert/>
                 <x-success-alert/>
@@ -34,6 +35,7 @@
                                         <tr>
                                             <th>Trading Pair</th>
                                             <th>Amount</th>
+                                            <th>Profit</th>
                                             <th>Status</th>
                                             <th>Start Date</th>
                                             <th>End Date</th>
@@ -49,6 +51,7 @@
                                                     {{ $investment->tradingPair ? $investment->tradingPair->base_symbol . '/' . $investment->tradingPair->quote_symbol : 'N/A' }}
                                                 </td>
                                                 <td>{{ $settings->currency }}{{ number_format($investment->amount, 2) }}</td>
+                                                <td>{{ $investment->profit !== null ? $settings->currency . number_format($investment->profit, 2) : 'N/A' }}</td>
                                                 <td>
                                                     <span class="badge {{ $investment->status === 'active' ? 'bg-success' : 'bg-secondary' }}">
                                                         {{ ucfirst($investment->status) }}

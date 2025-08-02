@@ -89,5 +89,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function dplan(){
     	return $this->belongsTo(Plans::class, 'plan');
     }
+
+     public function investments()
+    {
+        return $this->hasMany(Investment::class);
+    }
 	
 }

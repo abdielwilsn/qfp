@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Models\Settings;
+use App\Jobs\CloseExpiredInvestmentsJob;
+
 
 class Kernel extends ConsoleKernel
 {
@@ -30,10 +32,14 @@ class Kernel extends ConsoleKernel
         // Retrieve the global settings
         $settings = Settings::where('id', '=', 1)->first();
 
-        $schedule->job(new \App\Jobs\ExpireUserPlans)
-             ->hourly()
-             ->withoutOverlapping()
-             ->runInBackground();
+        // $schedule->job(new \App\Jobs\ExpireUserPlans)
+        //      ->hourly()
+        //      ->withoutOverlapping()
+        //      ->runInBackground();
+
+
+        $schedule->job(new CloseExpiredInvestmentsJob)->everyMinute();
+
 
 
         // Schedule the AutoTopup command

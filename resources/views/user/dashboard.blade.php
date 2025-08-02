@@ -105,7 +105,7 @@ if (Auth::user()->dashboard_style == "light") {
                                 </a>
                             </div>
                             <div class="col-auto">
-                                <a href="{{route('mplans')}}" class="btn btn-light d-flex flex-column align-items-center justify-content-center rounded-circle shadow-lg" style="
+                                <a href="{{route('trading.pairs')}}" class="btn btn-light d-flex flex-column align-items-center justify-content-center rounded-circle shadow-lg" style="
                                     width: 80px; 
                                     height: 80px; 
                                     text-decoration: none;

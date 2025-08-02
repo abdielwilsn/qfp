@@ -49,6 +49,8 @@ class CloseExpiredInvestmentsJob implements ShouldQueue
                 $user = $investment->user;
                 if ($user) {
                     $user->increment('account_bal', $totalReturn);
+                    // Log::info("user total return {$totalReturn}");
+                    // Log::info("user")
                     Log::info("User ID {$user->id} balance updated: +{$totalReturn} (Investment ID {$investment->id})");
                 } else {
                     Log::warning("Investment ID {$investment->id} has no associated user. Skipping balance update.");

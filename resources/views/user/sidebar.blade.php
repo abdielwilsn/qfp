@@ -85,11 +85,11 @@
                         <ul class="nav nav-collapse">
                             <li>
                                 <a href="{{ url('dashboard/trading-pairs') }}">
-                                    <span class="sub-item">Buy a Plan</span>
+                                    <span class="sub-item">Join a Trade</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ url('dashboard/myplans') }}">
+                                <a href="{{ url('dashboard/recent-trades') }}">
                                     <span class="sub-item"> Your Recent Trades </span>
                                 </a>
                             </li>

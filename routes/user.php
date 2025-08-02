@@ -63,6 +63,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')->group(func
 
 
 	// 
+    Route::get('recent-trades', [TradingPairsController::class, 'recentTrades'])->name('user.recent-trades');
 
 
 	Route::get('/trading-pairs', [TradingPairsController::class, 'userIndex'])->name('trading.pairs');

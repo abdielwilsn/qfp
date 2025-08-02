@@ -9,6 +9,9 @@ namespace App\Http\Controllers;
     use Illuminate\Support\Facades\Http;
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Facades\Validator;
+    use App\Models\Investment;
+    use Illuminate\Support\Facades\Auth;
+
 
     class TradingPairsController extends Controller
     {
@@ -31,6 +34,17 @@ namespace App\Http\Controllers;
 
             return view('admin.Plans.plans', compact('tradingPairs', 'settings'));
         }
+
+      public function recentTrades()
+    {
+        $investments = Investment::with(['user', 'tradingPair'])
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
+        $settings = Settings::first() ?? new Settings(['currency' => 'USD']);
+        return view('user.recent-trades', compact('investments', 'settings'));
+    }
 
         /**
          * Store a newly created trading pair

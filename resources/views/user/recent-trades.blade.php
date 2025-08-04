@@ -55,7 +55,17 @@
                                                     {{ $investment->tradingPair ? $investment->tradingPair->base_symbol . '/' . $investment->tradingPair->quote_symbol : 'N/A' }}
                                                 </td>
                                                 <td>{{ $settings->currency }}{{ number_format($investment->amount, 2) }}</td>
-                                                <td>{{ $investment->profit !== null ? $settings->currency . number_format($investment->profit, 2) : 'N/A' }}</td>
+                                                <td>
+                                                    <span class="profit-display" 
+                                                          data-investment-id="{{ $investment->id }}"
+                                                          data-amount="{{ $investment->amount }}"
+                                                          data-min-return="{{ $investment->tradingPair ? $investment->tradingPair->min_return_percentage : 0 }}"
+                                                          data-max-return="{{ $investment->tradingPair ? $investment->tradingPair->max_return_percentage : 0 }}"
+                                                          data-status="{{ $investment->status }}"
+                                                          data-profit="{{ $investment->profit ?? 0 }}">
+                                                        {{ $investment->profit !== null ? $settings->currency . number_format($investment->profit, 2) : 'N/A' }}
+                                                    </span>
+                                                </td>
                                                 <td>
                                                     <span class="badge {{ $investment->status === 'active' ? 'bg-success' : 'bg-secondary' }}">
                                                         {{ ucfirst($investment->status) }}
@@ -98,7 +108,15 @@
                                         </div>
                                         <div class="d-flex justify-content-between text-{{ $text }}">
                                             <span>Profit:</span>
-                                            <span class="fw-bold">{{ $investment->profit !== null ? $settings->currency . number_format($investment->profit, 2) : 'N/A' }}</span>
+                                            <span class="profit-display fw-bold"
+                                                  data-investment-id="{{ $investment->id }}"
+                                                  data-amount="{{ $investment->amount }}"
+                                                  data-min-return="{{ $investment->tradingPair ? $investment->tradingPair->min_return_percentage : 0 }}"
+                                                  data-max-return="{{ $investment->tradingPair ? $investment->tradingPair->max_return_percentage : 0 }}"
+                                                  data-status="{{ $investment->status }}"
+                                                  data-profit="{{ $investment->profit ?? 0 }}">
+                                                {{ $investment->profit !== null ? $settings->currency . number_format($investment->profit, 2) : 'N/A' }}
+                                            </span>
                                         </div>
                                         <div class="d-flex justify-content-between text-{{ $text }}">
                                             <span>Dates:</span>
@@ -116,6 +134,40 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function simulateProfits() {
+            const profitElements = document.querySelectorAll('.profit-display');
+            const currency = '{{ $settings->currency }}';
+
+            profitElements.forEach(element => {
+                const status = element.dataset.status;
+                if (status !== 'active') {
+                    // Skip completed investments (profit is fixed)
+                    return;
+                }
+
+                const amount = parseFloat(element.dataset.amount);
+                const minReturn = parseFloat(element.dataset.minReturn) / 100; // e.g., 50% -> 0.5
+                const maxReturn = parseFloat(element.dataset.maxReturn) / 100; // e.g., 150% -> 1.5
+
+                // Allow profit to range from -minReturn to maxReturn (e.g., -50% to 150%)
+                const minProfit = -minReturn * amount; // e.g., -50% of amount
+                const maxProfit = maxReturn * amount;  // e.g., 150% of amount
+                const randomProfit = Math.random() * (maxProfit - minProfit) + minProfit; // Random between minProfit and maxProfit
+
+                // Update profit display
+                element.textContent = `${currency}${randomProfit.toFixed(2)}`;
+                element.className = randomProfit > 0 ? 'profit-display text-success fw-bold' : 'profit-display text-danger fw-bold';
+            });
+        }
+
+        // Run every 5 seconds for active investments
+        setInterval(simulateProfits, 5000);
+
+        // Run immediately on page load
+        simulateProfits();
+    </script>
 @endsection
 
 <style>

@@ -29,6 +29,8 @@ class TradingPairsController extends Controller
             ->orderBy('created_at', 'desc')
             ->take(10)
             ->get();
+
+            // dd($investments);
         $settings = Settings::first() ?? new Settings(['currency' => 'USD']);
         return view('user.recent-trades', compact('investments', 'settings'));
     }
@@ -337,7 +339,7 @@ class TradingPairsController extends Controller
 
             \DB::commit();
 
-            return redirect()->route('user.plans.index')->with('success', 'Investment placed successfully!');
+            return redirect()->route('user.recent-trades')->with('success', 'Investment placed successfully!');
         } catch (\Exception $e) {
             \DB::rollBack();
             Log::error('Error creating investment: ' . $e->getMessage());

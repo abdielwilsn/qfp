@@ -58,7 +58,7 @@
                                     <td class="text-end">
                                         <a href="{{ route('user.trading-pairs.invest', $pair->id) }}" 
                                            class="btn btn-sm btn-warning fw-bold px-3">
-                                           Invest
+                                           Trade
                                         </a>
                                     </td>
                                     <td class="text-end fw-bold" id="price-{{ $pair->id }}">

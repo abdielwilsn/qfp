@@ -61,6 +61,14 @@
                             <div>Duration: <strong>{{ $tradingPair->investment_duration }} days</strong></div>
                         </div>
 
+                        @if ($errors->any())
+    <div class="alert alert-danger mt-2">
+        @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+        @endforeach
+    </div>
+@endif
+
                         <!-- Investment Form -->
                         <form action="{{ route('user.trading-pairs.store-investment', $tradingPair->id) }}" method="POST" class="mt-3">
                             @csrf
@@ -77,6 +85,7 @@
                                        placeholder="{{ $tradingPair->min_investment }} - {{ $tradingPair->max_investment }}">
                                 @error('amount')
                                     <small class="text-danger">{{ $message }}</small>
+                                    
                                 @enderror
                             </div>
 

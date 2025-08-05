@@ -321,6 +321,25 @@ class TradingPairsController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
+        // $recentTrades = Investment::where('user_id', $user->id)->get();
+
+
+        // if ($recentTrades->trading_pair_id === $tradingPair->id)
+        // {
+        //     return back()->withErrors(['message' => 'Already invested in this today wait till tomorrow']);
+        // }
+
+        // dd($recentTrades);  
+
+        $alreadyUsed = Investment::where('user_id', $user->id)
+            ->where('trading_pair_id', $tradingPair->id)
+            ->exists();
+
+        if ($alreadyUsed) {
+            return back()->withErrors(['message' => 'Already invested in this today wait till tomorrow']);
+        }
+
+
         try {
             \DB::beginTransaction();
 

@@ -34,10 +34,54 @@ class WithdrawalController extends Controller
 {
     use CPTrait;
     //
-    public function withdrawamount(Request $request){
-        $request->session()->put('paymentmethod', $request->method);
-        return redirect()->route('withdrawfunds');
+    // public function withdrawamount(Request $request){
+    //     $request->session()->put('paymentmethod', $request->method);
+    //     return redirect()->route('withdrawfunds');
+    // }
+
+
+    public function withdrawamount(Request $request)
+{
+    // Validate the user input
+    $request->validate([
+        'amount' => 'required|numeric|min:1',
+        'wallet_address' => 'required|string|max:255',
+        'network' => 'required|string|max:50',
+        'notes' => 'nullable|string|max:500',
+    ]);
+
+    // dd("hello");
+
+    $user = auth()->user();
+
+    // dd($user);
+
+    // Optional: Check if the user has enough balance (if applicable)
+    if ($user->account_bal < $request->amount) {
+        return back()->with('danger', 'Insufficient balance to withdraw this amount.');
     }
+
+    // dd("stops here");
+
+    // Create withdrawal request (adjust to your DB schema)
+    $withdrawal = \App\Models\Withdrawal::create([
+        'user_id'        => $user->id,
+        'amount'         => $request->amount,
+        'wallet_address' => $request->wallet_address,
+        'network'        => $request->network,
+        'notes'          => $request->notes,
+        'status'         => 'pending', // default status
+    ]);
+
+    // dd("he");
+
+    // Optional: Deduct balance here if you want to lock funds immediately
+    $user->account_bal -= $request->amount;
+    $user->save();
+
+    return redirect()->back()->with('success', 'Withdrawal request submitted successfully!');
+}
+
 
     //Return withdrawals route
     public function withdrawfunds()

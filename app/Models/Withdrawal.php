@@ -8,8 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Withdrawal extends Model
 {
     use HasFactory;
-    
-    public function duser(){
-    	return $this->belongsTo(User::class , 'user');
+
+    protected $fillable = [
+        'txn_id',
+        'user_id',
+        'amount',
+        'to_deduct',
+        'status',
+        'payment_mode',
+        'wallet_address',
+        'network',
+        'notes',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

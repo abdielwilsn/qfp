@@ -6,31 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateWithdrawalsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('txn_id')->nullable();
-            $table->integer('user')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable(); // renamed from 'user'
             $table->string('uname')->nullable();
-            $table->string('amount')->nullable();
-            $table->string('to_deduct')->nullable();
-            $table->string('status')->nullable();
+            $table->decimal('amount', 15, 2)->nullable();
+            $table->decimal('to_deduct', 15, 2)->nullable();
+            $table->string('status')->nullable()->default('pending');
             $table->string('payment_mode')->nullable();
+
+            // New columns for wallet withdrawals
+            $table->string('wallet_address')->nullable();
+            $table->string('network')->nullable();
+            $table->text('notes')->nullable();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('withdrawals');

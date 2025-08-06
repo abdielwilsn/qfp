@@ -216,8 +216,11 @@ class ViewsController extends Controller
      //Return withdrawals route
      public function withdrawals()
      {
-        $withdrawals = Wdmethod::where('type', 'withdrawal')->orWhere('type', 'both')->where('status', 'enabled')->orderByDesc('id')->get();
+        // $withdrawals = User::where('id', Auth::user()->id)->get();
 
+        // dd($withdrawals);
+        // $withdrawals = Wdmethod::where('type', 'withdrawal')->orWhere('type', 'both')->where('status', 'enabled')->orderByDesc('id')->get();
+// dd($withdrawals);
         return view('user.withdrawals')
          ->with(array(
             'title'=>'Withdraw Your funds',

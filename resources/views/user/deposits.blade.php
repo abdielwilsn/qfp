@@ -1,168 +1,188 @@
 <?php
 	if (Auth::user()->dashboard_style == "light") {
-		$bgmenu="blue";
-    $bg="light";
-    $text = "dark";
-} else {
-    $bgmenu="dark";
-    $bg="dark";
-    $text = "light";
-
-}
+		$bgmenu = "blue";
+		$bg = "light";
+		$text = "dark";
+	} else {
+		$bgmenu = "dark";
+		$bg = "dark";
+		$text = "light";
+	}
 ?>
 @extends('layouts.app')
-    @section('content')
-        @include('user.topmenu')
-        @include('user.sidebar')
-        <div class="main-panel bg-{{$bg}}">
-			<div class="content bg-{{$bg}}">
-				<div class="page-inner">
-					<div class="mt-2 mb-4">
-						<h1 class="title1 text-{{$text}}">Fund Your Account</h1>
-						<button class="px-5 btn btn-primary btn-lg"  onclick="window.location.href='https://metafxcrypto.com/howtobuy';">How To Buy Crypto</button>
-					</div>
-					
-					<x-danger-alert/>
-					<x-success-alert/>
-					<div class="row">
-					    	
-						<div class="col-md-12">
-							<div class="card bg-{{$bg}}">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-md-8">
-											
-												    
-													    
-											<form action="javascript:;" method="post" id="submitpaymentform">
-												@csrf
-												<div class="row">
-												    
-													<div class="mb-4 col-md-12">
-													    
-														<h5 class="card-title text-{{$text}}">Enter Amount</h5>
-														<input class="form-control text-{{$text}} bg-{{$bg}}" placeholder="Enter Amount" type="number" name="amount" required>
-													</div>
-													<div class="mb-4 col-md-12">
-														<input type="hidden" name="payment_method" id="paymethod">
-													</div>
-													<div class="mt-2 mb-1 col-md-12">
-														<h5 class="card-title text-{{$text}}">Choose Payment Method from the list below</h5>
-													</div>
-													@forelse ($dmethods as $method)
+@section('content')
+	@include('user.topmenu')
+	@include('user.sidebar')
+	<div class="main-panel bg-{{$bg}}">
+		<div class="content bg-{{$bg}}">
+			<div class="page-inner">
+				<div class="mt-2 mb-4">
+					<h1 class="title1 text-{{$text}}">Fund Your Account</h1>
+					<button class="px-5 btn btn-primary btn-lg" onclick="window.location.href='https://metafxcrypto.com/howtobuy';">How To Buy Crypto</button>
+				</div>
+
+				<x-danger-alert/>
+				<x-success-alert/>
+
+				<div class="alert alert-warning text-dark fw-bold fs-6">
+					⚠️ Minimum deposit amount is <strong>$50</strong>. Any deposit below this will not be processed.
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card bg-{{$bg}}">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-8">
+										<form action="javascript:;" method="post" id="submitpaymentform">
+											@csrf
+											<div class="row">
+												<div class="mb-4 col-md-12">
+													<h5 class="card-title text-{{$text}}">Enter Amount</h5>
+													<input class="form-control text-{{$text}} bg-{{$bg}}" placeholder="Enter Amount" type="number" name="amount" id="amount" required>
+												</div>
+												<div class="mb-4 col-md-12">
+													<input type="hidden" name="payment_method" id="paymethod">
+												</div>
+												<div class="mt-2 mb-1 col-md-12">
+													<h5 class="card-title text-{{$text}}">Choose Payment Method from the list below</h5>
+												</div>
+												@forelse ($dmethods as $method)
 													<div class="mb-2 col-md-6">
 														<a style="cursor: pointer;" data-method="{{$method->name}}" id="{{$method->id}}" class="text-decoration-none" onclick="checkpamethd(this.id)">
 															<div class="rounded shadow bg-{{$bg}}">
 																<div class="card-body">
 																	<span class="text-{{$text}}">
 																		@if (!empty($method->img_url))
-																		<img src="{{$method->img_url}}" alt="" class="" style="width: 25px;">
+																			<img src="{{$method->img_url}}" alt="" class="" style="width: 25px;">
 																		@endif
-																		  {{$method->name}}
+																		{{$method->name}}
 																	</span> 
 																</div>
 															</div>
 														</a>
 													</div>
-													@empty
+												@empty
 													<div class="mb-1 col-md-12">
 														<p class="text-{{$text}}">No Payment Method enabled at the moment, please check back later.</p>
 													</div>
-													@endforelse
-													@if (count($dmethods)>0)
-														<div class="mt-2 mb-1 col-md-12">
-															<input type="submit" class="px-5 btn btn-primary btn-lg" value="Procced to Payment">
-														</div>
-													@endif
-													
-												</div>
-											</form>
-										</div>
+												@endforelse
+
+												@if (count($dmethods) > 0)
+													<div class="mt-2 mb-1 col-md-12">
+														<input type="submit" class="px-5 btn btn-primary btn-lg" value="Proceed to Payment">
+													</div>
+												@endif
+											</div>
+										</form>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
 				</div>
+
 			</div>
-			<script>
-				let paymethod = document.querySelector('#paymethod');
-				
-				function checkpamethd(id){
-					let url = "{{url('/dashboard/get-method/')}}" + '/' + id;
-					fetch(url)
-					.then(function(res){
-						return res.json();
-					})
-					.then(function (response){
-						paymethod.value = response;
-						$.notify({
-							// options
-							icon: 'flaticon-alarm-1',
-							title: 'Payment Method',
-							message: 'you have chosen to pay with ' + ' ' + response,
-						},{
-							// settings
-							type: 'success',
-							allow_dismiss: true,
-							newest_on_top: false,
-							placement: {
-								from: "top",
-								align: "right"
-							},
-							offset: 20,
-							spacing: 10,
-							z_index: 1031,
-							delay: 5000,
-							timer: 1000,
-							animate: {
-								enter: 'animated fadeInDown',
-								exit: 'animated fadeOutUp'
-							},
-		
-						});
-					})
-					.catch(function(err){
-						console.log(err);
+		</div>
+		<script>
+			let paymethod = document.querySelector('#paymethod');
+
+			function checkpamethd(id) {
+				let url = "{{url('/dashboard/get-method/')}}" + '/' + id;
+				fetch(url)
+				.then(function(res){
+					return res.json();
+				})
+				.then(function(response){
+					paymethod.value = response;
+					$.notify({
+						icon: 'flaticon-alarm-1',
+						title: 'Payment Method',
+						message: 'You have chosen to pay with ' + response,
+					}, {
+						type: 'success',
+						allow_dismiss: true,
+						newest_on_top: false,
+						placement: {
+							from: "top",
+							align: "right"
+						},
+						offset: 20,
+						spacing: 10,
+						z_index: 1031,
+						delay: 5000,
+						timer: 1000,
+						animate: {
+							enter: 'animated fadeInDown',
+							exit: 'animated fadeOutUp'
+						},
 					});
-				}
-				$('#submitpaymentform').on('submit', function() {
-					//alert('love');
-					if (paymethod.value == "") {
-						$.notify({
-							// options
-							icon: 'flaticon-alarm-1',
-							title: 'Select Payment Method',
-							message: 'Please choose a payment method by clicking on it',
-						},{
-							// settings
-							type: 'danger',
-							allow_dismiss: true,
-							newest_on_top: false,
-							placement: {
-								from: "top",
-								align: "right"
-							},
-							offset: 20,
-							spacing: 10,
-							z_index: 1031,
-							delay: 5000,
-							timer: 1000,
-							animate: {
-								enter: 'animated fadeInDown',
-								exit: 'animated fadeOutUp'
-							},
-		
-						});
-					}else {
-						let makepayurl = "{{url('/dashboard/newdeposit')}}"
-						//console.log(makepayurl);
-						document.getElementById("submitpaymentform").action = makepayurl;
-						
-					}
-					
+				})
+				.catch(function(err){
+					console.log(err);
 				});
-			</script>
+			}
+
+			document.addEventListener('DOMContentLoaded', function () {
+				let firstMethod = document.querySelector('[data-method]');
+				if (firstMethod) {
+					checkpamethd(firstMethod.id);
+				}
+			});
+
+			$('#submitpaymentform').on('submit', function() {
+				let amount = document.getElementById('amount').value;
+				
+				if (paymethod.value == "") {
+					$.notify({
+						icon: 'flaticon-alarm-1',
+						title: 'Select Payment Method',
+						message: 'Please choose a payment method by clicking on it',
+					}, {
+						type: 'danger',
+						allow_dismiss: true,
+						newest_on_top: false,
+						placement: {
+							from: "top",
+							align: "right"
+						},
+						offset: 20,
+						spacing: 10,
+						z_index: 1031,
+						delay: 5000,
+						timer: 1000,
+						animate: {
+							enter: 'animated fadeInDown',
+							exit: 'animated fadeOutUp'
+						},
+					});
+				} else if (amount < 50) {
+					$.notify({
+						icon: 'flaticon-alarm-1',
+						title: 'Invalid Amount',
+						message: 'Minimum deposit amount is $50. Please increase the amount.',
+					}, {
+						type: 'danger',
+						allow_dismiss: true,
+						newest_on_top: false,
+						placement: {
+							from: "top",
+							align: "right"
+						},
+						offset: 20,
+						spacing: 10,
+						z_index: 1031,
+						delay: 5000,
+						timer: 1000,
+						animate: {
+							enter: 'animated fadeInDown',
+							exit: 'animated fadeOutUp'
+						},
+					});
+				} else {
+					let makepayurl = "{{url('/dashboard/newdeposit')}}";
+					document.getElementById("submitpaymentform").action = makepayurl;
+				}
+			});
+		</script>
 	@endsection
-	

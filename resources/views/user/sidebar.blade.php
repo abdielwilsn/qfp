@@ -47,11 +47,18 @@
                 </li>
 
                 <li class="nav-item {{ (request()->routeIs('tradinghistory')) ? 'active' : '' }}">
+                    <a href="{{ url('dashboard/recent-trades') }}">
+                        <i class="fa fa-signal " aria-hidden="true"></i>
+                        <p>Trading Record</p>
+                    </a>
+                </li>
+
+                {{-- <li class="nav-item {{ (request()->routeIs('tradinghistory')) ? 'active' : '' }}">
                     <a href="{{ url('dashboard/tradinghistory') }}">
                         <i class="fa fa-signal " aria-hidden="true"></i>
                         <p>Profit Record</p>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item {{ (request()->routeIs('accounthistory')) ? 'active' : '' }}">
                     <a href="{{ url('dashboard/accounthistory') }}">
                         <i class="fa fa-briefcase " aria-hidden="true"></i>

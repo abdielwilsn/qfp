@@ -279,7 +279,9 @@ class TradingPairsController extends Controller
 
     public function userIndex()
     {
+        // dd("hell");
         $tradingPairs = TradingPair::active()->ordered()->get();
+        // dd($tradingPairs);
         $settings = Settings::first();
         $this->updateStalePrices($tradingPairs);
         return view('user.mplans', compact('tradingPairs', 'settings'));

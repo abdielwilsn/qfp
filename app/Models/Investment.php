@@ -12,6 +12,7 @@ class Investment extends Model
         'amount',
         'status',
         'start_date',
+        'profit',
         'end_date'
     ];
 

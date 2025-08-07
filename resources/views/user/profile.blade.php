@@ -27,15 +27,15 @@
 									<li class="nav-item">
 										<a href="#per" class="nav-link active" data-toggle="tab">Personal Settings</a>
 									</li>
-									<li class="nav-item">
+									{{-- <li class="nav-item">
 										<a href="#set" class="nav-link" data-toggle="tab">Withdrawal Settings</a>
-									</li>
+									</li> --}}
 									<li class="nav-item">
 										<a href="#pas" class="nav-link" data-toggle="tab">Password/Security</a>
 									</li>
-									<li class="nav-item">
+									{{-- <li class="nav-item">
 										<a href="#sec" class="nav-link" data-toggle="tab">Other Settings</a>
-									</li>
+									</li> --}}
 								</ul>
 								<div class="tab-content">
 									<div class="tab-pane fade show active" id="per">

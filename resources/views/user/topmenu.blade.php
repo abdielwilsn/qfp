@@ -107,9 +107,9 @@ if (Auth::user()->dashboard_style == "light") {
                             </li>
                             <li>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ url('payment') }}">Deposit</a>
+                                <a class="dropdown-item" href="{{ url('dashboard/deposits') }}">Deposit</a>
                                 <a class="dropdown-item" href="{{ url('dashboard/withdrawals') }}">Withdraw</a>
-                                <a class="dropdown-item" href="{{ url('dashboard/buy-plan') }}">Buy Plan</a>
+                                <a class="dropdown-item" href="{{ url('dashboard/buy-plan') }}">Trade</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();

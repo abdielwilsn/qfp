@@ -57,12 +57,15 @@ class CloseExpiredInvestmentsJob implements ShouldQueue
                     continue;
                 }
 
+                // dd($profit);
+
                 // Update investment
                 $investment->update([
                     'status' => 'completed',
                     'profit' => $profit,
                     'updated_at' => now()
                 ]);
+                // dd($investment);
 
                 Log::info("Investment ID {$investment->id} closed. Profit: {$profit}, Total Return: {$totalReturn}");
             }

@@ -25,11 +25,11 @@
                 </div>
                 <div class="form-group col-md-6">
                     <h5 class="text-{{$text}}">Email From</h5>
-                    <input type="email" name="emailfrom" class="form-control bg-{{$bg}} text-{{$text}}" value="{{$settings->emailfrom}}" required>
+                    <input type="email" name="emailfrom" class="form-control bg-{{$bg}} text-{{$text}}" value="{{$settings->emailfrom}}">
                 </div>
                 <div class="form-group col-md-6">
                     <h5 class="text-{{$text}}">Email From Name</h5>
-                    <input type="text" name="emailfromname" class="form-control bg-{{$bg}} text-{{$text}}" value="{{$settings->emailfromname}}" required>
+                    <input type="text" name="emailfromname" class="form-control bg-{{$bg}} text-{{$text}}" value="{{$settings->emailfromname}}">
                 </div>
                 <div class="form-group col-md-6 smtp d-none">
                     <h5 class="text-{{$text}}">SMTP Host</h5>

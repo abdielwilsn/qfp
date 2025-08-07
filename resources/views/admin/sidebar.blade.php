@@ -112,12 +112,12 @@
                                     <span class="sub-item">App Settings</span>
                                 </a>
                             </li>
-                            {{-- <li>
+                            <li>
                                 <a href="{{route('refsetshow')}}">
                                     <span class="sub-item">Referral Settings</span>
                                 </a>
 
-                            </li> --}}
+                            </li>
                             <li>
                                 <a href="{{route('paymentview')}}">
                                     <span class="sub-item">Payment Settings</span>

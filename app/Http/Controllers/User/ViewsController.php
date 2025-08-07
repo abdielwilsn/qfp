@@ -189,7 +189,7 @@ class ViewsController extends Controller
           ->orderBy('id', 'desc')
           ->get(),
 
-          'withdrawals' => Withdrawal::where('user', Auth::user()->id)->orderBy('id', 'desc')
+          'withdrawals' => Withdrawal::where('user_id', Auth::user()->id)->orderBy('id', 'desc')
           ->get(),
           'deposits' => Deposit::where('user', Auth::user()->id)->orderBy('id', 'desc')
           ->get(),

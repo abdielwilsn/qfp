@@ -48,12 +48,12 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                                 <a href="{{url('admin/dashboard/email-verify')}}/{{$user->id}}" class="dropdown-item">Verify Email</a>
                                                 @endif
                                                 <a href="#"  data-toggle="modal" data-target="#topupModal" class="dropdown-item">Credit/Debit</a>
-                                                <a href="#" data-toggle="modal" data-target="#resetpswdModal"  class="dropdown-item">Reset Password</a>
+                                                {{-- <a href="#" data-toggle="modal" data-target="#resetpswdModal"  class="dropdown-item">Reset Password</a> --}}
                                                 <a href="#" data-toggle="modal" data-target="#clearacctModal" class="dropdown-item">Clear Account</a>
-                                                <a href="#" data-toggle="modal" data-target="#TradingModal" class="dropdown-item">Add Trading History</a>
+                                                {{-- <a href="#" data-toggle="modal" data-target="#TradingModal" class="dropdown-item">Add Trading History</a> --}}
                                                 <a href="#" data-toggle="modal" data-target="#edituser" class="dropdown-item">Edit</a>
                                                 <a href="#" data-toggle="modal" data-target="#sendmailtooneuserModal" class="dropdown-item">Send Email</a>
-                                                <a href="#" data-toggle="modal" data-target="#switchuserModal"  class="dropdown-item text-success">Login as {{$user->name}}</a>
+                                                {{-- <a href="#" data-toggle="modal" data-target="#switchuserModal"  class="dropdown-item text-success">Login as {{$user->name}}</a> --}}
                                                 <a href="#" data-toggle="modal" data-target="#deleteModal" class="dropdown-item text-danger">Delete {{$user->name}}</a>
                                                 
                                             </div>

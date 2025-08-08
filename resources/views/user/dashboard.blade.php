@@ -20,13 +20,20 @@ if (Auth::user()->dashboard_style == "light") {
                     
                     <!-- Curved Welcome Section -->
                     <div class="welcome-section" style="
-                        background: linear-gradient(135deg, #287d04 0%, #1e7e34 100%);
-                        border-radius: 0 0 30px 30px;
-                        padding: 30px 20px 40px 20px;
-                        margin: -30px -20px 30px -20px;
-                        position: relative;
-                        overflow: hidden;
-                    ">
+    background: {{ $bg == 'dark' 
+        ? 'linear-gradient(135deg, rgba(40, 125, 4, 0.15) 0%, rgba(30, 126, 52, 0.15) 100%)' 
+        : 'linear-gradient(135deg, #287d04 0%, #1e7e34 100%)' }};
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 0 0 30px 30px;
+    padding: 30px 20px 40px 20px;
+    margin: -30px -20px 30px -20px;
+    position: relative;
+    overflow: hidden;
+    border: {{ $bg == 'dark' ? '1px solid rgba(255, 255, 255, 0.05)' : 'none' }};
+">
+
+
                         <!-- Decorative Elements -->
                         <div style="
                             position: absolute;

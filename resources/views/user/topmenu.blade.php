@@ -41,21 +41,21 @@ if (Auth::user()->dashboard_style == "light") {
             {{-- </div> --}}
             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 
-{{--                <li class="nav-item hidden-caret">--}}
-{{--                    <form action="javascript:void(0)" method="post" id="styleform" class="form-inline">--}}
-{{--                       --}}
-{{--                        <div class="form-group">--}}
-{{--                            <label class="style_switch">--}}
-{{--                                <input name="style" id="style" type="checkbox" value="true" class="modes">--}}
-{{--                                <span class="slider round"></span>--}}
-{{--                            </label>--}}
-{{--                        </div> --}}
-{{--                        @if(Auth::user()->dashboard_style =='dark')--}}
-{{--                        <script>document.getElementById("style").checked= true;</script>--}}
-{{--                        @endif--}}
-{{--                        <input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
-{{--                    </form>--}}
-{{--                </li>--}}
+               <li class="nav-item hidden-caret">
+                   <form action="javascript:void(0)" method="post" id="styleform" class="form-inline">
+                     
+                       <div class="form-group">
+                           <label class="style_switch">
+                               <input name="style" id="style" type="checkbox" value="true" class="modes">
+                               <span class="slider round"></span>
+                           </label>
+                       </div>
+                       @if(Auth::user()->dashboard_style =='dark')
+                       <script>document.getElementById("style").checked= true;</script>
+                       @endif
+                       <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                   </form>
+               </li>
                 @if($settings->google_translate =='on')
                 <li class="nav-item hidden-caret">
                     <div id="google_translate_element"></div>

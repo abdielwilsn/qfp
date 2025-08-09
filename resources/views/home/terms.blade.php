@@ -2,6 +2,9 @@
 
 @section('title', 'Terms')
 
+@inject('content', 'App\Http\Controllers\FrontController')
+
+
 @section('styles')
 @parent
 

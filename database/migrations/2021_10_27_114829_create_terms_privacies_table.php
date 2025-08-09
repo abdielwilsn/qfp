@@ -11,6 +11,7 @@ class CreateTermsPrivaciesTable extends Migration
         Schema::create('terms_privacies', function (Blueprint $table) {
             $table->id();
             $table->text('terms')->nullable();
+            // $table->text()
             $table->text('privacy')->nullable();
             $table->timestamps();
         });

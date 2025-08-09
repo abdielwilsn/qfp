@@ -195,9 +195,9 @@ class FrontendController extends Controller
         //     'description' => $editor_content_save,
         //     'useterms' => $request->terms
         // ]);
-
-        $terms->description = $request->termsprivacy;
-        $terms->useterms = $request->terms;
+        // dd($terms);
+        $terms->terms = $request->termsprivacy;
+        // $terms->useterms = $request->terms;
         $terms->save();
         return redirect()->back()
         ->with('success', 'Terms and Privacy Policy Updated Successfully!');

@@ -30,6 +30,10 @@ class TradingPairsController extends Controller
             ->take(10)
             ->get();
 
+        if ($investments->isEmpty()) {
+            // Optional: flash a message or log
+            session()->flash('info', 'You have no recent trades.');
+        }
             // dd($investments);
         $settings = Settings::first() ?? new Settings(['currency' => 'USD']);
         return view('user.recent-trades', compact('investments', 'settings'));

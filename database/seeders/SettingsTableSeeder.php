@@ -26,7 +26,7 @@ class SettingsTableSeeder extends Seeder
                 'pp_ci' => 'iidjdjdj',
                 'keywords' => 'online trade, forex, cfd,',
                 'site_title' => 'Welcome to Starbit',
-                'site_address' => 'https://hyip.metafxcrypto.com/',
+                'site_address' => 'https://starbiit.com/',
                 'logo' => 'giuNrOlogo 2.png1644161897',
                 'favicon' => 'giuNrOfavicon.png1644161897',
                 'trade_mode' => 'on',

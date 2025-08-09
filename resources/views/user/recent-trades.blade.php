@@ -26,7 +26,7 @@
                     @if ($investments->isEmpty())
                         <div class="card bg-{{ $bg }} p-4 shadow-sm">
                             <h4 class="text-{{ $text }}">You have no recent trades.</h4>
-                            <a href="{{ route('user.plans.index') }}" class="btn btn-{{ $bgmenu }} mt-2">Start Investing</a>
+                            {{-- <a href="{{ route('user.plans.index') }}" class="btn btn-{{ $bgmenu }} mt-2">Start Investing</a> --}}
                         </div>
                     @else
                         <!-- Desktop Table View -->

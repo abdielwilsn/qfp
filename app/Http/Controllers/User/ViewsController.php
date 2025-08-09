@@ -202,6 +202,8 @@ class ViewsController extends Controller
     public function deposits()
     {
         $paymethod = Wdmethod::where('type', 'deposit')->orWhere('type', 'both')->where('status', 'enabled')->orderByDesc('id')->get();
+
+        // dd($paymethod);
     	return view('user.deposits')
         ->with(array(
             'title'=>'Fund your account',

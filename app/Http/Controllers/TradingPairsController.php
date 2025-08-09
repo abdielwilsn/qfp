@@ -313,7 +313,7 @@ class TradingPairsController extends Controller
                 'max:' . $tradingPair->max_investment,
                 function ($attribute, $value, $fail) use ($user) {
                     if ($value > $user->account_bal) {
-                        $fail('Insufficient balance for this investment.');
+                        $fail('Insufficient balance for this trade.');
                     }
                 }
             ]
@@ -338,7 +338,7 @@ class TradingPairsController extends Controller
             ->exists();
 
         if ($alreadyUsed) {
-            return back()->withErrors(['message' => 'Already invested in this today wait till tomorrow']);
+            return back()->withErrors(['message' => 'Already traded in this today wait till tomorrow']);
         }
 
 
@@ -360,7 +360,7 @@ class TradingPairsController extends Controller
 
             \DB::commit();
 
-            return redirect()->route('user.recent-trades')->with('success', 'Investment placed successfully!');
+            return redirect()->route('user.recent-trades')->with('success', 'Trade placed successfully!');
         } catch (\Exception $e) {
             \DB::rollBack();
             Log::error('Error creating investment: ' . $e->getMessage());

@@ -34,7 +34,7 @@
                                 <div class="col-md-8 offset-md-2">
                                     <strong>You can refer users by sharing your referral link:</strong><br>
                                     <div class="mb-3 input-group">
-                                        <input type="text" class="form-control myInput readonly text-{{$text}} bg-{{$bg}}" value="{{Auth::user()->ref_link}}" id="myInput" readonly>
+                                        <input type="text" class="form-control myInput readonly text-black bg-white" value="{{Auth::user()->ref_link}}" id="myInput" readonly>
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" onclick="myFunction()" type="button" id="button-addon2"><i class="fas fa-copy"></i></button>
                                         </div>

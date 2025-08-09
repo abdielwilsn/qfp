@@ -98,7 +98,7 @@
                                 </div>
                                 <a href="{{ route('user.trading-pairs.invest', $pair->id) }}" 
                                    class="btn btn-sm btn-warning fw-bold px-3">
-                                   Invest
+                                   Trade
                                 </a>
                             </div>
                             <div class="mt-2">

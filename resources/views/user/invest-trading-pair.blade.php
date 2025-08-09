@@ -89,7 +89,7 @@
                                 @enderror
                             </div>
 
-                            <button type="submit" class="btn btn-warning w-100 fw-bold py-2">Confirm Investment</button>
+                            <button type="submit" class="btn btn-warning w-100 fw-bold py-2">Confirm Trade</button>
                             {{-- <a href="{{ route('user.trading.pair.show') }}" class="btn btn-outline-secondary w-100 mt-2">Cancel</a> --}}
                         </form>
                     </div>

@@ -5,144 +5,112 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Mail\NewNotification;
-use App\Mail\UserUpload;
 use App\Mail\KycUpload;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Traits\CPTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Settings;
-use App\Models\Plans;
-use App\Models\Agent;
-use App\Models\User_plans;
-use App\Models\Admin;
-use App\Models\Faq;
-use App\Models\Images;
-use App\Models\Testimony;
-use App\Models\Content;
-use App\Models\Asset;
-use App\Models\Mt4Dtails;
-use App\Models\Deposit;
-use App\Models\Notification;
-use App\Models\Wdmethod;
-use App\Models\Withdrawal;
-use App\Models\Cp_transaction;
-use App\Models\Tp_Transaction;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class VerifyController extends Controller
 {
-    //
-    public function verifyaccount(Request $request){
-
-        $this->validate($request, [
-            'idcard' => 'mimes:jpg,jpeg,png|max:4000|image',
-            'passport' => 'mimes:jpg,jpeg,png|max:4000|image',
+    public function verifyaccount(Request $request)
+    {
+        $request->validate([
+            'idcard'   => 'nullable|mimes:jpg,jpeg,png,pdf,doc|max:4000|image',
+            'passport' => 'nullable|mimes:jpg,jpeg,png,pdf,doc|max:4000|image',
         ]);
-        
-        $settings = Settings::where('id', '=', '1')->first();
-        $strtxt = $this->RandomStringGenerator(6);
-  
-        if($request->hasfile('idcard')){
 
+        $settings = Settings::find(1);
+        $strtxt   = $this->RandomStringGenerator(6);
+        $whitelist = ['pdf', 'doc', 'jpeg', 'jpg', 'png'];
+
+        $cardname = null;
+        $passname = null;
+
+        // Process ID Card
+        if ($request->hasFile('idcard')) {
             $document1 = $request->file('idcard');
-            $filename1 = $document1->getClientOriginalName();
-            $ext = array_pop(explode(".", $filename1));
-            $whitelist = array('pdf','doc','jpeg','jpg','png');
-  
-            if (in_array($ext, $whitelist)) {
-  
-              if ($settings->location  == "Email") {
-                $cardname = $strtxt . $filename1 . time();
-  
-               }elseif ($settings->location  == "Local") {
-                  $cardname = $strtxt . $filename1 . time();
-                  // save to storage/app/uploads as the new $filename
-                  $path = $document1->storeAs('public/photos', $cardname);
-               }else {
-                  $cardname = $strtxt . $filename1 . time();
-                  $filePath = 'storage/' . $cardname;
-                  Storage::disk('s3')->put($filePath, file_get_contents($file));
-               }
-  
-            } else {
-              return redirect()->back()
-              ->with('message', 'Unaccepted ID Card Image Uploaded, try renaming the image file');
+            $ext = strtolower($document1->getClientOriginalExtension());
+
+            if (!in_array($ext, $whitelist)) {
+                return redirect()->back()
+                    ->with('message', 'Unaccepted ID Card Image Uploaded, try renaming the image file');
             }
-              
-        } 
-  
-  
-        if($request->hasfile('passport')){
+
+            $nameWithoutExt = pathinfo($document1->getClientOriginalName(), PATHINFO_FILENAME);
+            $cardname = "{$strtxt}_{$nameWithoutExt}_" . time() . ".{$ext}";
+
+            if ($settings->location === "Local") {
+                $document1->storeAs('public/photos', $cardname);
+            } elseif ($settings->location !== "Email") {
+                $filePath = "storage/{$cardname}";
+                Storage::disk('s3')->put($filePath, file_get_contents($document1));
+            }
+        }
+
+        // Process Passport
+        if ($request->hasFile('passport')) {
             $document2 = $request->file('passport');
-            $filename2 = $document2->getClientOriginalName();
-  
-            $ext = array_pop(explode(".", $filename2));
-            $whitelist = array('pdf','doc','jpeg','jpg','png');
-  
-            if (in_array($ext, $whitelist)) {
-  
-              if ($settings->location  == "Email") {
-                $passname = $strtxt . $filename2 . time();
-               }elseif ($settings->location  == "Local") {
-                  $passname = $strtxt . $filename2 . time();
-                  // save to storage/app/uploads as the new $filename
-                  $path = $document2->storeAs('public/photos', $passname);
-               }else {
-                  $passname = $strtxt . $filename2 . time();
-                  $filePaths = 'storage/' . $passname;
-                  Storage::disk('s3')->put($filePaths, file_get_contents($file));
-               }
-  
-            } else {
-              return redirect()->back()
-              ->with('message', 'Unaccepted Passport Image Uploaded, try renaming the image file');
+            $ext = strtolower($document2->getClientOriginalExtension());
+
+            if (!in_array($ext, $whitelist)) {
+                return redirect()->back()
+                    ->with('message', 'Unaccepted Passport Image Uploaded, try renaming the image file');
             }
-        } 
-  
-        if ($settings->location  == "Email") {
+
+            $nameWithoutExt = pathinfo($document2->getClientOriginalName(), PATHINFO_FILENAME);
+            $passname = "{$strtxt}_{$nameWithoutExt}_" . time() . ".{$ext}";
+
+            if ($settings->location === "Local") {
+                $document2->storeAs('public/photos', $passname);
+            } elseif ($settings->location !== "Email") {
+                $filePath = "storage/{$passname}";
+                Storage::disk('s3')->put($filePath, file_get_contents($document2));
+            }
+        }
+
+        // Handle Email location uploads
+        if ($settings->location === "Email") {
             $data = [
-              'document' => $document1,
-              'document1' => $document2,
+                'document'  => $request->file('idcard') ?? null,
+                'document1' => $request->file('passport') ?? null,
             ];
             Mail::to($settings->contact_email)->send(new KycUpload($data));
-        }else {
-            //send email notification
+        } else {
+            // Send notification email
             $objDemo = new \stdClass();
-            $objDemo->message = "This is to inform you of a successfull KYC Document Upload that just occured on your system., please login to review documents.";
+            $objDemo->message = "This is to inform you of a successful KYC Document Upload that just occurred on your system. Please login to review documents.";
             $objDemo->sender = $settings->site_name;
-            $objDemo->date = \Carbon\Carbon::Now();
-            $objDemo->subject ="KYC Verification";
+            $objDemo->date = Carbon::now();
+            $objDemo->subject = "KYC Verification";
             Mail::bcc($settings->contact_email)->send(new NewNotification($objDemo));
         }
-  
-  
-        //update user
-        User::where('id',Auth::user()->id)
-        ->update([
-            'id_card' => $cardname,
-            'passport' => $passname,
+
+        // Update user record
+        User::where('id', Auth::id())->update([
+            'id_card'        => $cardname,
+            'passport'       => $passname,
             'account_verify' => 'Under review',
         ]);
-  
+
         return redirect()->back()
-            ->with('success', 'Action Sucessful! Please wait for system to validate your submission.');
+            ->with('success', 'Action Successful! Please wait for system to validate your submission.');
     }
 
+    // Random string generator
+    private function RandomStringGenerator($n)
+    {
+        $domain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        $len = strlen($domain);
+        $generated_string = "";
 
-    // for front end content management
-    function RandomStringGenerator($n) 
-    { 
-        $generated_string = ""; 
-        $domain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"; 
-        $len = strlen($domain); 
-        for ($i = 0; $i < $n; $i++) 
-        { 
-            $index = rand(0, $len - 1); 
-            $generated_string = $generated_string . $domain[$index]; 
-        } 
-        // Return the random generated string 
-        return $generated_string; 
-    } 
+        for ($i = 0; $i < $n; $i++) {
+            $index = rand(0, $len - 1);
+            $generated_string .= $domain[$index];
+        }
+
+        return $generated_string;
+    }
 }

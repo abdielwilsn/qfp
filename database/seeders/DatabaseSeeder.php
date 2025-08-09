@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
             ContentsTableSeeder::class,
             CpTransactionsTableSeeder::class,
             CryptoAccountsTableSeeder::class,
-            DepositsTableSeeder::class,
+            // DepositsTableSeeder::class,
             FaqsTableSeeder::class,
             ImagesTableSeeder::class,
             NotificationsTableSeeder::class,

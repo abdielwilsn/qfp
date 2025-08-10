@@ -18,7 +18,7 @@
 			<div class="page-inner">
 				<div class="mt-2 mb-4">
 					<h1 class="title1 text-{{$text}}">Fund Your Account</h1>
-					<button class="px-5 btn btn-primary btn-lg" onclick="window.location.href='https://metafxcrypto.com/howtobuy';">How To Buy Crypto</button>
+					{{-- <button class="px-5 btn btn-primary btn-lg" onclick="window.location.href='https://metafxcrypto.com/howtobuy';">How To Buy Crypto</button> --}}
 				</div>
 
 				<x-danger-alert/>

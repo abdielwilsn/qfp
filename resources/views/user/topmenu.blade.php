@@ -13,7 +13,7 @@ if (Auth::user()->dashboard_style == "light") {
 <div class="main-header">
     <!-- Logo Header -->
     <div class="logo-header" data-background-color="{{$bgmenu}}">
-        <a href="/" class="logo" style="font-size: 27px; color:#fff;">
+        <a href="/dashboard" class="logo" style="font-size: 27px; color:#fff;">
             {{$settings->site_name}}
         </a>
         <button class="ml-auto navbar-toggler sidenav-toggler" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">

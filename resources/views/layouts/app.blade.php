@@ -155,6 +155,18 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 				$(".dataTables_filter input").addClass("bg-{{$bg}} text-{{$text}}");
 			} );
 		</script>
+
+		<style>
+
+
+
+	.dataTables_length select {
+    padding-left: 8px !important;
+    padding-right: 24px !important;
+}
+
+	</style>
+
 		@stack('modals')
 		@stack('scripts')
 		@livewireScripts

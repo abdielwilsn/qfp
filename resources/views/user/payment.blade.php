@@ -8,11 +8,11 @@
 	}
 ?>
 @extends('layouts.app')
-@section('styles')
+{{-- @section('styles')
     @parent
 	<link rel="stylesheet" href="{{asset('dash/css/stripeglobal.css')}}">
 	<link rel="stylesheet" href="{{asset('dash/css/stripenormalize.css')}}">
-@endsection
+@endsection --}}
 
     @section('content')
         @include('user.topmenu')
@@ -33,7 +33,10 @@
 						    
 						    
 							<div class="card bg-{{$bg}} shadow-lg p-2 p-md-4">
-							    <div><button class="px-5 btn btn-primary btn-lg"  onclick="window.location.href='https://metafxcrypto.com/howtobuy';">How To Buy Crypto</button></div>
+							    {{-- <div><button class="px-5 btn btn-primary btn-lg"  onclick="window.location.href='https://metafxcrypto.com/howtobuy';">How To Buy Crypto</button></div> --}}
+
+															    {{-- <div><button class="px-5 btn btn-primary btn-lg"> Buy Crypto</button></div> --}}
+
 								<div class="card-body">
 									@if($title !="Complete Payment")
 										@php
@@ -56,7 +59,7 @@
 											
 											<p style="margin:auto; width:50%;padding:10px;">
 											   <p class="text-{{$text}}"> 
-<ul><li class="text-{{$text}}"><big> <strong>HOW TO BUY CRYPTO</strong></big></li></ul>
+{{-- <ul><li class="text-{{$text}}"><big> <strong>HOW TO BUY CRYPTO</strong></big></li></ul>
 
 1• Copy the address of your desired crypto payment method<br>
 <p class="text-{{$text}}">2•	Visit <a class="text-{{$text}}" href="https://www.moonpay.com" target="_blank"> www.moonpay.com </a>;</p>
@@ -67,7 +70,7 @@
 7•	Enter Your Email address and continue <br>
 8•	Enter verification code and continue <br>
 9•	Please enter your name and date of birth as they appear on official documents. Inaccurate information will delay the completion of your transaction.<br>
-</p>
+</p> --}}
 
 
 
@@ -94,7 +97,7 @@
 												</h3>
 												<div class="form-group">
     												<div class="mb-3 input-group">
-    													<input type="text" class="form-control myInput readonly text-{{$text}} bg-{{$bg}}" value="{{$payment_mode->wallet_address}}" id="myInput" readonly>
+    													<input type="text" class="form-control myInput readonly text-black bg-white" value="{{$payment_mode->wallet_address}}" id="myInput" readonly>
     													<div class="input-group-append">
     														<button class="btn btn-outline-secondary" onclick="myFunction()" type="button" id="button-addon2"><i class="fas fa-copy"></i></button>
     													</div>

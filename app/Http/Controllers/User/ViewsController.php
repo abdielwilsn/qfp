@@ -116,7 +116,7 @@ class ViewsController extends Controller
             $request->session()->put('reged','yes');
             return redirect()->route('dashboard');
         }//Also log user out if web dashboard is not enabled and user is not admin
-        
+        // dd(Auth::user());
         return view('user.dashboard' ,[
             'title'=>'User panel',
             'ref_earnings' => $ref_earnings,

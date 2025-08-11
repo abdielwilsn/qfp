@@ -41,7 +41,7 @@ class CloseExpiredInvestmentsJob implements ShouldQueue
                 // Calculate profit (random between min and max return percentage)
                 $minReturn = $investment->tradingPair->min_return_percentage / 100;
                 $maxReturn = $investment->tradingPair->max_return_percentage / 100;
-                $returnRate = mt_rand($minReturn * 10000, $maxReturn * 10000) / 10000; // Random between min and max
+                $returnRate = mt_rand($minReturn * 10000, $maxReturn * 10000) / 10000;
                 $profit = $investment->amount * $returnRate;
                 $totalReturn = $investment->amount + $profit;
 
@@ -49,6 +49,13 @@ class CloseExpiredInvestmentsJob implements ShouldQueue
                 $user = $investment->user;
                 if ($user) {
                     $user->increment('account_bal', $totalReturn);
+
+                    // $user->increment('roi', $totalReturn);
+
+
+                    $user->increment('roi', $profit);
+
+                    // dd($user);
                     // Log::info("user total return {$totalReturn}");
                     // Log::info("user")
                     Log::info("User ID {$user->id} balance updated: +{$totalReturn} (Investment ID {$investment->id})");
@@ -57,11 +64,13 @@ class CloseExpiredInvestmentsJob implements ShouldQueue
                     continue;
                 }
 
+                // dd($user->roi);
+
                 // dd($profit);
 
                 // Update investment
                 $investment->update([
-                    'status' => 'completed',
+                    // 'status' => 'completed',
                     'profit' => $profit,
                     'updated_at' => now()
                 ]);

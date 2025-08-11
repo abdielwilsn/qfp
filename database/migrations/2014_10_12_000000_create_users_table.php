@@ -36,7 +36,7 @@ class CreateUsersTable extends Migration
             $table->string('plan')->nullable();
             $table->string('user_plan')->nullable();
             $table->float('account_bal')->nullable();
-            $table->float('roi')->nullable();
+            $table->float('roi')->default(0.00);
             $table->float('bonus')->nullable();
             $table->float('ref_bonus')->nullable();
             $table->string('signup_bonus')->nullable();

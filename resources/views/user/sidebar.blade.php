@@ -109,12 +109,12 @@
                         <p>Refer Users</p>
                     </a>
                 </li>
-                {{-- <li class="nav-item {{ (request()->routeIs('support')) ? 'active' : '' }}">
+                <li class="nav-item {{ (request()->routeIs('support')) ? 'active' : '' }}">
                     <a href="{{ url('dashboard/support') }}">
                         <i class="fa fa-life-ring" aria-hidden="true"></i>
                         <p>Help/Support</p>
                     </a>
-                </li> --}}
+                </li>
             </ul>
         </div>
     </div>

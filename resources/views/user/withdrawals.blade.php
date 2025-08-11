@@ -1,13 +1,13 @@
 <?php
-	if (Auth::user()->dashboard_style == "light") {
-		$bgmenu="blue";
-		$bg="light";
-		$text = "dark";
-	} else {
-		$bgmenu="dark";
-		$bg="dark";
-		$text = "light";
-	}
+    if (Auth::user()->dashboard_style == "light") {
+        $bgmenu = "blue";
+        $bg = "light";
+        $text = "dark";
+    } else {
+        $bgmenu = "dark";
+        $bg = "dark";
+        $text = "light";
+    }
 ?>
 @extends('layouts.app')
 @section('content')
@@ -32,6 +32,12 @@
                                         Withdrawals are currently disabled. Please check back later.
                                     </div>
                                 @else
+                                    {{-- BEP20 Notice --}}
+                                    <div class="alert alert-info text-center">
+                                        💡 We only process withdrawals via <strong>BNB Smart Chain (BEP20)</strong>.
+                                        Please make sure your wallet address is on the BEP20 network.
+                                    </div>
+
                                     <form action="{{ route('withdrawamount') }}" method="POST">
                                         @csrf
 
@@ -44,22 +50,18 @@
                                         {{-- Wallet Address --}}
                                         <div class="form-group">
                                             <label class="text-{{$text}}">Wallet Address</label>
-                                            <input type="text" class="form-control" name="wallet_address" required placeholder="Enter your wallet address">
+                                            <input type="text" class="form-control" name="wallet_address" required placeholder="Enter your BEP20 wallet address">
                                         </div>
 
+                                        {{-- Network --}}
                                         {{-- Network --}}
                                         <div class="form-group">
                                             <label class="text-{{$text}}">Network</label>
                                             <select class="form-control" name="network" required>
-                                                <option value="">Select Network</option>
-                                                <option value="BTC">Bitcoin (BTC)</option>
-                                                <option value="ETH">Ethereum (ERC20)</option>
-                                                <option value="BSC">BNB Smart Chain (BEP20)</option>
-                                                <option value="TRC20">Tron (TRC20)</option>
-                                                <option value="SOL">Solana</option>
-                                                <option value="Other">Other</option>
+                                                <option value="BSC" selected>BNB Smart Chain (BEP20)</option>
                                             </select>
                                         </div>
+
 
                                         {{-- Optional Notes --}}
                                         <div class="form-group">
@@ -73,7 +75,6 @@
                                                 <i class="fa fa-paper-plane"></i> Submit Withdrawal Request
                                             </button>
                                         </div>
-
                                     </form>
                                 @endif
                             </div>

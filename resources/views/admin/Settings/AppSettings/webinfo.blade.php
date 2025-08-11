@@ -26,12 +26,12 @@
                 </div> 
             </div>
             
-            {{-- <div class=" form-row">
+            <div class=" form-row">
                 <div class="form-group col-md-12">
                     <h5 class="text-{{$text}}">Announcement</h5>
                     <textarea name="update" class="form-control bg-{{$bg}} text-{{$text}}" rows="2">{{$settings->newupdate}}</textarea>
                 </div>
-                <div class="form-group col-md-6">
+                {{-- <div class="form-group col-md-6">
                     <h5 class="text-{{$text}}">Live chat widget Code</h5>
                     <textarea name="tawk_to" class="form-control bg-{{$bg}} text-{{$text}}" rows="4">{{$settings->tawk_to}}</textarea>
                 </div>
@@ -43,8 +43,8 @@
                             <option value="{{$list}}">{{$list}}</option>
                         @endforeach 
                     </select>
-                </div>
-            </div> --}}
+                </div> --}}
+            </div> 
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <h5 class="text-{{$text}}">Logo (Recommended size; max width, 200px and max height 100px.)</h5>

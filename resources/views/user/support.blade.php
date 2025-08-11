@@ -24,7 +24,7 @@
 								<h1 class="title1 text-{{$text}}">{{$settings->site_name}} Support</h1>
 								<div class="sign-up-row widget-shadow text-{{$text}}">
 									<h4 class="text-{{$text}}">For inquiries, suggestions or complains. Mail us</h4>
-									<h1 class="mt-3 text-primary"> <a href="mailto:{{$settings->contact_email}}">{{$settings->contact_email}}</a> </h1>
+									{{-- <h1 class="mt-3 text-primary"> <a href="mailto:{{$settings->contact_email}}">{{$settings->contact_email}}</a> </h1> --}}
 								</div>
 							</div>
 							<div class="pb-5 col-md-8 offset-md-2">

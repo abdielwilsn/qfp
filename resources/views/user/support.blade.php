@@ -43,7 +43,12 @@
 									</div>
 									<input type="hidden" name="_token" value="{{ csrf_token() }}">
 									<div class="">
-										<input type="submit" class="py-2 btn btn-primary btn-block" value="Send">
+<div class="text-center">
+    <input type="submit" 
+           class="btn btn-primary" 
+           style="height: 40px; padding: 0 20px; font-size: 14px; border-radius: 50px;" 
+           value="Send">
+</div>
 									</div>
 								</form>
 							</div>

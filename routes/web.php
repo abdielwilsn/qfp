@@ -35,6 +35,12 @@ require __DIR__.'/user.php';
 //     Route::post('/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook');
 // });
 
+
+Route::group(['middleware' => ['auth:admin', 'issuperadmin']], function () {
+    Route::get('/admin/user-trades/{user}', [TradingPairsController::class, 'viewUserTrades'])->name('admin.user-trades');
+    Route::delete('/admin/user-trades/{investment}', [TradingPairsController::class, 'deleteUserTrade'])->name('admin.user-trades.delete');
+});
+
 Route::get('/payment', function () {
     return view('payment.form');
 })->middleware('auth')->name('payment.form'); 
@@ -83,6 +89,9 @@ Route::get('/test-email', function () {
 
 
     Route::post('trading-pairs/{tradingPair}/invest', [TradingPairsController::class, 'storeInvestment'])->name('user.trading-pairs.store-investment');
+
+
+    
 
 // });
 

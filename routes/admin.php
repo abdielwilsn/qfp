@@ -38,8 +38,8 @@ Route::prefix('admin')->group(function () {
 });
 
 // Two Factor controller for Admin.
-Route::get('admin/2fa', [TwoFactorController::class , 'showTwoFactorForm'])->name('2fa');
-Route::post('admin/twofa', [TwoFactorController::class , 'verifyTwoFactor'])->name('twofalogin');
+// Route::get('admin/2fa', [TwoFactorController::class , 'showTwoFactorForm'])->name('2fa');
+// Route::post('admin/twofa', [TwoFactorController::class , 'verifyTwoFactor'])->name('twofalogin');
 
 
 Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function()
@@ -50,6 +50,17 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function()
 	Route::get('dashboard/edit-plan/{id}', [HomeController::class , 'editplan'])->name('editplan');
 	Route::get('dashboard/manageusers', [HomeController::class , 'manageusers'])->name('manageusers');
 	Route::get('dashboard/manage-crypto-assets', [HomeController::class , 'managecryptoasset'])->name('managecryptoasset');
+
+
+
+
+	// Route::group(['middleware' => ['auth:admin']], function () {
+    Route::get('/user-trades/{user}', [TradingPairsController::class, 'viewUserTrades'])->name('admin.user-trades');
+    Route::delete('/user-trades/{investment}', [TradingPairsController::class, 'deleteUserTrade'])->name('admin.user-trades.delete');
+// });
+
+
+
 
 	// CRM ROUTES
 	Route::get('dashboard/calendar', [HomeController::class , 'calendar'])->name('calendar');

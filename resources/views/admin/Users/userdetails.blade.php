@@ -31,6 +31,9 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                               Actions
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-lg-right">
+                                                @if (Auth('admin')->User()->type == "Super Admin")
+                                                    <a class="dropdown-item" href="{{ route('admin.user-trades', $user->id) }}">View Trades</a>
+                                                @endif
                                                 <a class="dropdown-item" href="{{ route('loginactivity', $user->id) }}">Login Activity</a>
                                                 @if($user->status==NULL || $user->status=='blocked')
                                                 <a class="dropdown-item" href="{{ url('admin/dashboard/uunblock') }}/{{$user->id}}">Unblock</a> 
@@ -55,7 +58,6 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                                 <a href="#" data-toggle="modal" data-target="#sendmailtooneuserModal" class="dropdown-item">Send Email</a>
                                                 {{-- <a href="#" data-toggle="modal" data-target="#switchuserModal"  class="dropdown-item text-success">Login as {{$user->name}}</a> --}}
                                                 <a href="#" data-toggle="modal" data-target="#deleteModal" class="dropdown-item text-danger">Delete {{$user->name}}</a>
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -88,13 +90,11 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 </div>
                                 <div class="col-md-3">
                                     <h5>Inv. Plans</h5>
-                                    {{-- <span class="text-bold"> <strong>2</strong> </span> --}}
                                     @if ($user->plan != NULL)
                                       <a class="btn btn-sm btn-primary d-inline" href="{{route('user.plans', $user->id)}}">View Plans</a>  
                                     @else
                                         <p>No Investment Plan</p>
                                     @endif
-                                    
                                 </div>
                                 <div class="col-md-3">
                                     <h5>KYC</h5>
@@ -158,18 +158,6 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                    <h5>{{$user->country}}</h5>
                                 </div>
                             </div>
-                            {{-- <div class="p-3 border row ">
-                                <div class="col-md-4 border-right">
-                                    <h5>Wallet Address</h5>
-                                </div>
-                                <div class="col-md-8">
-                                   <h5>@if ($user->wallet_address)
-                                    {{$user->wallet_address}}
-                                   @else
-                                   Not added yet!
-                                   @endif</h5>
-                                </div>
-                            </div> --}}
                             <div class="p-3 border row text-{{$text}}">
                                 <div class="col-md-4 border-right">
                                     <h5>Registered</h5>

@@ -41,6 +41,7 @@
                                             <th>Status</th>
                                             <th>Start Date</th>
                                             <th>End Date</th>
+                                            <th>Time Left</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -73,6 +74,14 @@
                                                 </td>
                                                 <td>{{ $investment->start_date->format('Y-m-d H:i') }}</td>
                                                 <td>{{ $investment->end_date ? $investment->end_date->format('Y-m-d H:i') : 'N/A' }}</td>
+                                                <td>
+                                                    @if($investment->end_date)
+                                                        <span class="countdown-timer" data-endtime="{{ $investment->end_date->toISOString() }}"></span>
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -124,6 +133,14 @@
                                                 {{ $investment->start_date->format('Y-m-d') }} to 
                                                 {{ $investment->end_date ? $investment->end_date->format('Y-m-d') : 'N/A' }}
                                             </span>
+
+                                            <div class="d-flex justify-content-between text-{{ $text }}">
+    <span>Time Left:</span>
+    <span class="countdown-timer text-{{ $text }}" data-endtime="{{ $investment->end_date ? $investment->end_date->format('c') : '' }}">
+        {{ $investment->end_date ? '' : 'N/A' }}
+    </span>
+</div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -167,6 +184,54 @@
 
         // Run immediately on page load
         simulateProfits();
+
+
+        function updateCountdowns() {
+    const countdownElements = document.querySelectorAll('.countdown-timer');
+    countdownElements.forEach(el => {
+        const endTimeStr = el.dataset.endtime;
+        if (!endTimeStr) {
+            el.textContent = 'N/A';
+            return;
+        }
+
+        const endTime = new Date(endTimeStr);
+        const now = new Date();
+
+        const diff = endTime - now; // milliseconds
+
+        if (diff <= 0) {
+            el.textContent = 'Expired';
+            el.classList.add('text-danger');
+            el.classList.remove('text-success');
+            return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        // Format: "Xd HH:MM:SS" or "HH:MM:SS" if no days
+        let timeString = '';
+        if (days > 0) {
+            timeString += days + 'd ';
+        }
+        timeString +=
+            String(hours).padStart(2, '0') + ':' +
+            String(minutes).padStart(2, '0') + ':' +
+            String(seconds).padStart(2, '0');
+
+        el.textContent = timeString;
+        el.classList.add('text-success');
+        el.classList.remove('text-danger');
+    });
+}
+
+// Run every 1 second to update countdown timers
+setInterval(updateCountdowns, 1000);
+updateCountdowns();
+
     </script>
 @endsection
 

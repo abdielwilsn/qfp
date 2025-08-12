@@ -371,5 +371,40 @@ class TradingPairsController extends Controller
             return back()->with('error', 'Failed to place investment.');
         }
     }
+
+    public function viewUserTrades(User $user)
+    {
+        $investments = Investment::with(['tradingPair'])
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        $settings = Settings::first() ?? new Settings(['currency' => 'USD']);
+        
+        return view('admin.user-trades', compact('investments', 'user', 'settings'));
+    }
+
+    public function deleteUserTrade(Investment $investment)
+    {
+        try {
+            \DB::beginTransaction();
+            
+            // Optionally refund the user's balance
+            $user = User::find($investment->user_id);
+            $user->increment('account_bal', $investment->amount);
+            
+            $investment->delete();
+            
+            \DB::commit();
+            
+            return redirect()->back()->with('success', 'Trade deleted successfully!');
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            Log::error('Error deleting user trade: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete trade.');
+        }
+    }
+    
+    
 }
 ?>

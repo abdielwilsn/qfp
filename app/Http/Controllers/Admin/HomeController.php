@@ -28,6 +28,7 @@ use App\Models\Tp_Transaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\TradingPair;
 
 class HomeController extends Controller
 {
@@ -47,7 +48,8 @@ class HomeController extends Controller
         $userlist = User::count();
         $activeusers = User::where('status', 'active')->count();
         $blockeusers = User::where('status', 'blocked')->count();
-        $plans = Plans::count();
+        $plans = TradingPair::count();
+        // $plans = Plans::count();
         $unverifiedusers = User::where('account_verify', '!=' ,'yes')->count();
       
         $chart_pdepsoit = DB::table('deposits')->where('status','Processed')->sum('amount');

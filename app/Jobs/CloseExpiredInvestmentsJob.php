@@ -70,7 +70,7 @@ class CloseExpiredInvestmentsJob implements ShouldQueue
 
                 // Update investment
                 $investment->update([
-                    // 'status' => 'completed',
+                    'status' => 'completed',
                     'profit' => $profit,
                     'updated_at' => now()
                 ]);

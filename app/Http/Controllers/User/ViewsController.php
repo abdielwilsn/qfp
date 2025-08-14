@@ -88,7 +88,13 @@ class ViewsController extends Controller
         //sum total deposited
         $total_deposited = DB::table('deposits')->select(DB::raw("SUM(amount) as count"))->where('user', Auth::user()->id)->
         where('status','Processed')->get();
-        
+        $withdrawals = DB::table('withdrawls')
+            ->select(DB::raw("SUM(amount) as count"))
+            ->where('user', Auth::user()->id)
+            ->where('status', 'processed')
+            ->get();
+
+
         if($settings->payment_mode=='Bank transfer'){
           $condition=empty(Auth::user()->account_no) or empty(Auth::user()->account_name) or empty(Auth::user()->bank_name) or empty(Auth::user()->phone);
         }elseif($settings->payment_mode=='BTC'){
@@ -121,6 +127,7 @@ class ViewsController extends Controller
             'title'=>'User panel',
             'ref_earnings' => $ref_earnings,
             'deposited' => $total_deposited,
+            'withdrawals' =>$withdrawals,
             'total_bonus' => $total_bonus,
             'user_plan' => $user_plan,
             'user_plan_active'=> $user_plan_active,

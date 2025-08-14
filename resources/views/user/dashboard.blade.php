@@ -205,7 +205,7 @@ if (Auth::user()->dashboard_style == "light") {
     </div>
 
     <!-- Total Withdrawals -->
-    <div class="col-6 col-sm-6 col-lg-3 mb-3" >
+    {{-- <div class="col-6 col-sm-6 col-lg-3 mb-3" >
         <div class="p-3 card bg-{{$bg}} shadow h-100" style="border-radius: 12px;">
             <div class="d-flex align-items-center h-100">
                 <span class="mr-3 stamp stamp-md bg-danger">
@@ -223,7 +223,30 @@ if (Auth::user()->dashboard_style == "light") {
                 </div>
             </div>
         </div>
+    </div> --}}
+
+    <!-- Total Withdrawals -->
+<div class="col-6 col-sm-6 col-lg-3 mb-3">
+    <div class="p-3 card bg-{{$bg}} shadow h-100" style="border-radius: 12px;">
+        <div class="d-flex align-items-center h-100">
+            <span class="mr-3 stamp stamp-md bg-danger">
+                <i class="fa fa-arrow-alt-circle-up"></i>
+            </span>
+            <div>
+                @php
+                    $totalWithdrawals = $withdrawals[0]->count ?? 0;
+                @endphp
+
+                <h5 class="mb-1 text-{{$text}}">
+                    <b>{{ $settings->currency }}{{ number_format($totalWithdrawals, 2, '.', ',') }}</b>
+                </h5>
+
+                <small class="text-muted text-{{$text}}">Total Withdrawals</small>
+            </div>
+        </div>
     </div>
+</div>
+
 </div>
                     
                     <div class="row">

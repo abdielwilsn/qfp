@@ -285,7 +285,7 @@ class ManageUsersController extends Controller
             }
         }
 
-        $withdrawals=Withdrawal::where('user',$id)->get();
+        $withdrawals=Withdrawal::where('user_id',$id)->get();
         if(!empty($withdrawals)){
             foreach($withdrawals as $withdrawals){
                 Withdrawal::where('id', $withdrawals->id)->delete();

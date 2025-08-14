@@ -40,11 +40,11 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                                 @else
                                                 <a class="dropdown-item" href="{{ url('admin/dashboard/uublock') }}/{{$user->id}}">Block</a>
                                                 @endif
-                                                @if($user->trade_mode=='on')
-                                                <a class="dropdown-item" href="{{ url('admin/dashboard/usertrademode') }}/{{$user->id}}/off">Turn off trade</a> 
-                                                @else
-                                                <a class="dropdown-item" href="{{ url('admin/dashboard/usertrademode') }}/{{$user->id}}/on">Turn on trade</a>
-                                                @endif
+                                                {{-- @if($user->trade_mode=='on') --}}
+                                                {{-- <a class="dropdown-item" href="{{ url('admin/dashboard/usertrademode') }}/{{$user->id}}/off">Turn off trade</a>  --}}
+                                                {{-- @else --}}
+                                                {{-- <a class="dropdown-item" href="{{ url('admin/dashboard/usertrademode') }}/{{$user->id}}/on">Turn on trade</a> --}}
+                                                {{-- @endif --}}
                                                 @if($user->email_verified_at)
                                                 
                                                 @else

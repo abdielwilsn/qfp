@@ -337,9 +337,11 @@ class TradingPairsController extends Controller
 
         // dd($recentTrades);  
 
-        $alreadyUsed = Investment::where('user_id', $user->id)
+       $alreadyUsed = Investment::where('user_id', $user->id)
             ->where('trading_pair_id', $tradingPair->id)
+            ->where('status', 'active') 
             ->exists();
+
 
         if ($alreadyUsed) {
             return back()->withErrors(['message' => 'Already traded in this today wait till tomorrow']);

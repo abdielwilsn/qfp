@@ -88,9 +88,9 @@ class ViewsController extends Controller
         //sum total deposited
         $total_deposited = DB::table('deposits')->select(DB::raw("SUM(amount) as count"))->where('user', Auth::user()->id)->
         where('status','Processed')->get();
-        $withdrawals = DB::table('withdrawls')
+        $withdrawals = DB::table('withdrawals')
             ->select(DB::raw("SUM(amount) as count"))
-            ->where('user', Auth::user()->id)
+            ->where('user_id', Auth::user()->id)
             ->where('status', 'processed')
             ->get();
 
@@ -109,7 +109,7 @@ class ViewsController extends Controller
         $total_bonus = User::where('id', Auth::user()->id)->first();
 
         //count the number of plans users have purchased
-        $user_plan = User_plans::where('user_id', Auth::user()->id)->get();
+        $user_plan = User_plans::where('user', Auth::user()->id)->get();
 
         $user_plan_active = User_plans::where([
                     ['user', '=', Auth::user()->id],

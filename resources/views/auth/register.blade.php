@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Creaet Account')
+@section('title', 'Create Account')
 
 @section('styles')
 @parent

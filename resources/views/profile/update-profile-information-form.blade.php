@@ -19,7 +19,7 @@
         </div>
         <div class="form-group col-md-6">
             <h5 class="text-{{$text}}">Nationality</h5>
-            <textarea class="form-control bg-{{$bg}} text-{{$text}}" placeholder="Full Address" name="address" row="3">{{ Auth::user()->address }}</textarea>
+            <textarea class="form-control bg-{{$bg}} text-{{$text}}" placeholder="Full Address" name="address" row="3">{{ Auth::user()->country }}</textarea>
         </div>
         
     </div>

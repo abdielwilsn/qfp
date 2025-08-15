@@ -79,6 +79,19 @@ class WithdrawalController extends Controller
     $user->account_bal -= $request->amount;
     $user->save();
 
+    $settings=Settings::where('id','1')->first();
+    $mail = $settings->contact_email;
+
+
+
+    $objDemo = new \stdClass();
+    $objDemo->message = "A withdrawal request has been initiated.";
+    $objDemo->sender = $settings->site_name;
+    $objDemo->date = \Carbon\Carbon::Now();
+    $objDemo->subject ="Withdrawal Request";
+
+    Mail::bcc($mail)->send(new NewNotification($objDemo));
+
     return redirect()->back()->with('success', 'Withdrawal request submitted successfully!');
 }
 
@@ -133,33 +146,33 @@ class WithdrawalController extends Controller
         //     if ($request->otpcode != Auth::user()->withdrawotp) {
         //         return redirect()->back()->with('message','OTP is incorrect, please recheck the code');
         //     }
-        // } 
-        
+        // }
+
         $settings=Settings::where('id','1')->first();
         if($settings->enable_kyc =="yes"){
             if(Auth::user()->account_verify != "Verified"){
                 return redirect()->back()->with('message','Your account must be verified before you can make withdrawal.');
             }
         }
-    
+
         $method=Wdmethod::where('name', $request->method)->first();
         if ($method->charges_type == 'percentage') {
             $charges = $request['amount'] * $method->charges_amount/100;
         } else {
             $charges = $method->charges_amount;
         }
-        
+
         $to_withdraw = $request['amount'] + $charges;
         //return if amount is lesser than method minimum withdrawal amount
-    
+
         if(Auth::user()->account_bal < $to_withdraw){
             return redirect()->back()
-            ->with('message', 'Sorry, your account balance is insufficient for this request.'); 
+            ->with('message', 'Sorry, your account balance is insufficient for this request.');
         }
-         
+
         if($request['amount'] < $method->minimum){
             return redirect()->back()
-            ->with("message", "Sorry, The minimum amount you can withdraw is $settings->currency$method->minimum."); 
+            ->with("message", "Sorry, The minimum amount you can withdraw is $settings->currency$method->minimum.");
         }
 
         //get user last investment package
@@ -175,21 +188,21 @@ class WithdrawalController extends Controller
                 return redirect()->route('profile')
                 ->with('message', 'Please Setup your Bitcoin Wallet Address');
             }
-            $coin="BTC"; 
+            $coin="BTC";
             $wallet=$user->btc_address;
         }elseif($request->method  =='Ethereum'){
             if(empty($user->eth_address)){
                 return redirect()->route('profile')
                 ->with('message', 'Please Setup your Ethereum Wallet Address');
             }
-            $coin="ETH"; 
+            $coin="ETH";
             $wallet=$user->eth_address;
         }elseif($request->method  =='Litecoin'){
             if(empty($user->ltc_address)){
                 return redirect()->route('profile')
                 ->with('message', 'Please Setup your Litecoin Wallet Address');
             }
-            $coin="LTC";  
+            $coin="LTC";
             $wallet=$user->ltc_address;
         }elseif($request->method  =='Bank Transfer'){
             if(empty($user->account_name) or empty($user->bank_name) or empty($user->account_number)){
@@ -228,15 +241,15 @@ class WithdrawalController extends Controller
         Mail::bcc($user->email)->send(new NewNotification($objDemouser));
 
         //save withdrawal info
-        $dp=new Withdrawal();         
+        $dp=new Withdrawal();
         $dp->amount= $amount;
         $dp->to_deduct= $to_withdraw;
         $dp->payment_mode = $request->method;
         $dp->status= 'Pending';
         $dp->paydetails= $request->details;
         $dp->user= $user->id;
-        $dp->save();  
-        
+        $dp->save();
+
         return redirect()->route('withdrawalsdeposits')
             ->with('success', 'Action Sucessful! Please wait while we process your request.');
 
@@ -244,19 +257,19 @@ class WithdrawalController extends Controller
 
 
     // for front end content management
-    function RandomStringGenerator($n) 
-    { 
-        $generated_string = ""; 
-        $domain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"; 
-        $len = strlen($domain); 
-        for ($i = 0; $i < $n; $i++) 
-        { 
-            $index = rand(0, $len - 1); 
-            $generated_string = $generated_string . $domain[$index]; 
-        } 
-        // Return the random generated string 
-        return $generated_string; 
-    } 
+    function RandomStringGenerator($n)
+    {
+        $generated_string = "";
+        $domain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        $len = strlen($domain);
+        for ($i = 0; $i < $n; $i++)
+        {
+            $index = rand(0, $len - 1);
+            $generated_string = $generated_string . $domain[$index];
+        }
+        // Return the random generated string
+        return $generated_string;
+    }
 
 
 

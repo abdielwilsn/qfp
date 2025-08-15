@@ -69,7 +69,7 @@ class DepositController extends Controller
                   ],
                 'metadata' => ['integration_check' => 'accept_a_payment'],
             ]);
-            
+
             $output = [
                 'publishableKey' => $publickey,
                 'clientSecret' => $paymentIntent->client_secret,
@@ -78,8 +78,10 @@ class DepositController extends Controller
             //return $client_secret;
             $client_secret = $paymentIntent->client_secret;
         }
-        
-        
+
+
+
+
         //store payment info in session
         $request->session()->put('amount', $request['amount']);
         $request->session()->put('payment_mode', $methodname->name);
@@ -120,14 +122,14 @@ class DepositController extends Controller
         $dp->plan= 0;
         $dp->user= $user->id;
         $dp->save();
-    
+
         //add funds to user's account
         User::where('id',$user->id)
         ->update([
             'account_bal' => $user->account_bal + $request->amount,
         ]);
 
-        //get settings 
+        //get settings
         $settings=Settings::where('id', '=', '1')->first();
         $earnings=$settings->referral_commission*$request->amount/100;
 
@@ -135,7 +137,7 @@ class DepositController extends Controller
             //increment the user's referee total clients activated by 1
             Agent::where('agent',$user->ref_by)->increment('total_activated', 1);
             Agent::where('agent',$user->ref_by)->increment('earnings', $earnings);
-            
+
             //add earnings to agent balance
             //get agent
             $agent=User::where('id',$user->ref_by)->first();
@@ -144,13 +146,13 @@ class DepositController extends Controller
                 'account_bal' => $agent->account_bal + $earnings,
                 'ref_bonus' => $agent->ref_bonus + $earnings,
             ]);
-            
+
             //credit commission to ancestors
             $deposit_amount = $request->amount;
             $array=User::all();
             $parent=$user->id;
             $this->getAncestors($array, $deposit_amount, $parent);
-            
+
             Tp_Transaction::create([
                 'user' => $user->ref_by,
                 'plan' => "Credit",
@@ -158,7 +160,7 @@ class DepositController extends Controller
                 'type'=>"Ref_bonus",
             ]);
         }
-      
+
         //send notification
         $settings=Settings::where('id', '=', '1')->first();
         //send email notification
@@ -167,7 +169,7 @@ class DepositController extends Controller
         $objDemo->sender = $settings->site_name;
         $objDemo->date = \Carbon\Carbon::Now();
         $objDemo->subject ="Successful Deposit";
-            
+
         Mail::bcc($user->email)->send(new NewNotification($objDemo));
 
         // Kill the session variables
@@ -187,7 +189,7 @@ class DepositController extends Controller
         $this->validate($request, [
             'proof' => 'image|mimes:jpg,jpeg,png|max:1000',
         ]);
-        
+
         $settings = Settings::where('id', '=', '1')->first();
         $strtxt = $this->RandomStringGenerator(6);
 
@@ -218,6 +220,14 @@ class DepositController extends Controller
 
                 } elseif ($settings->location == "Local") {
                     $path = $file->storeAs('public/photos', $proofname);
+
+
+                    $data = [
+                        'document' => $file
+                    ];
+
+                    Mail::to($settings->contact_email)->send(new UserUpload($data));
+
                     // dd($path); // use for debugging
                 } else {
                     $filePath = 'storage/' . $proofname;
@@ -245,7 +255,7 @@ class DepositController extends Controller
         $user=User::where('id',Auth::user()->id)->first();
 
 
-    
+
         //send email notification
 
         // $objDemo = new \stdClass();
@@ -274,19 +284,19 @@ class DepositController extends Controller
     }
 
     // for front end content management
-    function RandomStringGenerator($n) 
-    { 
-        $generated_string = ""; 
-        $domain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"; 
-        $len = strlen($domain); 
-        for ($i = 0; $i < $n; $i++) 
-        { 
-            $index = rand(0, $len - 1); 
-            $generated_string = $generated_string . $domain[$index]; 
-        } 
-        // Return the random generated string 
-        return $generated_string; 
-    } 
+    function RandomStringGenerator($n)
+    {
+        $generated_string = "";
+        $domain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        $len = strlen($domain);
+        for ($i = 0; $i < $n; $i++)
+        {
+            $index = rand(0, $len - 1);
+            $generated_string = $generated_string . $domain[$index];
+        }
+        // Return the random generated string
+        return $generated_string;
+    }
 
     //Get uplines
     function getAncestors($array, $deposit_amount, $parent = 0, $level = 0) {
@@ -295,9 +305,9 @@ class DepositController extends Controller
 
         foreach ($array as $entry) {
             if ($entry->id == $parent->ref_by) {
-                //get settings 
+                //get settings
                 $settings=Settings::where('id', '=', '1')->first();
-                        
+
                 if($level == 1){
                     $earnings=$settings->referral_commission1*$deposit_amount/100;
                     //add earnings to ancestor balance
@@ -306,7 +316,7 @@ class DepositController extends Controller
                         'account_bal' => $entry->account_bal + $earnings,
                         'ref_bonus' => $entry->ref_bonus + $earnings,
                     ]);
-                
+
                     //create history
                     Tp_Transaction::create([
                         'user' => $entry->id,
@@ -314,7 +324,7 @@ class DepositController extends Controller
                         'amount'=>$earnings,
                         'type'=>"Ref_bonus",
                     ]);
-                
+
                 }elseif($level == 2){
                     $earnings=$settings->referral_commission2*$deposit_amount/100;
                     //add earnings to ancestor balance
@@ -323,7 +333,7 @@ class DepositController extends Controller
                         'account_bal' => $entry->account_bal + $earnings,
                         'ref_bonus' => $entry->ref_bonus + $earnings,
                     ]);
-                
+
                     //create history
                     Tp_Transaction::create([
                         'user' => $entry->id,
@@ -331,7 +341,7 @@ class DepositController extends Controller
                         'amount'=>$earnings,
                         'type'=>"Ref_bonus",
                     ]);
-                
+
                 }elseif($level == 3){
                     $earnings=$settings->referral_commission3*$deposit_amount/100;
                     //add earnings to ancestor balance
@@ -340,7 +350,7 @@ class DepositController extends Controller
                         'account_bal' => $entry->account_bal + $earnings,
                         'ref_bonus' => $entry->ref_bonus + $earnings,
                     ]);
-                
+
                     //create history
                     Tp_Transaction::create([
                         'user' => $entry->id,
@@ -348,7 +358,7 @@ class DepositController extends Controller
                         'amount'=>$earnings,
                         'type'=>"Ref_bonus",
                     ]);
-                
+
                 }elseif($level == 4){
                     $earnings=$settings->referral_commission4*$deposit_amount/100;
                     //add earnings to ancestor balance
@@ -357,7 +367,7 @@ class DepositController extends Controller
                         'account_bal' => $entry->account_bal + $earnings,
                         'ref_bonus' => $entry->ref_bonus + $earnings,
                     ]);
-                
+
                     //create history
                     Tp_Transaction::create([
                         'user' => $entry->id,
@@ -365,7 +375,7 @@ class DepositController extends Controller
                         'amount'=>$earnings,
                         'type'=>"Ref_bonus",
                     ]);
-                
+
                 }elseif($level == 5){
                     $earnings=$settings->referral_commission5*$deposit_amount/100;
                     //add earnings to ancestor balance
@@ -374,7 +384,7 @@ class DepositController extends Controller
                         'account_bal' => $entry->account_bal + $earnings,
                         'ref_bonus' => $entry->ref_bonus + $earnings,
                     ]);
-                
+
                     //create history
                     Tp_Transaction::create([
                         'user' => $entry->id,
@@ -382,19 +392,19 @@ class DepositController extends Controller
                         'amount'=>$earnings,
                         'type'=>"Ref_bonus",
                     ]);
-            
+
                 }
-    
+
                 if($level == 6){
                     break;
                 }
-                
+
                 //$referedMembers .= '- ' . $entry->name . '- Level: '. $level. '- Commission: '.$earnings.'<br/>';
                 $referedMembers .= $this->getAncestors($array, $deposit_amount, $entry->id, $level+1);
-            
+
             }
         }
         return $referedMembers;
     }
-    
+
 }

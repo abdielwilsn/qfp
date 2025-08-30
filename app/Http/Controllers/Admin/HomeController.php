@@ -29,16 +29,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\TradingPair;
+use App\Models\Investment;
 
 class HomeController extends Controller
 {
-   
+
      /**
       * Show Admin Dashboard.
-      * 
+      *
       * @return \Illuminate\Http\Response
       */
-     public function index(){   
+     public function index(){
         //sum total deposited
         $total_deposited = DB::table('deposits')->select(DB::raw("SUM(amount) as count"))->where('status','Processed')->get();
         $pending_deposited = DB::table('deposits')->select(DB::raw("SUM(amount) as count"))->where('status','Pending')->get();
@@ -46,12 +47,14 @@ class HomeController extends Controller
         $pending_withdrawn = DB::table('withdrawals')->select(DB::raw("SUM(amount) as count"))->where('status','Pending')->get();
 
         $userlist = User::count();
-        $activeusers = User::where('status', 'active')->count();
+        $activeInvestments = Investment::where('status', 'active')->count();
+         $activeusers = Investment::where('status', 'active')->distinct('user_id')->count('user_id');
+//        $activeusers = User::where('status', 'active')->count();
         $blockeusers = User::where('status', 'blocked')->count();
         $plans = TradingPair::count();
         // $plans = Plans::count();
         $unverifiedusers = User::where('account_verify', '!=' ,'yes')->count();
-      
+
         $chart_pdepsoit = DB::table('deposits')->where('status','Processed')->sum('amount');
         $chart_pendepsoit = DB::table('deposits')->where('status','Pending')->sum('amount');
         $chart_pwithdraw = DB::table('withdrawals')->where('status','Processed')->sum('amount');
@@ -84,7 +87,7 @@ class HomeController extends Controller
         'title'=>'System Plans',
         'plans'=> Plans::where('type', 'Main')->orderby('created_at','ASC')->get(),
         'pplans'=> Plans::where('type', 'Promo')->get(),
-        
+
         ));
     }
 
@@ -93,7 +96,7 @@ class HomeController extends Controller
     	return view('admin.Plans.newplan')
         ->with(array(
         'title'=>'Add Investment Plan',
-        
+
         ));
     }
 
@@ -103,7 +106,7 @@ class HomeController extends Controller
         ->with(array(
         'title'=>'Edit Investment Plan',
         'plan'=> Plans::where('id', $id)->first(),
-        
+
         ));
     }
 
@@ -113,7 +116,7 @@ class HomeController extends Controller
       return view('admin.Users.users')
         ->with(array(
         'title'=>'All users',
-        
+
         ));
     }
 
@@ -128,31 +131,31 @@ class HomeController extends Controller
          ->with(array(
          'title'=>'Subscription search result',
          'subscriptions' => $result,
-         
+
          ));
      }
 
        //Return search route for Withdrawals
        public function searchWt(Request $request)
-       { 
+       {
         $dp = Withdrawal::all();
         $searchItem=$request['wtquery'];
-        
+
         $result=Withdrawal::where('user', $searchItem)
 			->orwhere('amount',$searchItem)
 			->orwhere('payment_mode',$searchItem)
 			->orwhere('status',$searchItem)
 			->paginate(10);
-        
+
         return view('admin.mwithdrawals')
           ->with(array(
           'dp'=> $dp,
           'title'=>'Withdrawals search result',
           'withdrawals' => $result,
-          
+
           ));
        }
-    
+
 
       //Return manage withdrawals route
       public function mwithdrawals()
@@ -161,7 +164,7 @@ class HomeController extends Controller
           ->with(array(
           'title'=>'Manage users withdrawals',
           'withdrawals' => Withdrawal::with('user')->orderBy('id', 'desc')->get(),
-          
+
           ));
       }
 
@@ -172,7 +175,7 @@ class HomeController extends Controller
           ->with(array(
           'title'=>'Manage users deposits',
           'deposits' => Deposit::with('duser')->orderBy('id', 'desc')->get(),
-          
+
           ));
       }
 
@@ -192,10 +195,10 @@ class HomeController extends Controller
         return view('admin.about')
           ->with(array(
           'title'=>'About Onlinetrader',
-          
+
           ));
       }
-      
+
        //Return view agent route
       public function viewagent($agent)
       {
@@ -204,7 +207,7 @@ class HomeController extends Controller
           'title'=>'Agent record',
           'agent'=> User::where('id',$agent)->first(),
           'ag_r' => User::where('ref_by',$agent)->get(),
-          
+
           ));
       }
 
@@ -212,7 +215,7 @@ class HomeController extends Controller
     public function settings(Request $request){
         include'currencies.php';
         return view('admin.settings')->with(array(
-          
+
           'wmethods' => Wdmethod::where('type', 'withdrawal')->get(),
           'assets' => Asset::all(),
           //'markets' => markets::all(),
@@ -228,10 +231,10 @@ class HomeController extends Controller
         ->with(array(
         'subscriptions' => Mt4Details::with('tuser')->orderBy('id', 'desc')->get(),
         'title'=>'Manage Subscription',
-        
+
         ));
-      } 
-      
+      }
+
       public function userplans($id)
       {
         return view('admin.Users.user_plans')
@@ -239,12 +242,12 @@ class HomeController extends Controller
         'plans' => User_plans::where('user', $id)->orderBy('id', 'desc')->get(),
         'user' => User::where('id' , $id)->first(),
         'title'=>'User Investment Plan(s)',
-        
-        ));
-      } 
 
-      
-      
+        ));
+      }
+
+
+
     //return front end management page
     public function frontpage(Request $request){
         return view('admin.frontpage')->with(array(
@@ -253,11 +256,11 @@ class HomeController extends Controller
         'images' => Images::orderBy('id', 'desc')->get(),
         'testimonies' => Testimony::orderBy('id', 'desc')->get(),
         'contents' => Content::orderBy('id', 'desc')->get(),
-        
+
         ));
     }
 
-    
+
   public function adduser(){
     return view('admin.referuser')->with(array(
       'title'=>'Add new Users',
@@ -273,7 +276,7 @@ class HomeController extends Controller
     return view('admin.madmin')->with(array(
       'admins' => Admin::orderby('id', 'desc')->get(),
       'title'=>'Add new manager',
-      
+
 
     ));
   }
@@ -286,7 +289,7 @@ class HomeController extends Controller
         'title'=>'KYC',
         'users' => User::where('id_card','!=', NULL)
         ->where('passport','!=', NULL)->get(),
-        
+
         ));
     }
 
@@ -295,8 +298,8 @@ class HomeController extends Controller
       return view('admin.Profile.profile')
         ->with(array(
         'title'=>'Admin Profile',
-        
-        
+
+
         ));
     }
 
@@ -307,13 +310,13 @@ class HomeController extends Controller
           'moresettings'=> SettingsCont::find(1),
       ]);
     }
-    
+
     // public function calendar()
     // {
     //   return view('admin.calender')
     //     ->with(array(
     //     'title'=>'Create To do List',
-    //     
+    //
     //     ));
     // }
 
@@ -323,7 +326,7 @@ class HomeController extends Controller
     //     ->with(array(
     //     'admin' => Admin::orderby('id', 'desc')->get(),
     //     'title'=>'Create a New Task',
-    //     
+    //
     //     ));
     // }
 
@@ -334,7 +337,7 @@ class HomeController extends Controller
     //     'admin' => Admin::orderby('id', 'desc')->get(),
     //     'tasks' => Task::orderby('id', 'desc')->get(),
     //     'title'=>'Manage Task',
-    //     
+    //
     //     ));
     // }
     // public function viewtask()
@@ -343,7 +346,7 @@ class HomeController extends Controller
     //     ->with(array(
     //     'tasks' => Task::orderby('id', 'desc')->where('designation', Auth('admin')->User()->id)->get(),
     //     'title'=>'View my Task',
-    //     
+    //
     //     ));
     // }
 
@@ -354,7 +357,7 @@ class HomeController extends Controller
     //     'admin' => Admin::orderBy('id', 'desc')->get(),
     //     'users' => User::orderby('id', 'desc')->where('user_plan', NULL)->get(),
     //     'title'=>'Manage New Registered Clients',
-    //     
+    //
     //     ));
     // }
     // public function leadsassign()
@@ -365,9 +368,9 @@ class HomeController extends Controller
     //       ['assign_to', Auth('admin')->User()->id],
     //       ['cstatus', NULL]
     //     ])->get(),
-        
+
     //     'title'=>'Manage New Registered Clients',
-    //     
+    //
     //     ));
     // }
 
@@ -378,8 +381,8 @@ class HomeController extends Controller
     //     ->with(array(
     //     'users' => User::orderby('id', 'desc')->where('cstatus', 'Customer')->get(),
     //     'title'=>'Manage New Registered Clients',
-    //     
+    //
     //     ));
     // }
-     
+
 }

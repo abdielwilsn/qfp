@@ -27,8 +27,7 @@ class TradingPairsController extends Controller
         $investments = Investment::with(['user', 'tradingPair'])
             ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
-            ->take(10)
-            ->get();
+            ->paginate(10);
 
         if ($investments->isEmpty()) {
             // Optional: flash a message or log
@@ -335,11 +334,11 @@ class TradingPairsController extends Controller
         //     return back()->withErrors(['message' => 'Already invested in this today wait till tomorrow']);
         // }
 
-        // dd($recentTrades);  
+        // dd($recentTrades);
 
        $alreadyUsed = Investment::where('user_id', $user->id)
             ->where('trading_pair_id', $tradingPair->id)
-            ->where('status', 'active') 
+            ->where('status', 'active')
             ->exists();
 
 
@@ -380,9 +379,9 @@ class TradingPairsController extends Controller
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         $settings = Settings::first() ?? new Settings(['currency' => 'USD']);
-        
+
         return view('admin.user-trades', compact('investments', 'user', 'settings'));
     }
 
@@ -390,15 +389,15 @@ class TradingPairsController extends Controller
     {
         try {
             \DB::beginTransaction();
-            
+
             // Optionally refund the user's balance
             $user = User::find($investment->user_id);
             $user->increment('account_bal', $investment->amount);
-            
+
             $investment->delete();
-            
+
             \DB::commit();
-            
+
             return redirect()->back()->with('success', 'Trade deleted successfully!');
         } catch (\Exception $e) {
             \DB::rollBack();
@@ -406,7 +405,7 @@ class TradingPairsController extends Controller
             return redirect()->back()->with('error', 'Failed to delete trade.');
         }
     }
-    
-    
+
+
 }
 ?>

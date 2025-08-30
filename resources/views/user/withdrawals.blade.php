@@ -1,13 +1,13 @@
 <?php
-    if (Auth::user()->dashboard_style == "light") {
-        $bgmenu = "blue";
-        $bg = "light";
-        $text = "dark";
-    } else {
-        $bgmenu = "dark";
-        $bg = "dark";
-        $text = "light";
-    }
+if (Auth::user()->dashboard_style == "light") {
+    $bgmenu = "blue";
+    $bg = "light";
+    $text = "dark";
+} else {
+    $bgmenu = "dark";
+    $bg = "dark";
+    $text = "light";
+}
 ?>
 @extends('layouts.app')
 @section('content')
@@ -32,10 +32,12 @@
                                         Withdrawals are currently disabled. Please check back later.
                                     </div>
                                 @else
-                                    {{-- BEP20 Notice --}}
+                                    {{-- BEP20 and Service Charge Notice --}}
                                     <div class="alert alert-info text-center">
                                         💡 We only process withdrawals via <strong>BNB Smart Chain (BEP20)</strong>.
-                                        Please make sure your wallet address is on the BEP20 network.
+                                        Please make sure your wallet address is USDT on the BEP20 network.<br>
+                                        <strong>Withdrawals take 10-15 minutes to verify and process.</strong><br>
+                                        <strong>Note:</strong> A 15% service charge will be applied, and you will receive 85% of the requested withdrawal amount.
                                     </div>
 
                                     <form action="{{ route('withdrawamount') }}" method="POST">
@@ -54,14 +56,12 @@
                                         </div>
 
                                         {{-- Network --}}
-                                        {{-- Network --}}
                                         <div class="form-group">
                                             <label class="text-{{$text}}">Network</label>
                                             <select class="form-control" name="network" required>
                                                 <option value="BSC" selected>BNB Smart Chain (BEP20)</option>
                                             </select>
                                         </div>
-
 
                                         {{-- Optional Notes --}}
                                         <div class="form-group">

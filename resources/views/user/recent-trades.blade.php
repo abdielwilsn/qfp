@@ -1,13 +1,13 @@
 <?php
-    if (Auth::user()->dashboard_style == "light") {
-        $bgmenu = "blue";
-        $bg = "light";
-        $text = "dark";
-    } else {
-        $bgmenu = "dark";
-        $bg = "dark";
-        $text = "light";
-    }
+if (Auth::user()->dashboard_style == "light") {
+    $bgmenu = "blue";
+    $bg = "light";
+    $text = "dark";
+} else {
+    $bgmenu = "dark";
+    $bg = "dark";
+    $text = "light";
+}
 ?>
 @extends('layouts.app')
 @section('content')
@@ -34,30 +34,30 @@
                             <div class="table-responsive">
                                 <table class="table table-hover text-{{ $text }}">
                                     <thead>
-                                        <tr>
-                                            <th>Trading Pair</th>
-                                            <th>Amount</th>
-                                            <th>Profit</th>
-                                            <th>Status</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                            <th>Time Left</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Trading Pair</th>
+                                        <th>Amount</th>
+                                        <th>Profit</th>
+                                        <th>Status</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Time Left</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($investments as $investment)
-                                            <tr>
-                                                <td>
-                                                    @if ($investment->tradingPair && $investment->tradingPair->base_icon_url)
-                                                        <img src="{{ $investment->tradingPair->base_icon_url ?? asset('images/default-coin.png') }}" 
-                                                             alt="{{ $investment->tradingPair->base_symbol }}" 
-                                                             style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;">
-                                                    @endif
-                                                    {{ $investment->tradingPair ? $investment->tradingPair->base_symbol . '/' . $investment->tradingPair->quote_symbol : 'N/A' }}
-                                                </td>
-                                                <td>{{ $settings->currency }}{{ number_format($investment->amount, 2) }}</td>
-                                                <td>
-                                                    <span class="profit-display" 
+                                    @foreach ($investments as $investment)
+                                        <tr>
+                                            <td>
+                                                @if ($investment->tradingPair && $investment->tradingPair->base_icon_url)
+                                                    <img src="{{ $investment->tradingPair->base_icon_url ?? asset('images/default-coin.png') }}"
+                                                         alt="{{ $investment->tradingPair->base_symbol }}"
+                                                         style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;">
+                                                @endif
+                                                {{ $investment->tradingPair ? $investment->tradingPair->base_symbol . '/' . $investment->tradingPair->quote_symbol : 'N/A' }}
+                                            </td>
+                                            <td>{{ $settings->currency }}{{ number_format($investment->amount, 2) }}</td>
+                                            <td>
+                                                    <span class="profit-display"
                                                           data-investment-id="{{ $investment->id }}"
                                                           data-amount="{{ $investment->amount }}"
                                                           data-min-return="{{ $investment->tradingPair ? $investment->tradingPair->min_return_percentage : 0 }}"
@@ -66,24 +66,23 @@
                                                           data-profit="{{ $investment->profit ?? 0 }}">
                                                         {{ $investment->profit !== null ? $settings->currency . number_format($investment->profit, 2) : 'N/A' }}
                                                     </span>
-                                                </td>
-                                                <td>
+                                            </td>
+                                            <td>
                                                     <span class="badge {{ $investment->status === 'active' ? 'bg-success' : 'bg-secondary' }}">
                                                         {{ ucfirst($investment->status) }}
                                                     </span>
-                                                </td>
-                                                <td>{{ $investment->start_date->format('Y-m-d H:i') }}</td>
-                                                <td>{{ $investment->end_date ? $investment->end_date->format('Y-m-d H:i') : 'N/A' }}</td>
-                                                <td>
-                                                    @if($investment->end_date)
-                                                        <span class="countdown-timer" data-endtime="{{ $investment->end_date->toISOString() }}"></span>
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-
-                                            </tr>
-                                        @endforeach
+                                            </td>
+                                            <td>{{ $investment->start_date->format('Y-m-d H:i') }}</td>
+                                            <td>{{ $investment->end_date ? $investment->end_date->format('Y-m-d H:i') : 'N/A' }}</td>
+                                            <td>
+                                                @if($investment->end_date)
+                                                    <span class="countdown-timer" data-endtime="{{ $investment->end_date->toISOString() }}"></span>
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -96,8 +95,8 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
                                             @if ($investment->tradingPair && $investment->tradingPair->base_icon_url)
-                                                <img src="{{ $investment->tradingPair->base_icon_url ?? asset('images/default-coin.png') }}" 
-                                                     alt="{{ $investment->tradingPair->base_symbol }}" 
+                                                <img src="{{ $investment->tradingPair->base_icon_url ?? asset('images/default-coin.png') }}"
+                                                     alt="{{ $investment->tradingPair->base_symbol }}"
                                                      class="me-2" width="28" height="28">
                                             @endif
                                             <div>
@@ -130,21 +129,24 @@
                                         <div class="d-flex justify-content-between text-{{ $text }}">
                                             <span>Dates:</span>
                                             <span class="text-muted small">
-                                                {{ $investment->start_date->format('Y-m-d') }} to 
+                                                {{ $investment->start_date->format('Y-m-d') }} to
                                                 {{ $investment->end_date ? $investment->end_date->format('Y-m-d') : 'N/A' }}
                                             </span>
-
-                                            <div class="d-flex justify-content-between text-{{ $text }}">
-    <span>Time Left:</span>
-    <span class="countdown-timer text-{{ $text }}" data-endtime="{{ $investment->end_date ? $investment->end_date->format('c') : '' }}">
-        {{ $investment->end_date ? '' : 'N/A' }}
-    </span>
-</div>
-
+                                        </div>
+                                        <div class="d-flex justify-content-between text-{{ $text }}">
+                                            <span>Time Left:</span>
+                                            <span class="countdown-timer text-{{ $text }}" data-endtime="{{ $investment->end_date ? $investment->end_date->format('c') : '' }}">
+                                                {{ $investment->end_date ? '' : 'N/A' }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
+                        </div>
+
+                        <!-- Pagination Links -->
+                        <div class="d-flex justify-content-center mt-4">
+                            {{ $investments->links() }}
                         </div>
                     @endif
                 </div>
@@ -185,53 +187,51 @@
         // Run immediately on page load
         simulateProfits();
 
-
         function updateCountdowns() {
-    const countdownElements = document.querySelectorAll('.countdown-timer');
-    countdownElements.forEach(el => {
-        const endTimeStr = el.dataset.endtime;
-        if (!endTimeStr) {
-            el.textContent = 'N/A';
-            return;
+            const countdownElements = document.querySelectorAll('.countdown-timer');
+            countdownElements.forEach(el => {
+                const endTimeStr = el.dataset.endtime;
+                if (!endTimeStr) {
+                    el.textContent = 'N/A';
+                    return;
+                }
+
+                const endTime = new Date(endTimeStr);
+                const now = new Date();
+
+                const diff = endTime - now; // milliseconds
+
+                if (diff <= 0) {
+                    el.textContent = 'Expired';
+                    el.classList.add('text-danger');
+                    el.classList.remove('text-success');
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                // Format: "Xd HH:MM:SS" or "HH:MM:SS" if no days
+                let timeString = '';
+                if (days > 0) {
+                    timeString += days + 'd ';
+                }
+                timeString +=
+                    String(hours).padStart(2, '0') + ':' +
+                    String(minutes).padStart(2, '0') + ':' +
+                    String(seconds).padStart(2, '0');
+
+                el.textContent = timeString;
+                el.classList.add('text-success');
+                el.classList.remove('text-danger');
+            });
         }
 
-        const endTime = new Date(endTimeStr);
-        const now = new Date();
-
-        const diff = endTime - now; // milliseconds
-
-        if (diff <= 0) {
-            el.textContent = 'Expired';
-            el.classList.add('text-danger');
-            el.classList.remove('text-success');
-            return;
-        }
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
-
-        // Format: "Xd HH:MM:SS" or "HH:MM:SS" if no days
-        let timeString = '';
-        if (days > 0) {
-            timeString += days + 'd ';
-        }
-        timeString +=
-            String(hours).padStart(2, '0') + ':' +
-            String(minutes).padStart(2, '0') + ':' +
-            String(seconds).padStart(2, '0');
-
-        el.textContent = timeString;
-        el.classList.add('text-success');
-        el.classList.remove('text-danger');
-    });
-}
-
-// Run every 1 second to update countdown timers
-setInterval(updateCountdowns, 1000);
-updateCountdowns();
-
+        // Run every 1 second to update countdown timers
+        setInterval(updateCountdowns, 1000);
+        updateCountdowns();
     </script>
 @endsection
 
@@ -262,5 +262,24 @@ updateCountdowns();
     /* Improve table text size for desktop */
     .table {
         font-size: 0.9rem;
+    }
+
+    /* Style pagination links */
+    .pagination {
+        justify-content: center;
+    }
+    .page-link {
+        color: {{ $bgmenu === 'blue' ? '#007bff' : '#ffffff' }};
+        background-color: {{ $bg === 'light' ? '#ffffff' : '#343a40' }};
+        border-color: {{ $bgmenu === 'blue' ? '#007bff' : '#6c757d' }};
+    }
+    .page-item.active .page-link {
+        background-color: {{ $bgmenu === 'blue' ? '#007bff' : '#6c757d' }};
+        border-color: {{ $bgmenu === 'blue' ? '#007bff' : '#6c757d' }};
+        color: #ffffff;
+    }
+    .page-link:hover {
+        background-color: {{ $bgmenu === 'blue' ? '#0056b3' : '#5a6268' }};
+        color: #ffffff;
     }
 </style>

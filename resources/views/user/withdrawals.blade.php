@@ -86,3 +86,4 @@ if (Auth::user()->dashboard_style == "light") {
         </div>
     </div>
 @endsection
+

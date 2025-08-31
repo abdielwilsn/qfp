@@ -114,6 +114,7 @@ class AppSettingsController extends Controller
                 'site_address' => $request['site_address'],
                 'telegram_channel' => $request['telegram_channel'],
                 'admin_telegram' => $request['admin_telegram'],
+                'withdrawal_percentage' => $request['withdrawal_percentage'],
             ]);
 
         return redirect()->back()->with('success', 'Settings Saved successfully');

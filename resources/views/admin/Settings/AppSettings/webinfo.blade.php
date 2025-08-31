@@ -36,11 +36,18 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <h5 class="text-{{$text}}">Telegram Channel</h5>
-                    <input type="text" name="telegram_channel" class="form-control bg-{{$bg}} text-{{$text}}" value="{{ $settings->telegram_channel ?? '' }}" placeholder="e.g., @YourChannel ">
+                    <input type="text" name="telegram_channel" class="form-control bg-{{$bg}} text-{{$text}}" value="{{ $settings->telegram_channel ?? '' }}" placeholder="e.g., @YourChannel">
                 </div>
                 <div class="form-group col-md-6">
                     <h5 class="text-{{$text}}">Admin Telegram</h5>
-                    <input type="text" name="admin_telegram" class="form-control bg-{{$bg}} text-{{$text}}" value="{{ $settings->admin_telegram ?? '' }}" placeholder="e.g., @AdminHandle ">
+                    <input type="text" name="admin_telegram" class="form-control bg-{{$bg}} text-{{$text}}" value="{{ $settings->admin_telegram ?? '' }}" placeholder="e.g., @AdminHandle">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <h5 class="text-{{$text}}">Withdrawal Percentage (%)</h5>
+                    <input type="number" name="withdrawal_percentage" class="form-control bg-{{$bg}} text-{{$text}}" value="{{ $settings->withdrawal_percentage ?? '0.00' }}" step="0.01" min="0" max="100" placeholder="e.g., 5.00" required>
                 </div>
             </div>
 

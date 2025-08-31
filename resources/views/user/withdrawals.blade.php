@@ -37,7 +37,7 @@ if (Auth::user()->dashboard_style == "light") {
                                         💡 We only process withdrawals via <strong>BNB Smart Chain (BEP20)</strong>.
                                         Please make sure your wallet address is USDT on the BEP20 network.<br>
                                         <strong>Withdrawals take 10-15 minutes to verify and process.</strong><br>
-                                        <strong>Note:</strong> A 15% service charge will be applied, and you will receive 85% of the requested withdrawal amount.<br>
+                                        <strong>Note:</strong> A {{$settings->withdrawal_percentage}}% service charge will be applied, and you will receive {{100 - $settings->withdrawal_percentage}}% of the requested withdrawal amount.<br>
                                         @if (!empty($settings->telegram_channel) || !empty($settings->admin_telegram))
                                             <div class="mt-3">
                                                 @if (!empty($settings->telegram_channel))

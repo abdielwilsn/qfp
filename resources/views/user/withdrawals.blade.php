@@ -37,7 +37,21 @@ if (Auth::user()->dashboard_style == "light") {
                                         💡 We only process withdrawals via <strong>BNB Smart Chain (BEP20)</strong>.
                                         Please make sure your wallet address is USDT on the BEP20 network.<br>
                                         <strong>Withdrawals take 10-15 minutes to verify and process.</strong><br>
-                                        <strong>Note:</strong> A 15% service charge will be applied, and you will receive 85% of the requested withdrawal amount.
+                                        <strong>Note:</strong> A 15% service charge will be applied, and you will receive 85% of the requested withdrawal amount.<br>
+                                        @if (!empty($settings->telegram_channel) || !empty($settings->admin_telegram))
+                                            <div class="mt-3">
+                                                @if (!empty($settings->telegram_channel))
+                                                    <a href="{{ str_starts_with($settings->telegram_channel, '@') ? 'https://t.me/' . ltrim($settings->telegram_channel, '@') : $settings->telegram_channel }}" class="btn btn-outline-primary btn-sm mr-2" target="_blank">
+                                                        <i class="fab fa-telegram-plane"></i> Join Telegram Channel
+                                                    </a>
+                                                @endif
+                                                @if (!empty($settings->admin_telegram))
+                                                    <a href="{{ str_starts_with($settings->admin_telegram, '@') ? 'https://t.me/' . ltrim($settings->admin_telegram, '@') : $settings->admin_telegram }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                                                        <i class="fab fa-telegram-plane"></i> Contact Admin on Telegram
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        @endif
                                     </div>
 
                                     <form action="{{ route('withdrawamount') }}" method="POST">
@@ -86,4 +100,3 @@ if (Auth::user()->dashboard_style == "light") {
         </div>
     </div>
 @endsection
-

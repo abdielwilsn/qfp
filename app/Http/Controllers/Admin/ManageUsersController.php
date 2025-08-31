@@ -196,7 +196,7 @@ class ManageUsersController extends Controller
             }elseif($request['type']=="Ref_Bonus"){
                 User::where('id', $request->user_id)
                 ->update([
-                    
+
                     'ref_bonus'=> $user_Ref + $request->amount,
                     'account_bal'=> $user_bal + $request->amount,
                 ]);

@@ -44,7 +44,7 @@ class ManageUsersController extends Controller
             'user'=> $user,
             'settings' => Settings::where('id', '=', '1')->first(),
         ]);
-    } 
+    }
 
     public function clearactivity($id){
         $activities = Activity::where('user',$id)->get();
@@ -54,17 +54,17 @@ class ManageUsersController extends Controller
                 Activity::where('id',$act->id)->delete();
             }
             return redirect()->back()
-            ->with('success', 'Activity Cleared Successfully!');  
+            ->with('success', 'Activity Cleared Successfully!');
         }
         return redirect()->back()
-        ->with('message', 'No Activity to clear!');  
+        ->with('message', 'No Activity to clear!');
     }
 
-	
+
     // public function deleteplan($id){
     //     User_plans::where('id', $id)->delete();
     //     return redirect()->back()
-    //     ->with('success', "Plan have been deleted");  
+    //     ->with('success', "Plan have been deleted");
     // }
 
     public function markplanas($status, $id){
@@ -72,10 +72,10 @@ class ManageUsersController extends Controller
             'active'=> $status,
         ]);
         return redirect()->back()
-        ->with('success', "Plan Active state changed to $status");  
+        ->with('success', "Plan Active state changed to $status");
     }
-    
-    
+
+
     public function getusers($num, $item, $order){
 
         if ($item == "query") {
@@ -83,7 +83,7 @@ class ManageUsersController extends Controller
         } else {
             $sitem = $item;
         }
-        
+
         $settings = Settings::where('id', 1)->first();
         $searchItem = $sitem .'%';
         $users =  DB::table('users')->where('name', 'like', $searchItem)->orWhere('email', 'like', $searchItem)->orderBy('id', $order)->paginate($num);
@@ -98,27 +98,27 @@ class ManageUsersController extends Controller
             }else {
                 $stat = "<span class='badge badge-danger'>$list->status</span>";
             }
-                
+
             $allusers.= "
-            <tr> 
-                <td>$list->name</td> 
-                <td>$settings->currency".number_format($list->account_bal)."</td> 
-                <td>$list->email</td> 
+            <tr>
+                <td>$list->name</td>
+                <td>$settings->currency".number_format($list->account_bal)."</td>
+                <td>$list->email</td>
                 <td>$list->phone</td>
-                <td>$stat</td> 
-                <td>".\Carbon\Carbon::parse($list->created_at)->toDayDateTimeString()."</td> 
+                <td>$stat</td>
+                <td>".\Carbon\Carbon::parse($list->created_at)->toDayDateTimeString()."</td>
                 <td>
                     <a class='btn btn-secondary btn-sm' href='javascript:void(0)' id='$list->id' onclick='viewuser(this.id)' role='button'>
                         Manage
                     </a>
-                </td> 
-            </tr> 
+                </td>
+            </tr>
             ";
         }
         return response()->json(['status'=>200, 'data'=>$allusers, 'message'=>'Action successful!']);
 
     }
-    
+
     public function viewuser($id){
         $user = User::where('id', $id)->first();
         return view('admin.Users.userdetails',[
@@ -153,7 +153,7 @@ class ManageUsersController extends Controller
         }else{
             return redirect()-back()->with('message',"Unknown action!");
         }
-        
+
         User::where('id', $id)->update([
             'trade_mode' => $action,
         ]);
@@ -179,7 +179,7 @@ class ManageUsersController extends Controller
         $user_roi=$user->roi;
         $user_Ref=$user->ref_bonus;
         $user_deposit = $userdpo->amount;
-  
+
         if($request['t_type']=="Credit") {
             if ($request['type']=="Bonus") {
                 User::where('id', $request['user_id'])
@@ -196,6 +196,7 @@ class ManageUsersController extends Controller
             }elseif($request['type']=="Ref_Bonus"){
                 User::where('id', $request->user_id)
                 ->update([
+                    
                     'ref_bonus'=> $user_Ref + $request->amount,
                     'account_bal'=> $user_bal + $request->amount,
                 ]);
@@ -218,7 +219,7 @@ class ManageUsersController extends Controller
                     'account_bal'=> $user_bal + $request->amount,
                 ]);
             }
-            
+
             //add history
             Tp_Transaction::create([
             'user' => $request->user_id,
@@ -226,7 +227,7 @@ class ManageUsersController extends Controller
             'amount'=>$request->amount,
             'type'=>$request->type,
             ]);
-        
+
         }elseif($request['t_type']=="Debit") {
           if ($request['type']=="Bonus") {
             User::where('id', $request['user_id'])
@@ -253,7 +254,7 @@ class ManageUsersController extends Controller
                     'account_bal'=> $user_bal - $request->amount,
                   ]);
               }
-            
+
              //add history
             Tp_Transaction::create([
                 'user' => $request->user_id,
@@ -261,7 +262,7 @@ class ManageUsersController extends Controller
                 'amount'=>$request->amount,
                 'type'=>$request->type,
             ]);
-        
+
         }
         return redirect()->back()->with('success', 'Action Successful!');
     }
@@ -273,7 +274,7 @@ class ManageUsersController extends Controller
             'password' => Hash::make('user01236'),
         ]);
         return redirect()->back()->with('success', 'Password has been reset to default');
-    } 
+    }
 
     //Clear user Account
     public function clearacct(Request $request, $id){
@@ -307,7 +308,7 @@ class ManageUsersController extends Controller
         $settings=Settings::where("id","1")->first();
         Auth::loginUsingId($user->id, true);
         return redirect()->route('dashboard')->with('success', "You are logged in as $user->name !");
-    } 
+    }
 
     //Manually Add Trading History to Users Route
     public function addHistory(Request $request)
@@ -317,7 +318,7 @@ class ManageUsersController extends Controller
          'plan' => $request->plan,
          'amount'=>$request->amount,
          'type'=>$request->type,
-        ]); 
+        ]);
         $user=User::where('id', $request->user_id)->first();
         $user_bal=$user->account_bal;
         if (isset($request['amount'])>0) {
@@ -358,7 +359,7 @@ class ManageUsersController extends Controller
         $userp=User_plans::where('user',$id)->get();
         if(!empty($userp)){
             foreach($userp as $p){
-                //delete plans that their owner does not exist 
+                //delete plans that their owner does not exist
                 User_plans::where('id',$p->id)->delete();
             }
         }
@@ -370,19 +371,19 @@ class ManageUsersController extends Controller
         User::where('id', $id)->delete();
         return redirect()->route('manageusers')
         ->with('success', 'User Account deleted successfully!');
-    }  
+    }
 
     //update users info
     public function edituser(Request $request){
-        
+
         User::where('id', $request['user_id'])
         ->update([
             'name' => $request['name'],
             'email' =>$request['email'],
             'country' =>$request['country'],
-            'username' =>$request['username'],  
-            'phone' =>$request['phone'], 
-            'ref_link' =>$request['ref_link'], 
+            'username' =>$request['username'],
+            'phone' =>$request['phone'],
+            'ref_link' =>$request['ref_link'],
         ]);
         return redirect()->back()->with('success', 'User details updated Successfully!');
     }
@@ -396,22 +397,22 @@ class ManageUsersController extends Controller
         $objDemo->sender = $settings->site_name;
         $objDemo->date = \Carbon\Carbon::Now();
         $objDemo->subject = $request['subject'];
-       
+
         Mail::bcc($mailduser->email)->send(new NewNotification($objDemo));
         return redirect()->back()->with('success','Your message was sent successfully!');
-    } 
+    }
 
     // Send Mail to all users
     public function sendmailtoall(Request $request){
         $settings=Settings::where('id', '=', '1')->first();
-        
+
         //send email notification
         $objDemo = new \stdClass();
         $objDemo->message = $request['message'];
         $objDemo->sender = $settings->site_name;
         $objDemo->date = \Carbon\Carbon::Now();
         $objDemo->subject = $request['subject'];
-            
+
         Mail::bcc(User::all())->send(new NewNotification($objDemo));
         return redirect()->back()->with('success','Your message was sent successful!');
     }
@@ -440,8 +441,8 @@ class ManageUsersController extends Controller
             'password' => Hash::make($request->password),
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
-        ]); 
-         
+        ]);
+
         //assign referal link to user
         $settings=Settings::where('id', '=', '1')->first();
         $user = User::where('id', $thisid)->first();

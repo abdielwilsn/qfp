@@ -22,7 +22,13 @@
     <!-- fake-notification -->
     <link rel="stylesheet" href="temp/custom/resource/views/home/home4/alert/css/fake-notification-min.css">
 
-
+<style>
+    @media (max-width: 767px) {
+        .header .header__row {
+            display: none !important;
+        }
+    }
+</style>
 
   </head>
   <body >

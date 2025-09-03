@@ -37,21 +37,6 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                             </button>
                         </div>
 
-                        <!-- Alternative Solution 2: Stack on mobile -->
-                        <!--
-							<div class="row mb-3">
-								<div class="col-12 col-md-8 mb-2 mb-md-0">
-									<a href="#" data-toggle="modal" data-target="#sendmailModal" class="btn btn-primary btn-lg mr-2 mb-2 mb-md-0">Message all</a>
-									@if($settings->enable_kyc =="yes")
-                            <a href="{{ url('admin/dashboard/kyc') }}" class="btn btn-warning btn-lg mb-2 mb-md-0">KYC</a>
-									@endif
-                        </div>
-                        <div class="col-12 col-md-4 text-md-right">
-                            <a href="#" data-toggle="modal" data-target="#adduser" class="btn btn-primary btn-block btn-md-auto"> <i class='fas fa-plus-circle'></i> Add User</a>
-                        </div>
-                    </div>
--->
-
                         <!-- Modal -->
                         <div class="modal fade" id="adduser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -91,7 +76,6 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                                 <button type="submit" class="px-4 btn btn-primary">Add User</button>
                                             </form>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +83,6 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                     </div>
                 </div>
                 <div class="mb-5 row">
-
                     <div class="col-md-12 shadow card p-4 bg-{{Auth('admin')->User()->dashboard_style}}">
                         <!-- Collapsible Filter Controls -->
                         <div class="collapse" id="filterControls">
@@ -140,6 +123,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 </form>
                             </div>
                         </div>
+
                         <div class="table-responsive" data-example-id="hoverable-table">
                             <table class="table table-hover text-{{$text}}">
                                 <thead>
@@ -154,25 +138,68 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 </tr>
                                 </thead>
                                 <tbody id="userslisttbl">
-
+                                <!-- Users data will be loaded here -->
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Pagination Container -->
+                        <div id="paginationContainer" class="d-flex justify-content-center mt-4">
+                            <!-- Pagination links will be loaded here -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- CSS for pagination styling -->
+        <style>
+            #paginationContainer .pagination {
+                margin-bottom: 0;
+            }
+
+            #paginationContainer .page-link {
+                background-color: var(--bs-{{$bg}});
+                border-color: var(--bs-gray-300);
+                color: var(--bs-{{$text}});
+            }
+
+            #paginationContainer .page-item.active .page-link {
+                background-color: var(--bs-primary);
+                border-color: var(--bs-primary);
+                color: white;
+            }
+
+            #paginationContainer .page-link:hover {
+                background-color: var(--bs-gray-100);
+                border-color: var(--bs-gray-300);
+                color: var(--bs-{{$text}});
+            }
+
+            @media (max-width: 768px) {
+                #paginationContainer .pagination {
+                    font-size: 0.875rem;
+                }
+
+                #paginationContainer .page-link {
+                    padding: 0.375rem 0.5rem;
+                }
+            }
+        </style>
+
         <script>
             $('#input1').on('keypress', function(e) {
                 return e.which !== 32;
             });
-        </script>
-        <script>
-            function getallusers(){
+
+            let currentPage = 1;
+
+            function getallusers(page = 1){
                 let number = document.querySelector('#numofrecord').value;
                 let searchvalue = document.querySelector('#searchitem').value;
                 let ordervalue = document.querySelector('#order').value;
                 let table = document.querySelector('#userslisttbl');
+                let paginationContainer = document.querySelector('#paginationContainer');
 
                 if (searchvalue == "") {
                     searchvalue = "query";
@@ -180,7 +207,11 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                     searchvalue = searchvalue;
                 }
 
-                let url = "{{url('/admin/dashboard/getusers/')}}" + '/' + number + '/' + searchvalue + '/' + ordervalue;
+                let url = "{{url('/admin/dashboard/getusers/')}}" + '/' + number + '/' + searchvalue + '/' + ordervalue + '?page=' + page;
+
+                // Show loading state
+                table.innerHTML = '<tr><td colspan="7" class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
+                paginationContainer.innerHTML = '';
 
                 fetch(url)
                     .then(function(res){
@@ -189,25 +220,69 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                     .then(function (response){
                         if(response.status === 200){
                             table.innerHTML = response.data;
+                            paginationContainer.innerHTML = response.pagination || '';
                             document.querySelector('#searchitem').style.borderColor = '';
+                            currentPage = page;
+
+                            // Add click event listeners to pagination links
+                            addPaginationEventListeners();
                         }
                         if(response.status === 201){
-                            table.innerHTML = response.data;
+                            table.innerHTML = '<tr><td colspan="7" class="text-center text-muted">' + response.data + '</td></tr>';
+                            paginationContainer.innerHTML = '';
                             document.querySelector('#searchitem').style.borderColor = 'red';
                         }
                     })
                     .catch(function(err){
                         console.log(err);
+                        table.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Error loading users. Please try again.</td></tr>';
+                        paginationContainer.innerHTML = '';
                     });
-
             }
 
+            function addPaginationEventListeners() {
+                const paginationLinks = document.querySelectorAll('#paginationContainer .pagination .page-link');
+
+                paginationLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+
+                        // Get the URL from the clicked link
+                        const url = this.getAttribute('href');
+                        if (!url || url === '#') return;
+
+                        // Extract page number from URL
+                        const urlParams = new URLSearchParams(url.split('?')[1]);
+                        const page = urlParams.get('page');
+
+                        if (page) {
+                            getallusers(parseInt(page));
+                        }
+                    });
+                });
+            }
+
+            // Event listeners for filters
             let numberopt = document.querySelector('#numofrecord');
             let searchbox = document.querySelector('#searchitem');
             let order = document.querySelector('#order');
-            numberopt.addEventListener('change', getallusers);
-            order.addEventListener('change', getallusers);
-            searchbox.addEventListener('keyup', getallusers);
+
+            numberopt.addEventListener('change', function() {
+                currentPage = 1;
+                getallusers(1);
+            });
+
+            order.addEventListener('change', function() {
+                currentPage = 1;
+                getallusers(1);
+            });
+
+            searchbox.addEventListener('keyup', function() {
+                currentPage = 1;
+                getallusers(1);
+            });
+
+            // Initial load
             getallusers();
 
             function viewuser(id){
@@ -215,10 +290,10 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                 window.location.href = url;
             }
         </script>
+
         <!-- send all users email -->
         <div id="sendmailModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header bg-{{Auth('admin')->User()->dashboard_style}}">
@@ -228,7 +303,6 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                     <div class="modal-body bg-{{Auth('admin')->User()->dashboard_style}}">
                         <form method="post" action="{{route('sendmailtoall')}}">
                             @csrf
-
                             <div class=" form-group">
                                 <input type="text" name="subject" class="form-control bg-{{$bg}} text-{{$text}}" placeholder="Subject" required>
                             </div>

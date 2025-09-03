@@ -10,6 +10,7 @@ class UsersTableSeeder extends Seeder
 {
     public function run()
     {
+
         DB::table('users')->insert([
             [
                 'id' => 55,

@@ -53,7 +53,12 @@ if (Auth::user()->dashboard_style == "light") {
 
                     <!-- Welcome Content -->
                     <div class="mt-2 mb-4" style="position: relative; z-index: 2;">
-                        <h2 class="text-white pb-2" style="font-weight: 600;">Welcome, {{ Auth::user()->name }}!</h2>
+                        <h2 class="text-white pb-2" style="font-weight: 600;">
+                            Welcome, {{ Auth::user()->name }}
+                            @if (Auth::user()->account_verify)
+                                <i class="fa fa-check-circle" style="color: #1E90FF; margin-left: 8px;"></i>
+                            @endif
+                        </h2>
                         @if ($settings->enable_annoc == "on")
                             <h5 id="ann" class="text-white-50 mb-4">{{$settings->newupdate}}</h5>
                             @if(Session::has('getAnouc') && Session::get('getAnouc') == "true" )

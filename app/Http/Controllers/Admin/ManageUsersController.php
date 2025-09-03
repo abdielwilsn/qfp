@@ -75,9 +75,8 @@ class ManageUsersController extends Controller
         ->with('success', "Plan Active state changed to $status");
     }
 
-
-    public function getusers($num, $item, $order){
-
+    public function getusers($num, $item, $order, Request $request)
+    {
         if ($item == "query") {
             $sitem = "";
         } else {
@@ -85,40 +84,161 @@ class ManageUsersController extends Controller
         }
 
         $settings = Settings::where('id', 1)->first();
-        $searchItem = $sitem .'%';
-        $users =  DB::table('users')->where('name', 'like', $searchItem)->orWhere('email', 'like', $searchItem)->orderBy('id', $order)->paginate($num);
+        $searchItem = $sitem . '%';
+
+        // Build the query
+        $query = DB::table('users')
+            ->where('name', 'like', $searchItem)
+            ->orWhere('email', 'like', $searchItem)
+            ->orderBy('id', $order);
+
+        // Get paginated results
+        $users = $query->paginate($num);
+
+        // Preserve query parameters for pagination links
+        $users->appends($request->query());
+
+        // Debug information
+        $totalUsers = $query->count();
+        $currentPage = $users->currentPage();
+        $lastPage = $users->lastPage();
+
+        \Log::info("Pagination Debug", [
+            'total_users' => $totalUsers,
+            'per_page' => $num,
+            'current_page' => $currentPage,
+            'last_page' => $lastPage,
+            'users_on_this_page' => $users->count()
+        ]);
+
         $allusers = '';
 
-        if (count($users) < 1) {
-            return response()->json(['status'=>201, 'data'=>'No user match your query', 'message'=>'Action successful!']);
+        if ($users->count() < 1) {
+            return response()->json([
+                'status' => 201,
+                'data' => 'No user match your query',
+                'pagination' => '',
+                'total' => 0,
+                'current_page' => 1,
+                'last_page' => 1,
+                'per_page' => $num,
+                'message' => 'Action successful!'
+            ]);
         }
+
         foreach ($users as $key => $list) {
-            if($list->status == "active"){
+            if ($list->status == "active") {
                 $stat = "<span class='badge badge-success'>$list->status</span>";
-            }else {
+            } else {
                 $stat = "<span class='badge badge-danger'>$list->status</span>";
             }
 
-            $allusers.= "
-            <tr>
-                <td>$list->name</td>
-                <td>$settings->currency".number_format($list->account_bal)."</td>
-                <td>$list->email</td>
-                <td>$list->phone</td>
-                <td>$stat</td>
-                <td>".\Carbon\Carbon::parse($list->created_at)->toDayDateTimeString()."</td>
-                <td>
-                    <a class='btn btn-secondary btn-sm' href='javascript:void(0)' id='$list->id' onclick='viewuser(this.id)' role='button'>
-                        Manage
-                    </a>
-                </td>
-            </tr>
-            ";
-        }
-        return response()->json(['status'=>200, 'data'=>$allusers, 'message'=>'Action successful!']);
+            // Add verification badge if account_verify is true
+            $verifiedBadge = $list->account_verify ? "<i class='fa fa-check-circle' style='color: #1E90FF; margin-left: 8px;'></i> " : '';
 
+            $allusers .= "
+        <tr>
+            <td>$list->name $verifiedBadge</td>
+            <td>$settings->currency" . number_format($list->account_bal, 2, '.', ',') . "</td>
+            <td>$list->email</td>
+            <td>$list->phone</td>
+            <td>$stat</td>
+            <td>" . \Carbon\Carbon::parse($list->created_at)->toDayDateTimeString() . "</td>
+            <td>
+                <a class='btn btn-secondary btn-sm' href='javascript:void(0)' id='$list->id' onclick='viewuser(this.id)' role='button'>
+                    Manage
+                </a>
+            </td>
+        </tr>
+        ";
+        }
+
+        // Generate custom pagination HTML for AJAX - always show if more than 1 page
+        $pagination = $this->generateCustomPagination($users);
+
+        return response()->json([
+            'status' => 200,
+            'data' => $allusers,
+            'pagination' => $pagination,
+            'total' => $users->total(),
+            'current_page' => $users->currentPage(),
+            'last_page' => $users->lastPage(),
+            'per_page' => $users->perPage(),
+            'debug_info' => [
+                'total_users' => $totalUsers,
+                'showing_pagination' => $lastPage > 1,
+                'pagination_html_length' => strlen($pagination)
+            ],
+            'message' => 'Action successful!'
+        ]);
     }
 
+    private function generateCustomPagination($paginator)
+    {
+        // Force show pagination even with few pages for testing
+        $totalPages = $paginator->lastPage();
+
+        if ($totalPages <= 1) {
+            // Return empty but log why
+            \Log::info("No pagination needed", ['total_pages' => $totalPages]);
+            return '';
+        }
+
+        $currentPage = $paginator->currentPage();
+        $start = max($currentPage - 2, 1);
+        $end = min($currentPage + 2, $totalPages);
+
+        $pagination = '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
+
+        // Previous button
+        if ($currentPage > 1) {
+            $pagination .= '<li class="page-item"><a class="page-link" href="#" data-page="' . ($currentPage - 1) . '">&laquo; Previous</a></li>';
+        } else {
+            $pagination .= '<li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>';
+        }
+
+        // First page
+        if ($start > 1) {
+            $pagination .= '<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>';
+            if ($start > 2) {
+                $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+            }
+        }
+
+        // Page numbers
+        for ($i = $start; $i <= $end; $i++) {
+            if ($i == $currentPage) {
+                $pagination .= '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
+            } else {
+                $pagination .= '<li class="page-item"><a class="page-link" href="#" data-page="' . $i . '">' . $i . '</a></li>';
+            }
+        }
+
+        // Last page
+        if ($end < $totalPages) {
+            if ($end < $totalPages - 1) {
+                $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+            }
+            $pagination .= '<li class="page-item"><a class="page-link" href="#" data-page="' . $totalPages . '">' . $totalPages . '</a></li>';
+        }
+
+        // Next button
+        if ($currentPage < $totalPages) {
+            $pagination .= '<li class="page-item"><a class="page-link" href="#" data-page="' . ($currentPage + 1) . '">Next &raquo;</a></li>';
+        } else {
+            $pagination .= '<li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>';
+        }
+
+        $pagination .= '</ul></nav>';
+
+        \Log::info("Generated pagination", [
+            'current_page' => $currentPage,
+            'total_pages' => $totalPages,
+            'pagination_html' => $pagination
+        ]);
+
+        return $pagination;
+    }
     public function viewuser($id){
         $user = User::where('id', $id)->first();
         return view('admin.Users.userdetails',[

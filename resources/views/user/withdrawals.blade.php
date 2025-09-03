@@ -45,11 +45,11 @@ if (Auth::user()->dashboard_style == "light") {
                                                         <i class="fab fa-telegram-plane"></i> Join Telegram Channel
                                                     </a>
                                                 @endif
-                                                @if (!empty($settings->admin_telegram))
-                                                    <a href="{{ str_starts_with($settings->admin_telegram, '@') ? 'https://t.me/' . ltrim($settings->admin_telegram, '@') : $settings->admin_telegram }}" class="btn btn-outline-primary btn-sm" target="_blank">
-                                                        <i class="fab fa-telegram-plane"></i> Contact Admin on Telegram
-                                                    </a>
-                                                @endif
+{{--                                                @if (!empty($settings->admin_telegram))--}}
+{{--                                                    <a href="{{ str_starts_with($settings->admin_telegram, '@') ? 'https://t.me/' . ltrim($settings->admin_telegram, '@') : $settings->admin_telegram }}" class="btn btn-outline-primary btn-sm" target="_blank">--}}
+{{--                                                        <i class="fab fa-telegram-plane"></i> Contact Admin on Telegram--}}
+{{--                                                    </a>--}}
+{{--                                                @endif--}}
                                             </div>
                                         @endif
                                     </div>

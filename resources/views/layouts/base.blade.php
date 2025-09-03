@@ -9,7 +9,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>{{$settings->site_name}} – Safe investment with {{$settings->site_name}}</title>
+    <title>{{$settings->site_name}} – Safe Crypto Trading with {{$settings->site_name}}</title>
     <meta name="description" content="">
    <link rel="icon" href="{{ asset('storage/app/public/photos/'.$settings->favicon)}}" type="image/png"/>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

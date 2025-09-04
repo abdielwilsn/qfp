@@ -24,6 +24,12 @@
                     <h5 class="text-{{$text}}">Website Description</h5>
                     <textarea name="description" class="form-control bg-{{$bg}} text-{{$text}}" rows="4">{{ $settings->description }}</textarea>
                 </div>
+
+
+                <div class="form-group col-md-12">
+                    <h5 class="text-{{$text}}">Payment Note</h5>
+                    <textarea name="network_note" class="form-control bg-{{$bg}} text-{{$text}}" rows="4">{{ $settings->network_note }}</textarea>
+                </div>
             </div>
 
             <div class="form-row">

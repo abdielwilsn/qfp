@@ -77,6 +77,7 @@ class AppSettingsController extends Controller
             'tawk_to' => 'nullable|string',
             'telegram_channel' => 'nullable|string|max:255',
             'admin_telegram' => 'nullable|string|max:255',
+            'network_note' => 'nullable|string',
         ]);
 
         $settings = Settings::where('id', '=', '1')->first();
@@ -115,6 +116,7 @@ class AppSettingsController extends Controller
                 'telegram_channel' => $request['telegram_channel'],
                 'admin_telegram' => $request['admin_telegram'],
                 'withdrawal_percentage' => $request['withdrawal_percentage'],
+                'network_note' => $request['network_note'],
             ]);
 
         return redirect()->back()->with('success', 'Settings Saved successfully');

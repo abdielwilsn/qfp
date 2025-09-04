@@ -66,7 +66,7 @@ if (Auth::user()->dashboard_style == "light") {
                                         {{-- Wallet Address --}}
                                         <div class="form-group">
                                             <label class="text-{{$text}}">Wallet Address</label>
-                                            <input type="text" class="form-control" name="wallet_address" required placeholder="Enter your BEP20 wallet address">
+                                            <input type="text" class="form-control" name="wallet_address" required placeholder="Enter your wallet address">
                                         </div>
 
                                         {{-- Network --}}
@@ -74,6 +74,8 @@ if (Auth::user()->dashboard_style == "light") {
                                             <label class="text-{{$text}}">Network</label>
                                             <select class="form-control" name="network" required>
                                                 <option value="BSC" selected>BNB Smart Chain (BEP20)</option>
+                                                <option value="ER20" selected>ER20</option>
+
                                             </select>
                                         </div>
 

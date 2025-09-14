@@ -188,18 +188,25 @@ class ManageUsersController extends Controller
         $start = max($currentPage - 2, 1);
         $end = min($currentPage + 2, $totalPages);
 
+        // Get current query parameters to preserve filters
+        $queryParams = request()->query();
+        $baseUrl = url('/admin/dashboard/getusers/' . request()->route('num') . '/' . request()->route('item') . '/' . request()->route('order'));
+
         $pagination = '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
 
         // Previous button
         if ($currentPage > 1) {
-            $pagination .= '<li class="page-item"><a class="page-link" href="#" data-page="' . ($currentPage - 1) . '">&laquo; Previous</a></li>';
+            $prevPage = $currentPage - 1;
+            $prevUrl = $baseUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $prevPage]));
+            $pagination .= '<li class="page-item"><a class="page-link" href="' . $prevUrl . '">&laquo; Previous</a></li>';
         } else {
             $pagination .= '<li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>';
         }
 
         // First page
         if ($start > 1) {
-            $pagination .= '<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>';
+            $firstUrl = $baseUrl . '?' . http_build_query(array_merge($queryParams, ['page' => 1]));
+            $pagination .= '<li class="page-item"><a class="page-link" href="' . $firstUrl . '">1</a></li>';
             if ($start > 2) {
                 $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
             }
@@ -207,10 +214,11 @@ class ManageUsersController extends Controller
 
         // Page numbers
         for ($i = $start; $i <= $end; $i++) {
+            $pageUrl = $baseUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $i]));
             if ($i == $currentPage) {
                 $pagination .= '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
             } else {
-                $pagination .= '<li class="page-item"><a class="page-link" href="#" data-page="' . $i . '">' . $i . '</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="' . $pageUrl . '">' . $i . '</a></li>';
             }
         }
 
@@ -219,12 +227,15 @@ class ManageUsersController extends Controller
             if ($end < $totalPages - 1) {
                 $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
             }
-            $pagination .= '<li class="page-item"><a class="page-link" href="#" data-page="' . $totalPages . '">' . $totalPages . '</a></li>';
+            $lastUrl = $baseUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $totalPages]));
+            $pagination .= '<li class="page-item"><a class="page-link" href="' . $lastUrl . '">' . $totalPages . '</a></li>';
         }
 
         // Next button
         if ($currentPage < $totalPages) {
-            $pagination .= '<li class="page-item"><a class="page-link" href="#" data-page="' . ($currentPage + 1) . '">Next &raquo;</a></li>';
+            $nextPage = $currentPage + 1;
+            $nextUrl = $baseUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $nextPage]));
+            $pagination .= '<li class="page-item"><a class="page-link" href="' . $nextUrl . '">Next &raquo;</a></li>';
         } else {
             $pagination .= '<li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>';
         }

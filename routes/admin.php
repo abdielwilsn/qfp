@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\TwoFactorController;
 use App\Http\Controllers\Admin\ClearCacheController;
 use App\Http\Controllers\Admin\ManageAssetController;
 use App\Http\Controllers\TradingPairsController;
+use App\Http\Controllers\ReferralsController;
 
 Route::prefix('admin')->group(function () {
 	Route::get('login',[LoginController::class , 'showLoginForm'])->name('adminloginform');
@@ -56,6 +57,8 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function()
 
 	// Route::group(['middleware' => ['auth:admin']], function () {
     Route::get('/user-trades/{user}', [TradingPairsController::class, 'viewUserTrades'])->name('admin.user-trades');
+    Route::get('/user-referrals/{user}', [ReferralsController::class, 'getReferrals'])->name('admin.user-referrals');
+
     Route::delete('/user-trades/{investment}', [TradingPairsController::class, 'deleteUserTrade'])->name('admin.user-trades.delete');
 // });
 
@@ -129,18 +132,18 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function()
 	Route::get('dashboard/viewagent/{agent}',[LogicController::class , 'viewagent'])->name('viewagent');
 	Route::get('dashboard/delagent/{id}',[LogicController::class , 'delagent'])->name('delagent');
 	// Settings Update Routes
-	
+
 	Route::post('dashboard/updatesettings', [SettingsController::class , 'updatesettings']);
 
 	Route::post('dashboard/updateasset', [SettingsController::class , 'updateasset']);
 	Route::post('dashboard/updatemarket', [SettingsController::class , 'updatemarket']);
 	Route::post('dashboard/updatefee', [SettingsController::class , 'updatefee']);
-	
-	
+
+
 	// clear cache
 	Route::get('dashboard/clearcache', [ClearCacheController::class , 'clearcache'])->name('clearcache');
 
- 
+
 	// Update App Information
 	Route::put('dashboard/updatewebinfo', [AppSettingsController::class , 'updatewebinfo'])->name('updatewebinfo');
 	Route::put('dashboard/updatepreference', [AppSettingsController::class , 'updatepreference'])->name('updatepreference');
@@ -191,10 +194,10 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function()
 	Route::get('dashboard/delsystemuser/{id}', [ManageUsersController::class , 'delsystemuser']);
 	Route::get('dashboard/usertrademode/{id}/{action}', [ManageUsersController::class , 'usertrademode']);
 	Route::post('dashboard/sendmailtoall', [ManageUsersController::class , 'sendmailtoall'])->name('sendmailtoall');
-	
+
 	Route::get('dashboard/trashplan/{id}', [InvPlanController::class , 'trashplan']);
 	Route::get('dashboard/deletewdmethod/{id}', 'App\Http\Controllers\Admin\SettingsController@deletewdmethod');
-	
+
 	// This Route is for frontpage editing
 	Route::post('dashboard/savefaq', [FrontendController::class , 'savefaq'])->name('savefaq');
 	Route::post('dashboard/savetestimony', [FrontendController::class , 'savetestimony'])->name('savetestimony');
@@ -207,7 +210,7 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function()
 	Route::post('dashboard/updatecontents', [FrontendController::class , 'updatecontents'])->name('updatecontents');
 	Route::post('dashboard/updateimg', [FrontendController::class , 'updateimg'])->name('updateimg');
 	Route::get('dashboard/adminprofile', [HomeController::class , 'adminprofile'])->name('adminprofile');
-	
+
 	Route::get('dashboard/deleteplan/{id}',[ManageUsersController::class , 'deleteplan'])->name('deleteplan');
 
 	Route::get('dashboard/markas/{status}/{id}',[ManageUsersController::class , 'markplanas'])->name('markas');
@@ -237,10 +240,10 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function()
 
 	Route::post('dashboard/exchangefee', [ManageAssetController::class , 'exchangefee'])->name('exchangefee');
 
-		
+
 // Admin Trading Pairs Routes (Protected by admin middleware)
 Route::prefix('admin')->name('admin.')->group(function () {
-    
+
     // Trading Pairs Management
     Route::get('/trading-pairs', [TradingPairsController::class, 'index'])->name('trading-pairs.index');
     Route::post('/trading-pairs', [TradingPairsController::class, 'store'])->name('trading-pairs.store');
@@ -249,7 +252,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/trading-pairs/{tradingPair}/edit', [TradingPairsController::class, 'edit'])->name('trading-pairs.edit');
     Route::put('/trading-pairs/{tradingPair}', [TradingPairsController::class, 'update'])->name('trading-pairs.update');
     Route::delete('/trading-pairs/{tradingPair}', [TradingPairsController::class, 'destroy'])->name('trading-pairs.destroy');
-    
+
     // Trading Pairs Actions
     Route::post('/trading-pairs/{tradingPair}/toggle-status', [TradingPairsController::class, 'toggleStatus'])->name('trading-pairs.toggle-status');
     Route::get('/trading-pairs/refresh-prices', [TradingPairsController::class, 'refreshPrices'])->name('trading-pairs.refresh-prices');
@@ -268,4 +271,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
 //     return redirect()->route('admin.trading-pairs.index');
 // })->name('newplan'); // Redirect old new plan route
 });
-// Everything About Admin Route ends here 
+// Everything About Admin Route ends here

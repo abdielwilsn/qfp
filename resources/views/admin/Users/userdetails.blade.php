@@ -33,10 +33,12 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                             <div class="dropdown-menu dropdown-menu-lg-right">
                                                 @if (Auth('admin')->User()->type == "Super Admin")
                                                     <a class="dropdown-item" href="{{ route('admin.user-trades', $user->id) }}">View Trades</a>
+                                                    <a class="dropdown-item" href="{{ route('admin.user-referrals', $user->id) }}">Manage Referrals</a>
+
                                                 @endif
                                                 <a class="dropdown-item" href="{{ route('loginactivity', $user->id) }}">Login Activity</a>
                                                 @if($user->status==NULL || $user->status=='blocked')
-                                                <a class="dropdown-item" href="{{ url('admin/dashboard/uunblock') }}/{{$user->id}}">Unblock</a> 
+                                                <a class="dropdown-item" href="{{ url('admin/dashboard/uunblock') }}/{{$user->id}}">Unblock</a>
                                                 @else
                                                 <a class="dropdown-item" href="{{ url('admin/dashboard/uublock') }}/{{$user->id}}">Block</a>
                                                 @endif
@@ -46,7 +48,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                                 {{-- <a class="dropdown-item" href="{{ url('admin/dashboard/usertrademode') }}/{{$user->id}}/on">Turn on trade</a> --}}
                                                 {{-- @endif --}}
                                                 @if($user->email_verified_at)
-                                                
+
                                                 @else
                                                 <a href="{{url('admin/dashboard/email-verify')}}/{{$user->id}}" class="dropdown-item">Verify Email</a>
                                                 @endif
@@ -97,7 +99,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 <div class="col-md-3">
                                     <h5>Inv. Plans</h5>
                                     @if ($user->plan != NULL)
-                                      <a class="btn btn-sm btn-primary d-inline" href="{{route('user.plans', $user->id)}}">View Plans</a>  
+                                      <a class="btn btn-sm btn-primary d-inline" href="{{route('user.plans', $user->id)}}">View Plans</a>
                                     @else
                                         <p>No Investment Plan</p>
                                     @endif

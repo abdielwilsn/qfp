@@ -25,6 +25,8 @@ use App\Http\Controllers\Admin\ClearCacheController;
 use App\Http\Controllers\Admin\ManageAssetController;
 use App\Http\Controllers\TradingPairsController;
 use App\Http\Controllers\ReferralsController;
+use App\Http\Controllers\UserReferralSettingController;
+
 
 Route::prefix('admin')->group(function () {
 	Route::get('login',[LoginController::class , 'showLoginForm'])->name('adminloginform');
@@ -53,6 +55,11 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function()
 	Route::get('dashboard/manage-crypto-assets', [HomeController::class , 'managecryptoasset'])->name('managecryptoasset');
 
 
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/referral-settings', [UserReferralSettingController::class, 'referralView'])->name('user.referral.view');
+        Route::post('/referral-settings/update', [UserReferralSettingController::class, 'updateRefBonus'])->name('user.referral.update');
+    });
 
 
 	// Route::group(['middleware' => ['auth:admin']], function () {

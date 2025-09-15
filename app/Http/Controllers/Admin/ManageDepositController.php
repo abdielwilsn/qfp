@@ -22,6 +22,7 @@ use App\Models\Withdrawal;
 use App\Models\Cp_transaction;
 use App\Models\Tp_Transaction;
 use App\Models\Notification;
+use App\Models\UserReferralSetting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -32,179 +33,148 @@ use Illuminate\Support\Facades\Mail;
 
 class ManageDepositController extends Controller
 {
-    //Delete deposit
-    public function deldeposit($id){
+    // Delete deposit
+    public function deldeposit($id)
+    {
         Deposit::where('id', $id)->delete();
         return redirect()->back()->with('success', 'Deposit history has been deleted!');
     }
 
-    //process deposits
-    public function pdeposit($id){
-        //confirm the users plan
+    // Process deposits
+    public function pdeposit($id)
+    {
+        // Find the deposit and user
         $deposit = Deposit::where('id', $id)->first();
+        if (!$deposit) {
+            return redirect()->back()->with('error', 'Deposit not found!');
+        }
+
         $user = User::where('id', $deposit->user)->first();
+        if (!$user || $deposit->user != $user->id) {
+            return redirect()->back()->with('error', 'Invalid user for this deposit!');
+        }
 
-        if($deposit->user == $user->id){
-            //add funds to user's account
-            User::where('id', $user->id)
-                ->update([
-                    'account_bal' => $user->account_bal + $deposit->amount,
-                ]);
+        // Check if this is the user's first deposit
+        $isFirstDeposit = !Deposit::where('user', $user->id)
+            ->where('status', 'Processed')
+            ->where('id', '!=', $id) // Exclude the current deposit
+            ->exists();
 
-            //get settings
-            $settings = Settings::where('id', '=', '1')->first();
-            $earnings = $settings->referral_commission * $deposit->amount / 100;
+        // Add funds to user's account
+        User::where('id', $user->id)->update([
+            'account_bal' => $user->account_bal + $deposit->amount,
+        ]);
 
-            if(!empty($user->ref_by) && !$user->ref_by_paid){
-                //increment the user's referee total clients activated by 1
-                Agent::where('agent', $user->ref_by)->increment('total_activated', 1);
-                Agent::where('agent', $user->ref_by)->increment('earnings', $earnings);
+        // Handle referral bonus for direct referrer (if applicable)
+        if ($isFirstDeposit && !empty($user->ref_by) && !$user->ref_by_paid) {
+            // Get the referrer's custom settings or fall back to global settings
+            $referrerSettings = UserReferralSetting::where('user_id', $user->ref_by)->first();
+            $globalSettings = Settings::where('id', 1)->first();
 
-                //add earnings to agent balance
-                //get agent
-                $agent = User::where('id', $user->ref_by)->first();
-                User::where('id', $user->ref_by)
-                    ->update([
-                        'account_bal' => $agent->account_bal + $earnings,
-                        'ref_bonus' => $agent->ref_bonus + $earnings,
-                    ]);
+            $commissionRate = $referrerSettings ? $referrerSettings->referral_commission : $globalSettings->referral_commission;
+            $earnings = $commissionRate * $deposit->amount / 100;
 
-                //create history
-                Tp_Transaction::create([
-                    'user' => $user->ref_by,
-                    'plan' => "Credit",
-                    'amount' => $earnings,
-                    'type' => "Ref_bonus",
-                ]);
+            // Update agent's total activated clients and earnings
+            Agent::where('agent', $user->ref_by)->increment('total_activated', 1);
+            Agent::where('agent', $user->ref_by)->increment('earnings', $earnings);
 
-                //set ref_by_paid to true
-                User::where('id', $user->id)
-                    ->update([
-                        'ref_by_paid' => true,
-                    ]);
-            }
+            // Add earnings to referrer's balance
+            $agent = User::where('id', $user->ref_by)->first();
+            User::where('id', $user->ref_by)->update([
+                'account_bal' => $agent->account_bal + $earnings,
+                'ref_bonus' => $agent->ref_bonus + $earnings,
+            ]);
 
-            //credit commission to ancestors
+            // Create transaction history
+            Tp_Transaction::create([
+                'user' => $user->ref_by,
+                'plan' => "Credit",
+                'amount' => $earnings,
+                'type' => "Ref_bonus",
+            ]);
+
+            // Mark ref_by_paid as true
+            User::where('id', $user->id)->update([
+                'ref_by_paid' => true,
+            ]);
+        }
+
+        // Credit commission to ancestors (only on first deposit)
+        if ($isFirstDeposit) {
             $deposit_amount = $deposit->amount;
             $array = User::all();
             $parent = $user->id;
             $this->getAncestors($array, $deposit_amount, $parent);
         }
 
-        //update deposits
-        Deposit::where('id', $id)
-            ->update([
-                'status' => 'Processed',
-            ]);
+        // Update deposit status
+        Deposit::where('id', $id)->update([
+            'status' => 'Processed',
+        ]);
+
         return redirect()->back()->with('success', 'Action Successful!');
     }
 
-    public function viewdepositimage($id){
+    // View deposit image
+    public function viewdepositimage($id)
+    {
         return view('admin.Deposits.depositimg', [
             'deposit' => Deposit::where('id', $id)->first(),
             'title' => 'View Deposit Screenshot',
-            'settings' => Settings::where('id', '=', '1')->first(),
+            'settings' => Settings::where('id', 1)->first(),
         ]);
     }
 
-    //Get uplines
-    function getAncestors($array, $deposit_amount, $parent = 0, $level = 0) {
+    // Get uplines
+    function getAncestors($array, $deposit_amount, $parent = 0, $level = 0)
+    {
         $referedMembers = '';
         $parent = User::where('id', $parent)->first();
+        if (!$parent) {
+            return $referedMembers;
+        }
 
         foreach ($array as $entry) {
             if ($entry->id == $parent->ref_by) {
-                //get settings
-                $settings = Settings::where('id', '=', '1')->first();
+                // Get the ancestor's custom settings or fall back to global settings
+                $ancestorSettings = UserReferralSetting::where('user_id', $entry->id)->first();
+                $globalSettings = Settings::where('id', 1)->first();
 
-                if($level == 1){
-                    $earnings = $settings->referral_commission1 * $deposit_amount / 100;
-                    //add earnings to ancestor balance
-                    User::where('id', $entry->id)
-                        ->update([
-                            'account_bal' => $entry->account_bal + $earnings,
-                            'ref_bonus' => $entry->ref_bonus + $earnings,
-                        ]);
-
-                    //create history
-                    Tp_Transaction::create([
-                        'user' => $entry->id,
-                        'plan' => "Credit",
-                        'amount' => $earnings,
-                        'type' => "Ref_bonus",
-                    ]);
-
-                } elseif($level == 2){
-                    $earnings = $settings->referral_commission2 * $deposit_amount / 100;
-                    //add earnings to ancestor balance
-                    User::where('id', $entry->id)
-                        ->update([
-                            'account_bal' => $entry->account_bal + $earnings,
-                            'ref_bonus' => $entry->ref_bonus + $earnings,
-                        ]);
-
-                    //create history
-                    Tp_Transaction::create([
-                        'user' => $entry->id,
-                        'plan' => "Credit",
-                        'amount' => $earnings,
-                        'type' => "Ref_bonus",
-                    ]);
-
-                } elseif($level == 3){
-                    $earnings = $settings->referral_commission3 * $deposit_amount / 100;
-                    //add earnings to ancestor balance
-                    User::where('id', $entry->id)
-                        ->update([
-                            'account_bal' => $entry->account_bal + $earnings,
-                            'ref_bonus' => $entry->ref_bonus + $earnings,
-                        ]);
-
-                    //create history
-                    Tp_Transaction::create([
-                        'user' => $entry->id,
-                        'plan' => "Credit",
-                        'amount' => $earnings,
-                        'type' => "Ref_bonus",
-                    ]);
-
-                } elseif($level == 4){
-                    $earnings = $settings->referral_commission4 * $deposit_amount / 100;
-                    //add earnings to ancestor balance
-                    User::where('id', $entry->id)
-                        ->update([
-                            'account_bal' => $entry->account_bal + $earnings,
-                            'ref_bonus' => $entry->ref_bonus + $earnings,
-                        ]);
-
-                    //create history
-                    Tp_Transaction::create([
-                        'user' => $entry->id,
-                        'plan' => "Credit",
-                        'amount' => $earnings,
-                        'type' => "Ref_bonus",
-                    ]);
-
-                } elseif($level == 5){
-                    $earnings = $settings->referral_commission5 * $deposit_amount / 100;
-                    //add earnings to ancestor balance
-                    User::where('id', $entry->id)
-                        ->update([
-                            'account_bal' => $entry->account_bal + $earnings,
-                            'ref_bonus' => $entry->ref_bonus + $earnings,
-                        ]);
-
-                    //create history
-                    Tp_Transaction::create([
-                        'user' => $entry->id,
-                        'plan' => "Credit",
-                        'amount' => $earnings,
-                        'type' => "Ref_bonus",
-                    ]);
-
+                $earnings = 0;
+                if ($level == 1) {
+                    $commissionRate = $ancestorSettings ? $ancestorSettings->referral_commission1 : $globalSettings->referral_commission1;
+                    $earnings = $commissionRate * $deposit_amount / 100;
+                } elseif ($level == 2) {
+                    $commissionRate = $ancestorSettings ? $ancestorSettings->referral_commission2 : $globalSettings->referral_commission2;
+                    $earnings = $commissionRate * $deposit_amount / 100;
+                } elseif ($level == 3) {
+                    $commissionRate = $ancestorSettings ? $ancestorSettings->referral_commission3 : $globalSettings->referral_commission3;
+                    $earnings = $commissionRate * $deposit_amount / 100;
+                } elseif ($level == 4) {
+                    $commissionRate = $ancestorSettings ? $ancestorSettings->referral_commission4 : $globalSettings->referral_commission4;
+                    $earnings = $commissionRate * $deposit_amount / 100;
+                } elseif ($level == 5) {
+                    $commissionRate = $ancestorSettings ? $ancestorSettings->referral_commission5 : $globalSettings->referral_commission5;
+                    $earnings = $commissionRate * $deposit_amount / 100;
                 }
 
-                if($level == 6){
+                if ($earnings > 0) {
+                    // Add earnings to ancestor balance
+                    User::where('id', $entry->id)->update([
+                        'account_bal' => $entry->account_bal + $earnings,
+                        'ref_bonus' => $entry->ref_bonus + $earnings,
+                    ]);
+
+                    // Create transaction history
+                    Tp_Transaction::create([
+                        'user' => $entry->id,
+                        'plan' => "Credit",
+                        'amount' => $earnings,
+                        'type' => "Ref_bonus",
+                    ]);
+                }
+
+                if ($level == 5) { // Stop at level 5
                     break;
                 }
 
@@ -214,16 +184,16 @@ class ManageDepositController extends Controller
         return $referedMembers;
     }
 
-    // for front end content management
-    function RandomStringGenerator($n){
+    // For front-end content management
+    function RandomStringGenerator($n)
+    {
         $generated_string = "";
         $domain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         $len = strlen($domain);
-        for ($i = 0; $i < $n; $i++){
+        for ($i = 0; $i < $n; $i++) {
             $index = rand(0, $len - 1);
             $generated_string = $generated_string . $domain[$index];
         }
-        // Return the random generated string
         return $generated_string;
     }
 }

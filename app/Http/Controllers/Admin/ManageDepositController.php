@@ -116,80 +116,80 @@ class ManageDepositController extends Controller
         });
     }
 
-    // Process deposits
-    public function pdeposit($id)
-    {
-        // Find the deposit and user
-        $deposit = Deposit::where('id', $id)->first();
-        if (!$deposit) {
-            return redirect()->back()->with('error', 'Deposit not found!');
-        }
+    // // Process deposits
+    // public function pdeposit($id)
+    // {
+    //     // Find the deposit and user
+    //     $deposit = Deposit::where('id', $id)->first();
+    //     if (!$deposit) {
+    //         return redirect()->back()->with('error', 'Deposit not found!');
+    //     }
 
-        $user = User::where('id', $deposit->user)->first();
-        if (!$user || $deposit->user != $user->id) {
-            return redirect()->back()->with('error', 'Invalid user for this deposit!');
-        }
+    //     $user = User::where('id', $deposit->user)->first();
+    //     if (!$user || $deposit->user != $user->id) {
+    //         return redirect()->back()->with('error', 'Invalid user for this deposit!');
+    //     }
 
-        // Check if this is the user's first deposit
-        $isFirstDeposit = !Deposit::where('user', $user->id)
-            ->where('status', 'Processed')
-            ->where('id', '!=', $id) // Exclude the current deposit
-            ->exists();
+    //     // Check if this is the user's first deposit
+    //     $isFirstDeposit = !Deposit::where('user', $user->id)
+    //         ->where('status', 'Processed')
+    //         ->where('id', '!=', $id) // Exclude the current deposit
+    //         ->exists();
 
-        // Add funds to user's account
-        User::where('id', $user->id)->update([
-            'account_bal' => $user->account_bal + $deposit->amount,
-        ]);
+    //     // Add funds to user's account
+    //     User::where('id', $user->id)->update([
+    //         'account_bal' => $user->account_bal + $deposit->amount,
+    //     ]);
 
-        // Handle referral bonus for direct referrer (if applicable)
-        if ($isFirstDeposit && !empty($user->ref_by) && !$user->ref_by_paid) {
-            // Get the referrer's custom settings or fall back to global settings
-            $referrerSettings = UserReferralSetting::where('user_id', $user->ref_by)->first();
-            $globalSettings = Settings::where('id', 1)->first();
+    //     // Handle referral bonus for direct referrer (if applicable)
+    //     if ($isFirstDeposit && !empty($user->ref_by) && !$user->ref_by_paid) {
+    //         // Get the referrer's custom settings or fall back to global settings
+    //         $referrerSettings = UserReferralSetting::where('user_id', $user->ref_by)->first();
+    //         $globalSettings = Settings::where('id', 1)->first();
 
-            $commissionRate = $referrerSettings ? $referrerSettings->referral_commission : $globalSettings->referral_commission;
-            $earnings = $commissionRate * $deposit->amount / 100;
+    //         $commissionRate = $referrerSettings ? $referrerSettings->referral_commission : $globalSettings->referral_commission;
+    //         $earnings = $commissionRate * $deposit->amount / 100;
 
-            // Update agent's total activated clients and earnings
-            Agent::where('agent', $user->ref_by)->increment('total_activated', 1);
-            Agent::where('agent', $user->ref_by)->increment('earnings', $earnings);
+    //         // Update agent's total activated clients and earnings
+    //         Agent::where('agent', $user->ref_by)->increment('total_activated', 1);
+    //         Agent::where('agent', $user->ref_by)->increment('earnings', $earnings);
 
-            // Add earnings to referrer's balance
-            $agent = User::where('id', $user->ref_by)->first();
-            User::where('id', $user->ref_by)->update([
-                'account_bal' => $agent->account_bal + $earnings,
-                'ref_bonus' => $agent->ref_bonus + $earnings,
-            ]);
+    //         // Add earnings to referrer's balance
+    //         $agent = User::where('id', $user->ref_by)->first();
+    //         User::where('id', $user->ref_by)->update([
+    //             'account_bal' => $agent->account_bal + $earnings,
+    //             'ref_bonus' => $agent->ref_bonus + $earnings,
+    //         ]);
 
-            // Create transaction history
-            Tp_Transaction::create([
-                'user' => $user->ref_by,
-                'plan' => "Credit",
-                'amount' => $earnings,
-                'type' => "Ref_bonus",
-            ]);
+    //         // Create transaction history
+    //         Tp_Transaction::create([
+    //             'user' => $user->ref_by,
+    //             'plan' => "Credit",
+    //             'amount' => $earnings,
+    //             'type' => "Ref_bonus",
+    //         ]);
 
-            // Mark ref_by_paid as true
-            User::where('id', $user->id)->update([
-                'ref_by_paid' => true,
-            ]);
-        }
+    //         // Mark ref_by_paid as true
+    //         User::where('id', $user->id)->update([
+    //             'ref_by_paid' => true,
+    //         ]);
+    //     }
 
-        // Credit commission to ancestors (only on first deposit)
-        if ($isFirstDeposit) {
-            $deposit_amount = $deposit->amount;
-            $array = User::all();
-            $parent = $user->id;
-            $this->getAncestors($array, $deposit_amount, $parent);
-        }
+    //     // Credit commission to ancestors (only on first deposit)
+    //     if ($isFirstDeposit) {
+    //         $deposit_amount = $deposit->amount;
+    //         $array = User::all();
+    //         $parent = $user->id;
+    //         $this->getAncestors($array, $deposit_amount, $parent);
+    //     }
 
-        // Update deposit status
-        Deposit::where('id', $id)->update([
-            'status' => 'Processed',
-        ]);
+    //     // Update deposit status
+    //     Deposit::where('id', $id)->update([
+    //         'status' => 'Processed',
+    //     ]);
 
-        return redirect()->back()->with('success', 'Action Successful!');
-    }
+    //     return redirect()->back()->with('success', 'Action Successful!');
+    // }
 
     // View deposit image
     public function viewdepositimage($id)

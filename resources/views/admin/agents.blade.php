@@ -19,43 +19,43 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                     <x-success-alert/>
 					<div class="mb-5 row">
 						<div class="col-12 card p-3 shadow bg-{{Auth('admin')->User()->dashboard_style}} text-{{$text}}">
-							<div class="bs-example widget-shadow table-responsive" data-example-id="hoverable-table"> 
+							<div class="bs-example widget-shadow table-responsive" data-example-id="hoverable-table">
 							<a href="#" data-toggle="modal" data-target="#addagentModal" class="btn btn-{{$text}} btn-lg" style="margin:10px;"> <i class="fa fa-plus"></i> Add agent</a>
-								<table id="ShipTable" class="table table-hover text-{{$text}}"> 
-									<thead> 
-										<tr> 
+								<table id="ShipTable" class="table table-hover text-{{$text}}">
+									<thead>
+										<tr>
 											<th>Agent name</th>
 											<th>Clients referred</th>
 											<th>Option(s)</th>
-										</tr> 
-									</thead> 
-									<tbody> 
+										</tr>
+									</thead>
+									<tbody>
 										@foreach($agents as $agent)
-										<tr> 
-											<td>{{$agent->duser->name}}</td> 
-											<td>{{$agent->total_refered}}</td> 
-											<!--<td>{{$agent->total_activated}}</td> 
+										<tr>
+											<td>{{$agent->duser->name}}</td>
+											<td>{{$agent->total_refered}}</td>
+											<!--<td>{{$agent->total_activated}}</td>
 											<td>{{$agent->earnings}}</td>-->
 											<td>
 											{{-- <a class="btn btn-{{$text}}" href="{{url('admin/dashboard/viewagent')}}/{{$agent->agent}}" title="View agent clients">
 												<i class="fa fa-eye"></i>
 												</a>  --}}
-												
+
 												<a class="btn btn-{{$text}}" href="{{url('admin/dashboard/delagent')}}/{{$agent->id}}" style="color:red;" title="Remove agent clients">
 												<i class="fa fa-times"></i>
 												</a>
-											</td> 
-										</tr> 
+											</td>
+										</tr>
 										@endforeach
-									</tbody> 
+									</tbody>
 									<!-- Add agent Modal -->
 											<div id="addagentModal" class="modal fade" role="dialog">
 										<div class="modal-dialog">
-		
+
 											<!-- Modal content-->
 											<div class="modal-content">
 											<div class="modal-header bg-{{Auth('admin')->User()->dashboard_style}} ">
-												
+
 												<h4 class="modal-title text-{{$text}}"><strong>Add agent.</strong></h4>
 												<button type="button" class="close text-{{$text}}" data-dismiss="modal">&times;</button>
 											</div>
@@ -65,7 +65,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
 															@foreach($users as $user)
 														<option value="{{$user->id}}">{{$user->name}}</option>
 															@endforeach
-													</select><br>	    
+													</select><br>
 														<input class="form-control bg-{{Auth('admin')->User()->dashboard_style}} text-{{$text}}" placeholder="Increment referred users" type="number" min="0" name="referred_users" value="0"><br/>
 														<input type="hidden" name="_token" value="{{ csrf_token() }}">
 														<input type="submit" class="btn btn-{{$text}}" value="Submit">

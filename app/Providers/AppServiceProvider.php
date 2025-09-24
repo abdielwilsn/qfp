@@ -11,6 +11,10 @@ use App\Models\TermsPrivacy;
 use Storage;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
+use App\Repositories\DepositRepositoryInterface;
+use App\Repositories\EloquentDepositRepository;
+use App\Repositories\UserRepositoryInterface;
+use App\Repositories\EloquentUserRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(DepositRepositoryInterface::class, EloquentDepositRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, EloquentUserRepository::class);
+
         Storage::extend('sftp', function ($app, $config) {
             return new Filesystem(new SftpAdapter($config));
         });

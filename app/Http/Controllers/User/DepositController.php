@@ -216,7 +216,7 @@ class DepositController extends Controller
                     $data = [
                         'document' => $file
                     ];
-                    Mail::to($settings->contact_email)->send(new UserUpload($data));
+                    // Mail::to($settings->contact_email)->send(new UserUpload($data));
 
                 } elseif ($settings->location == "Local") {
                     $path = $file->storeAs('public/photos', $proofname);
@@ -226,7 +226,7 @@ class DepositController extends Controller
                         'document' => $file
                     ];
 
-                    Mail::to($settings->contact_email)->send(new UserUpload($data));
+                    // Mail::to($settings->contact_email)->send(new UserUpload($data));
 
                     // dd($path); // use for debugging
                 } else {

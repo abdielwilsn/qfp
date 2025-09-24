@@ -80,10 +80,10 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                     <h5>Profit</h5>
                                     <p>{{$settings->currency}}{{number_format($user->roi)}} </p>
                                 </div>
-                                <div class="col-md-3">
+                                {{-- <div class="col-md-3">
                                     <h5>Referral Bonus</h5>
                                     <p>{{$settings->currency}}{{number_format($user->ref_bonus)}}</p>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-3">
                                     <h5>Bonus</h5>
                                     <p>{{$settings->currency}}{{number_format($user->bonus)}}</p>
@@ -96,14 +96,14 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                     <span class="badge badge-success">Active</span>
                                     @endif
                                 </div>
-                                <div class="col-md-3">
+                                {{-- <div class="col-md-3">
                                     <h5>Inv. Plans</h5>
                                     @if ($user->plan != NULL)
                                       <a class="btn btn-sm btn-primary d-inline" href="{{route('user.plans', $user->id)}}">View Plans</a>
                                     @else
                                         <p>No Investment Plan</p>
                                     @endif
-                                </div>
+                                </div> --}}
                                 <div class="col-md-3">
                                     <h5>KYC</h5>
                                     @if ($user->account_verify == "Not Verified" || $user->account_verify == NULL)

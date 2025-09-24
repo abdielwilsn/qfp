@@ -12,15 +12,23 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Settings;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class VerifyController extends Controller
 {
     public function verifyaccount(Request $request)
     {
         $request->validate([
-            'idcard'   => 'nullable|mimes:jpg,jpeg,png,pdf,doc|max:4000|image',
-            'passport' => 'nullable|mimes:jpg,jpeg,png,pdf,doc|max:4000|image',
-        ]);
+          'id_number' => [
+              'required',
+              'string',
+              'max:255',
+              Rule::unique('users', 'id_number')->ignore(Auth::id(), 'id'),
+          ],
+], [
+          'id_number.unique' => 'This ID number has already been used by another account please contact support if you have lost access to your old account, we only allow one account per user.',
+]);
+
 
         $settings = Settings::find(1);
         $strtxt   = $this->RandomStringGenerator(6);
@@ -77,7 +85,7 @@ class VerifyController extends Controller
                 'document'  => $request->file('idcard') ?? null,
                 'document1' => $request->file('passport') ?? null,
             ];
-            Mail::to($settings->contact_email)->send(new KycUpload($data));
+            // Mail::to($settings->contact_email)->send(new KycUpload($data));
         } else {
             // Send notification email
             $objDemo = new \stdClass();
@@ -85,7 +93,7 @@ class VerifyController extends Controller
             $objDemo->sender = $settings->site_name;
             $objDemo->date = Carbon::now();
             $objDemo->subject = "KYC Verification";
-            Mail::bcc($settings->contact_email)->send(new NewNotification($objDemo));
+            // Mail::bcc($settings->contact_email)->send(new NewNotification($objDemo));
         }
 
         // Update user record

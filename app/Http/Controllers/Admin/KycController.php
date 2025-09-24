@@ -32,17 +32,27 @@ use Illuminate\Support\Facades\Mail;
 
 class KycController extends Controller
 {
-    
+
    //accept KYC route
    public function acceptkyc($id)
     {
         $user = User::where('id', $id)->first();
-        
+
         //update user
         User::where('id',$id)
         ->update([
             'account_verify' => 'Verified',
         ]);
+
+        if($user->ref_bonus > 0 ){
+            //update user account balance
+            User::where('id',$id)
+            ->update([
+                'account_bal' => DB::raw('account_bal + '.$user->ref_bonus),
+                'kyc_status' => 'approved',
+            ]);
+
+        }
 
         //send notification
         $settings=Settings::where('id', '=', '1')->first();
@@ -53,10 +63,10 @@ class KycController extends Controller
         $objDemo->date = \Carbon\Carbon::Now();
         $objDemo->subject ="Account Verification Status";
         Mail::bcc($user->email)->send(new NewNotification($objDemo));
-    
+
         return redirect()->back()->with('message', 'Action Sucessful!');
     }
-   
+
     //accept KYC route
     public function rejectkyc($id){
         //update user
@@ -66,8 +76,8 @@ class KycController extends Controller
             'id_card'=> NULL,
             'passport' => NULL,
         ]);
-    
+
         return redirect()->back()->with('message', 'Action Sucessful!');
     }
- 
+
 }

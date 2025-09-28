@@ -25,7 +25,6 @@ class DepositRepository implements DepositRepositoryInterface
     public function hasProcessedDeposits($userId, $excludeDepositId)
     {
 
-        // dd($userId, $excludeDepositId);
         return Deposit::where('user', $userId)
             ->where('status', 'Processed')
             ->where('id', '!=', $excludeDepositId)

@@ -46,11 +46,14 @@ class KycController extends Controller
 
         if($user->ref_bonus > 0 ){
             //update user account balance
-            User::where('id',$id)
-            ->update([
-                'account_bal' => DB::raw('account_bal + '.$user->ref_bonus),
-                'kyc_status' => 'approved',
-            ]);
+            // User::where('id',$id)
+            // ->update([
+            //     'account_bal' => DB::raw('account_bal + '.$user->ref_bonus),
+            //     // 'kyc_status' => 'approved',
+            // ]);
+            $user->account_bal += $user->ref_bonus;
+            $user->ref_bonus = 0;
+            $user->save();
 
         }
 

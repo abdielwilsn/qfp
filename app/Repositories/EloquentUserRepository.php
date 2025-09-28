@@ -44,13 +44,26 @@ class EloquentUserRepository implements UserRepositoryInterface
 
     public function updateRefBonus(int $id, float $amount)
     {
+
         $user = User::findOrFail($id);
-        $user->ref_bonus += $amount;
+
+        if ($user && $user->account_verify === 'Verified') {
+
+            $user->account_bal += $amount;
+
+        } else {
+
+            $user->ref_bonus += $amount;
+
+        }
+
+        // $user->ref_bonus += $amount;
+
         // so logic to check kyc status before updating account balance.
 
-        if ($user->kyc_status === 'approved') {
-            $user->account_bal += $amount;
-        }
+        // if ($user->kyc_status === 'approved') {
+        //     $user->account_bal += $amount;
+        // }
         // $user->account_bal += $amount;
         $user->save();
 

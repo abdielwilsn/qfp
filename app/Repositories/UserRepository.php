@@ -23,11 +23,15 @@ class UserRepository implements UserRepositoryInterface
 
     public function updateRefBonus($id, float $amount)
     {
-        dd($id);
         $user = $this->find($id);
-        if ($user) {
+
+        if ($user && $user->account_verify === 'Verified') {
             User::where('id', $id)->update([
+
                 'account_bal' => $user->account_bal + $amount,
+            ]);
+        } else {
+            User::where('id', $id)->update([
                 'ref_bonus' => $user->ref_bonus + $amount,
             ]);
         }

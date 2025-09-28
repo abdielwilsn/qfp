@@ -43,7 +43,6 @@ class ProcessDepositAction
 
             $isFirstDeposit = !$this->depositRepository->hasProcessedDeposits($user->id, $id);
 
-            // dd("hello");
 
             $this->userRepository->updateBalance($user->id, $deposit->amount);
 

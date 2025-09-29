@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 use App\Mail\KycUpdateRequest;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class SendUsersToUpdateKYC implements ShouldQueue
 {
@@ -33,12 +34,21 @@ class SendUsersToUpdateKYC implements ShouldQueue
      */
     public function handle()
     {
-        $users = User::where('id_number', null)->get();
+        $users = User::whereNull('id_number')->get();
+
+
+
         foreach ($users as $user) {
+
+            Log::info("Sending KYC update email to user: {$user->email}");
             // Send email to user to update KYC
             Mail::to($user->email)->send(new KycUpdateRequest($user));
+
             $user->account_verify = 'Under review';
+
             $user->save();
+
+
         }
     }
 }

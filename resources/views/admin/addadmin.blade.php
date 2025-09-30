@@ -58,7 +58,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                     @endif
                                 </div>
                             </div>
-                            
+
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                 <h4 class="text-{{$text}}">Phone number</h4>
                                 <div>
@@ -76,11 +76,12 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 <select class="form-control bg-{{Auth('admin')->User()->dashboard_style}} text-{{$text}}" name="type">
                                     <option>Super Admin</option>
                                     <option>Admin</option>
+                                    <option>Manager</option>
                                 </select><br>
                             </div>
 
                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                
+
                                 <h4 class="text-{{$text}}">Password</h4>
                                 <div>
                                     <input id="password" type="password" class="form-control bg-{{Auth('admin')->User()->dashboard_style}} text-{{$text}}" name="password" required>

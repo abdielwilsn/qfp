@@ -44,7 +44,7 @@ class SendUsersToUpdateKYC implements ShouldQueue
             // Send email to user to update KYC
             Mail::to($user->email)->send(new KycUpdateRequest($user));
 
-            $user->account_verify = 'Under review';
+            $user->account_verify = Null;
 
             $user->save();
 

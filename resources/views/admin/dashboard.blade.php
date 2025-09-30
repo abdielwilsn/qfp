@@ -25,7 +25,11 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                         </div>
                         <div class="py-2 ml-md-auto py-md-0">
                             <a href="{{route('mdeposits')}}" class="mr-2 btn btn-success btn-border">Deposits</a>
+                            @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")
+
                             <a href="{{route('mwithdrawals')}}" class="mr-2 btn btn-danger btn-border">Withdrawals</a>
+
+                            @endif
                             <a href="{{route('manageusers')}}" class="btn btn-secondary">Users</a>
                         </div>
                     </div>

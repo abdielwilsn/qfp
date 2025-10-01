@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BalanceLog extends Model
 {
-    protected $fillable = ['user_id', 'old_balance', 'new_balance', 'changed_at'];
+    protected $fillable = ['user_id', 'old_balance', 'new_balance'];
 
     public function user()
     {

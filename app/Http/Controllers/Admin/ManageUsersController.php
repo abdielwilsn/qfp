@@ -252,11 +252,20 @@ class ManageUsersController extends Controller
     }
     public function viewuser($id){
         $user = User::where('id', $id)->first();
-        return view('admin.Users.userdetails',[
+        $deposits = Deposit::where('user', $id)->orderByDesc('id')->get();
+        $withdrawals = Withdrawal::where('user_id', $id)->orderByDesc('id')->get();
+        $totalDeposits = $deposits->sum('amount'); 
+
+
+
+        return view('admin.Users.userdetails', [
             'user' => $user,
             'pl' => Plans::orderByDesc('id')->get(),
             'settings' => Settings::where('id', '1')->first(),
             'title' => "Manage $user->name",
+            'deposits' => $deposits,
+            'withdrawals' => $withdrawals,
+            'totalDeposits' => $totalDeposits,
         ]);
     }
      //block user

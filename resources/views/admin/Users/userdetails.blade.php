@@ -80,10 +80,14 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                     <h5>Profit</h5>
                                     <p>{{$settings->currency}}{{number_format($user->roi)}} </p>
                                 </div>
-                                {{-- <div class="col-md-3">
+                                <div class="col-md-3">
                                     <h5>Referral Bonus</h5>
                                     <p>{{$settings->currency}}{{number_format($user->ref_bonus)}}</p>
-                                </div> --}}
+                                </div>
+                                <div class="col-md-3">
+                                    <h5>Total Deposits</h5>
+                                    <p>{{$settings->currency}}{{$totalDeposits}}</p>
+                                    </div>
                                 <div class="col-md-3">
                                     <h5>Bonus</h5>
                                     <p>{{$settings->currency}}{{number_format($user->bonus)}}</p>

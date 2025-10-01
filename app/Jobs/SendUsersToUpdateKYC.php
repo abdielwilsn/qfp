@@ -13,7 +13,7 @@ use App\Mail\KycUpdateRequest;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
-class nSendUsersToUpdateKYC implements ShouldQueue
+class SendUsersToUpdateKYC implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

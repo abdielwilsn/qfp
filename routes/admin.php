@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\ManageAssetController;
 use App\Http\Controllers\TradingPairsController;
 use App\Http\Controllers\ReferralsController;
 use App\Http\Controllers\UserReferralSettingController;
+use App\Http\Controllers\BalanceLogController;
 
 
 Route::prefix('admin')->group(function () {
@@ -47,6 +48,12 @@ Route::prefix('admin')->group(function () {
 
 Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function()
 {
+
+
+    Route::get('/balance-logs', [BalanceLogController::class, 'index'])->name('balance_logs.index');
+
+
+
     Route::get('dashboard', [HomeController::class , 'index'])->name('admin.dashboard');
 	Route::get('dashboard/plans', [HomeController::class , 'plans'])->name('plans');
 	Route::get('dashboard/new-plan', [HomeController::class , 'newplan'])->name('newplan');

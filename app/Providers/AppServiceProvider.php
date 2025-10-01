@@ -15,6 +15,8 @@ use App\Repositories\DepositRepositoryInterface;
 use App\Repositories\EloquentDepositRepository;
 use App\Repositories\UserRepositoryInterface;
 use App\Repositories\EloquentUserRepository;
+use App\Models\User;
+use App\Observers\UserObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -50,5 +52,7 @@ class AppServiceProvider extends ServiceProvider
             View::share('terms', $terms);
             View::share('moresettings', $moreset);
         }
+
+        User::observe(UserObserver::class);
     }
 }

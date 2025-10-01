@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\User;
 use App\Models\Settings;
+use App\Models\BalanceLog;
+use Illuminate\Support\Facades\Log;
 
 class UserObserver
 {
@@ -31,9 +33,30 @@ class UserObserver
      * @param  \App\Models\User  $user
      * @return void
      */
+
+
     public function updated(User $user)
     {
-        //
+        // Check if account_bal has changed
+        if ($user->isDirty('account_bal')) {
+            $oldBalance = $user->getOriginal('account_bal');
+            $newBalance = $user->account_bal;
+
+            // Log the change
+            Log::info('User account balance changed', [
+                'user_id' => $user->id,
+                'old_balance' => $oldBalance,
+                'new_balance' => $newBalance,
+                'changed_at' => now(),
+            ]);
+
+            BalanceLog::create([
+                'user_id' => $user->id,
+                'old_balance' => $oldBalance,
+                'new_balance' => $newBalance,
+                'changed_at' => now(),
+            ]);
+        }
     }
 
     /**

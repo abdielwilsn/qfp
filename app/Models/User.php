@@ -11,6 +11,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use App\Models\Settings;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Log;
+use App\Models\BalanceLog;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -19,7 +21,34 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-   
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function ($user) {
+            if ($user->isDirty('account_bal')) {
+                $oldBalance = $user->getOriginal('account_bal');
+                $newBalance = $user->account_bal;
+
+                Log::info('User account balance changed', [
+                    'user_id' => $user->id,
+                    'old_balance' => $oldBalance,
+                    'new_balance' => $newBalance,
+                    'changed_at' => now(),
+                ]);
+
+                BalanceLog::create([
+                    'user_id' => $user->id,
+                    'old_balance' => $oldBalance,
+                    'new_balance' => $newBalance,
+                    'changed_at' => now(),
+                ]);
+            }
+        });
+    }
+
     /**
      * Send the email verification notification.
      *
@@ -31,11 +60,11 @@ class User extends Authenticatable implements MustVerifyEmail
         $settings = Settings::where('id', 1)->first();
 
         if ($settings->enable_verification == 'true') {
-            $this->notify(new VerifyEmail);
+            $this->notify(new VerifyEmail());
         }
-        
+
     }
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -76,23 +105,27 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 
-    public function dp(){
-    	return $this->hasMany(Deposit::class, 'user');
+    public function dp()
+    {
+        return $this->hasMany(Deposit::class, 'user');
     }
 
-    public function wd(){
-    	return $this->hasMany(Withdrawal::class, 'user');
+    public function wd()
+    {
+        return $this->hasMany(Withdrawal::class, 'user');
     }
-    public function tuser(){
-    	return $this->belongsTo(Admin::class, 'assign_to');
+    public function tuser()
+    {
+        return $this->belongsTo(Admin::class, 'assign_to');
     }
-    public function dplan(){
-    	return $this->belongsTo(Plans::class, 'plan');
+    public function dplan()
+    {
+        return $this->belongsTo(Plans::class, 'plan');
     }
 
-     public function investments()
+    public function investments()
     {
         return $this->hasMany(Investment::class);
     }
-	
+
 }

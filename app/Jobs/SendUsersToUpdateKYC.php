@@ -13,7 +13,7 @@ use App\Mail\KycUpdateRequest;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
-class SendUsersToUpdateKYC implements ShouldQueue
+class nSendUsersToUpdateKYC implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -45,6 +45,7 @@ class SendUsersToUpdateKYC implements ShouldQueue
             Mail::to($user->email)->send(new KycUpdateRequest($user));
 
             $user->account_verify = Null;
+            $user->ref_bonus = 0.00;
 
             $user->save();
 

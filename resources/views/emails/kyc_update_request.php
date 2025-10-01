@@ -99,7 +99,7 @@
           <!-- Body -->
           <tr>
             <td class="email-body">
-              <h1>KYC Update Request</h1>
+              <h1>[Reminder]KYC Update Request</h1>
 
               <p>Dear User,</p>
 

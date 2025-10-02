@@ -39,8 +39,12 @@ if (Auth('admin')->User()->dashboard_style == "light") {
             <x-success-alert/>
             <div class="page-inner mt--5">
                 <!-- Beginning of Dashboard Stats -->
-                @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")
+{{--                @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")--}}
                     <div class="row row-card-no-pd bg-{{$bg}} shadow-lg mt--2">
+
+
+                        @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")
+
                         <div class="col-sm-6 col-md-3">
                             <div class="card card-stats card-round bg-{{$bg}} full-height">
                                 <div class="card-body">
@@ -66,6 +70,8 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 </div>
                             </div>
                         </div>
+
+                        @endif
                         <div class="col-sm-6 col-md-3">
                             <div class="card card-stats card-round bg-{{$bg}} full-height">
                                 <div class="card-body">
@@ -91,7 +97,10 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-md-3">
+
+                            @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")
+
+                            <div class="col-sm-6 col-md-3">
                             <div class="card card-stats card-round bg-{{$bg}} full-height">
                                 <div class="card-body">
                                     <div class="row">
@@ -116,6 +125,8 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="col-sm-6 col-md-3">
                             <div class="card card-stats card-round bg-{{$bg}} full-height">
                                 <div class="card-body">
@@ -160,6 +171,7 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 </div>
                             </div>
                         </div>
+                            @endif
                         <div class="col-sm-6 col-md-3">
                             <div class="card card-stats card-round bg-{{$bg}}">
                                 <div class="card-body">
@@ -169,17 +181,22 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                                 <i class="flaticon-remove-user text-danger"></i>
                                             </div>
                                         </div>
+
+
                                         <div class="col-8 col-stats">
                                             <div class="numbers">
                                                 <p class="card-category">Block Users</p>
                                                 <h4 class="card-title text-{{$text}}">{{$blockeusers}}</h4>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-md-3">
+                            @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")
+
+                                <div class="col-sm-6 col-md-3">
                             <div class="card card-stats card-round bg-{{$bg}}">
                                 <div class="card-body">
                                     <div class="row">
@@ -198,6 +215,8 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 </div>
                             </div>
                         </div>
+
+                            @endif
                         <div class="col-sm-6 col-md-3">
                             <div class="card card-stats card-round bg-{{Auth('admin')->User()->dashboard_style}}">
                                 <div class="card-body">
@@ -218,7 +237,10 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+
+                @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")
+
+                <div class="row">
                         <div class="col-md-12">
                             <div class="overflow-auto">
                                 <canvas id="myChart" height="100" class="text-{{$text}}"></canvas>

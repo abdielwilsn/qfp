@@ -15,7 +15,7 @@
                     </a>
                 </div>
             </div>
-           
+
             <ul class="nav nav-primary">
                 <li class="nav-item {{ (request()->routeIs('admin.dashboard')) ? 'active' : '' }}">
                     <a href="{{ url('/admin/dashboard') }}">
@@ -24,7 +24,7 @@
                     </a>
                 </li>
                 @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")
-                    
+
                 <li class="nav-item {{ (request()->routeIs('plans')) ? 'active' : '' }} {{ (request()->routeIs('newplan')) ? 'active' : '' }} {{ (request()->routeIs('editplan')) ? 'active' : '' }}">
                     <a href="{{ url('/admin/admin/trading-pairs') }}">
                         <i class="fas fa-cubes " aria-hidden="true"></i>
@@ -37,7 +37,9 @@
                         <p>Manage Users</p>
                     </a>
                 </li>
-                
+                @endif
+
+
                 <li class="nav-item {{ (request()->routeIs('mdeposits')) ? 'active' : '' }} {{ (request()->routeIs('mwithdrawals')) ? 'active' : '' }} {{ (request()->routeIs('mdeposits')) ? 'active' : '' }} {{(request()->routeIs('viewdepositimage')) ? 'active' : '' }} {{ (request()->routeIs('processwithdraw')) ? 'active' : '' }}">
                     <a data-toggle="collapse" href="#mdw">
                         <i class="fas fa-credit-card"></i>
@@ -46,20 +48,29 @@
                     </a>
                     <div class="collapse" id="mdw">
                         <ul class="nav nav-collapse">
+
+
                             <li>
                                 <a href="{{ url('/admin/dashboard/mdeposits') }}">
                                     <span class="sub-item">Manage Deposit</span>
                                 </a>
                             </li>
+                            @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")
+
                             <li>
                                 <a href="{{ url('/admin/dashboard/mwithdrawals') }}">
                                     <span class="sub-item">Manage Withdrawal</span>
                                 </a>
                             </li>
+
+                            @endif
                         </ul>
                     </div>
                 </li>
-                
+
+                    @if (Auth('admin')->User()->type == "Super Admin" || Auth('admin')->User()->type == "Admin")
+
+
                 {{-- <li class="nav-item {{ (request()->routeIs('agents')) ? 'active' : '' }}">
                     <a href="{{ url('/admin/dashboard/agents') }}">
                         <i class="fas fa-users " aria-hidden="true"></i>
@@ -75,7 +86,7 @@
                 </li>
                 @endif
                 @endif
-                
+
                 @if (Auth('admin')->User()->type == "Super Admin")
                    <li class="nav-item {{ (request()->routeIs('addmanager')) ? 'active' : '' }} {{ (request()->routeIs('madmin')) ? 'active' : '' }}">
                     <a data-toggle="collapse" href="#adm">
@@ -97,8 +108,8 @@
                             </li>
                         </ul>
                     </div>
-                </li> 
-                
+                </li>
+
                 <li class="nav-item {{ (request()->routeIs('appsettingshow')) ? 'active' : '' }} {{ (request()->routeIs('termspolicy')) ? 'active' : '' }} {{ (request()->routeIs('refsetshow')) ? 'active' : '' }} {{ (request()->routeIs('paymentview')) ? 'active' : '' }} {{ (request()->routeIs('subview')) ? 'active' : '' }} {{ (request()->routeIs('frontpage')) ? 'active' : '' }} {{ (request()->routeIs('allipaddress')) ? 'active' : '' }} {{ (request()->routeIs('ipaddress')) ? 'active' : '' }} {{ (request()->routeIs('editpaymethod')) ? 'active' : '' }} {{ (request()->routeIs('managecryptoasset')) ? 'active' : '' }}">
                     <a data-toggle="collapse" href="#settings">
                         <i class="fa fa-cog"></i>
@@ -150,10 +161,10 @@
                             </li> --}}
                         </ul>
                     </div>
-                </li> 
+                </li>
 
-                
-                
+
+
                 @endif
             </ul>
         </div>

@@ -50,19 +50,14 @@ class EloquentUserRepository implements UserRepositoryInterface
 
         $globalSettings = Settings::where('id', 1)->first();
 
-        if($globalSettings->enable_kyc == 'yes') {
-
+        if($globalSettings->enable_kyc === 'yes') {
             if ($user && $user->account_verify === 'Verified') {
-
                 $user->account_bal += $amount;
-
             } else {
-
                 $user->ref_bonus += $amount;
-
             }
         } else {
-            $user->ref_bonus += $amount;
+            $user->account_bal += $amount;
         }
 
         // $user->ref_bonus += $amount;

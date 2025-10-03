@@ -50,7 +50,6 @@ class ProcessDepositAction
 
 
             if ($isFirstDeposit) {
-                dd("hello");
 
                 $this->referralService->handleDirectReferralBonus($user, $deposit->amount);
                 $this->referralService->handleAncestorBonuses($user->id, $deposit->amount);

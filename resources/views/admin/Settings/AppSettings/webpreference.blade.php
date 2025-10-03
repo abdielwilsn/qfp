@@ -11,13 +11,13 @@
                 <div class="form-group col-md-6">
                     <h5 class="text-{{$text}}">Uploaded Files Location</h5>
                     <select name="location" class="form-control bg-{{$bg}} text-{{$text}}">
-                        <option>{{$settings->location}}</option> 
-                        <option>AWS S3</option> 
+                        <option>{{$settings->location}}</option>
+                        <option>AWS S3</option>
                         <option>Email</option>
                         <option>Local</option>
                     </select>
-                    <small class="text-{{$text}}">Note: To use AWS S3, please supply your AWS information in the .ENV file</small> 
-                </div> 
+                    <small class="text-{{$text}}">Note: To use AWS S3, please supply your AWS information in the .ENV file</small>
+                </div>
                 <input name="s_currency" value="{{ $settings->s_currency }}" id="s_c" type="hidden">
                 <div class="form-group col-md-6">
                     <h5 class="text-{{$text}}">Website Currency</h5>
@@ -27,11 +27,11 @@
                         <option id="{{$key}}" value="<?php echo html_entity_decode($currency); ?>">{{$key .' ('.html_entity_decode($currency).')'}}</option>
                         @endforeach
                     </select>
-                    
-                </div> 
+
+                </div>
                 <input type="hidden" value="{{$settings->site_preference}}" name="site_preference">
             </div>
-            
+
             <div class="mt-3 row">
                 <div class="mt-4 col-md-6">
                     <h5 class="text-{{$text}}">Annoucment:</h5>
@@ -59,10 +59,10 @@
                         </label>
                     </div>
                     <div>
-                       <small class="text-{{$text}}">if turned off, Users will not receive ROI on weekends</small> 
+                       <small class="text-{{$text}}">if turned off, Users will not receive ROI on weekends</small>
                     </div>
                 </div>
-                
+
                 <div class="mt-4 col-md-6">
                     <h5 class="text-{{$text}}">Withdrawals</h5>
                     <div class="selectgroup">
@@ -78,9 +78,9 @@
                     <div>
                         <small class="text-{{$text}}">if disabled, Users will not be able to place withdrawal request</small>
                     </div>
-                    
+
                 </div>
-            
+
                 <div class="mt-4 col-md-6">
                     <h5 class="text-{{$text}}">Google ReCaptcha:</h5>
                     <div class="selectgroup">
@@ -94,9 +94,9 @@
                         </label>
                     </div>
                     <div>
-                       <small class="text-{{$text}}">if turned on, Users will need to pass the google recaptcha challenge upon registration, also please see how to set up google recpatcha on your website before you can use it. <a href="https://doc.onlinetrade.brynamics.xyz/details/how-to-add-google-recaptcha-" target="_blank">See how</a></small> 
+                       <small class="text-{{$text}}">if turned on, Users will need to pass the google recaptcha challenge upon registration, also please see how to set up google recpatcha on your website before you can use it. <a href="https://doc.onlinetrade.brynamics.xyz/details/how-to-add-google-recaptcha-" target="_blank">See how</a></small>
                     </div>
-                    
+
                 </div>
 
                 <div class="mt-4 col-md-6">
@@ -112,7 +112,7 @@
                         </label>
                     </div>
                     <div>
-                      <small class="text-{{$text}}">if turned on, Users will have the option of selecting their preferred language through google translation</small>  
+                      <small class="text-{{$text}}">if turned on, Users will have the option of selecting their preferred language through google translation</small>
                     </div>
                 </div>
 
@@ -129,10 +129,10 @@
                         </label>
                     </div>
                     <div>
-                      <small class="text-{{$text}}">if turned off, Users will not receive thier ROI at all.</small>  
+                      <small class="text-{{$text}}">if turned off, Users will not receive thier ROI at all.</small>
                     </div>
                 </div>
-                
+
                 <div class="mt-4 col-md-6">
                     <h5 class="text-{{$text}}">KYC(Verification)</h5>
                     <div class="selectgroup">
@@ -146,7 +146,7 @@
                         </label>
                     </div>
                     <div>
-                      <small class="text-{{$text}}">if turned on, Users will need to submit required documents to get verified before they can place a withdrawal request.</small> 
+                      <small class="text-{{$text}}">if turned on, Users will need to submit required documents to get verified before they can get their referral bonus and place a withdrawal request.</small>
                     </div>
                 </div>
 
@@ -163,7 +163,7 @@
                         </label>
                     </div>
                     <div>
-                      <small class="text-{{$text}}">Google Login allows users to login/register with their google account</small> 
+                      <small class="text-{{$text}}">Google Login allows users to login/register with their google account</small>
                     </div>
                 </div>
 
@@ -180,7 +180,7 @@
                         </label>
                     </div>
                     <div>
-                      <small class="text-{{$text}}">If email verification is disabled users will not be ask to verify their email address.</small> 
+                      <small class="text-{{$text}}">If email verification is disabled users will not be ask to verify their email address.</small>
                     </div>
                 </div>
                 <input type="hidden" name="id" value="1">
@@ -243,4 +243,3 @@
     @else
         <script>document.getElementById("socialoff").checked= true;</script>
     @endif
-    

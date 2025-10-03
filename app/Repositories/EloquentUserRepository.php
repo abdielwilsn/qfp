@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Settings;
 use App\Models\User;
 
 class EloquentUserRepository implements UserRepositoryInterface
@@ -47,14 +48,21 @@ class EloquentUserRepository implements UserRepositoryInterface
 
         $user = User::findOrFail($id);
 
-        if ($user && $user->account_verify === 'Verified') {
+        $globalSettings = Settings::where('id', 1)->first();
 
-            $user->account_bal += $amount;
+        if($globalSettings->enable_kyc == 'yes') {
 
+            if ($user && $user->account_verify === 'Verified') {
+
+                $user->account_bal += $amount;
+
+            } else {
+
+                $user->ref_bonus += $amount;
+
+            }
         } else {
-
             $user->ref_bonus += $amount;
-
         }
 
         // $user->ref_bonus += $amount;

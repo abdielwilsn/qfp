@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Settings;
 use App\Models\User;
 
 class UserRepository implements UserRepositoryInterface
@@ -25,15 +26,25 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = $this->find($id);
 
-        if ($user && $user->account_verify === 'Verified') {
-            User::where('id', $id)->update([
+        $globalSettings = Settings::where('id', 1)->first();
 
-                'account_bal' => $user->account_bal + $amount,
-            ]);
+        if($globalSettings->enable_kyc == 'yes') {
+
+            if ($user && $user->account_verify === 'Verified') {
+                User::where('id', $id)->update([
+
+                    'account_bal' => $user->account_bal + $amount,
+                ]);
+            } else {
+                User::where('id', $id)->update([
+                    'ref_bonus' => $user->ref_bonus + $amount,
+                ]);
+            }
         } else {
-            User::where('id', $id)->update([
-                'ref_bonus' => $user->ref_bonus + $amount,
-            ]);
+
+                User::where('id', $id)->update([
+                    'ref_bonus' => $user->ref_bonus + $amount,
+                ]);
         }
     }
 

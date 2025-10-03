@@ -47,14 +47,14 @@ class UserObserver
                 'user_id' => $user->id,
                 'old_balance' => $oldBalance,
                 'new_balance' => $newBalance,
-                'changed_at' => now(),
             ]);
+
+//            dd($oldBalance, $newBalance);
 
             BalanceLog::create([
                 'user_id' => $user->id,
                 'old_balance' => $oldBalance,
                 'new_balance' => $newBalance,
-                'changed_at' => now(),
             ]);
         }
     }

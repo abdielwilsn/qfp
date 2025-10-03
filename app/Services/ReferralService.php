@@ -23,6 +23,7 @@ class ReferralService
             return;
         }
 
+
         $referrerSettings = UserReferralSetting::where('user_id', $user->ref_by)->first();
         $globalSettings = Settings::where('id', 1)->first();
 
@@ -31,7 +32,6 @@ class ReferralService
 
         Agent::where('agent', $user->ref_by)->increment('total_activated', 1);
         Agent::where('agent', $user->ref_by)->increment('earnings', $earnings);
-
 
 
         $this->userRepository->updateRefBonus($user->ref_by, $earnings);

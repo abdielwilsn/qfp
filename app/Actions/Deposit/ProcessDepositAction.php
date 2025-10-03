@@ -31,6 +31,7 @@ class ProcessDepositAction
                 throw new \Exception('Deposit not found!');
             }
 
+
             if ($deposit->status === 'Processed') {
                 throw new \Exception('Deposit already processed!');
             }
@@ -46,12 +47,17 @@ class ProcessDepositAction
 
             $this->userRepository->updateBalance($user->id, $deposit->amount);
 
+
+
             if ($isFirstDeposit) {
+                dd("hello");
+
                 $this->referralService->handleDirectReferralBonus($user, $deposit->amount);
                 $this->referralService->handleAncestorBonuses($user->id, $deposit->amount);
             }
 
             $this->depositRepository->updateStatus($id, 'Processed');
+
         });
     }
 }

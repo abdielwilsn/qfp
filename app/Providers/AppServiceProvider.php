@@ -53,6 +53,6 @@ class AppServiceProvider extends ServiceProvider
             View::share('moresettings', $moreset);
         }
 
-        User::observe(UserObserver::class);
+//        User::observe(UserObserver::class);
     }
 }

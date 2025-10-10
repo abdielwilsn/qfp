@@ -47,4 +47,15 @@ return [
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
         'redirect' => env('FACEBOOK_REDIRECT_URI'),
     ],
+
+
+    'etherscan' => [
+        'api_key' => env('ETHERSCAN_API_KEY'),
+    ],
+
+    'wallet' => [
+        'address' => env('MAIN_WALLET_ADDRESS'),
+    ],
+
+
 ];

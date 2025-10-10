@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Commands\AutoTopup::class,
-        // Commands\CheckPlanDuration::class, 
+        // Commands\CheckPlanDuration::class,
         \App\Console\Commands\ExpirePlans::class,
     ];
 
@@ -39,6 +39,9 @@ class Kernel extends ConsoleKernel
 
 
         $schedule->job(new CloseExpiredInvestmentsJob)->everyMinute();
+
+
+        $schedule->command('deposits:check')->everyFiveMinutes();
 
 
 

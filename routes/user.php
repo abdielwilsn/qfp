@@ -15,7 +15,7 @@ use App\Http\Controllers\User\SomeController;
 use App\Http\Controllers\User\SocialLoginController;
 use App\Http\Controllers\User\ExchangeController;
 use App\Http\Controllers\TradingPairsController;
-
+use App\Http\Controllers\CryptomusPayController;
 
 // Email verification routes
 Route::get('/verify-email', 'App\Http\Controllers\User\UsersController@verifyemail')->middleware('auth')->name('verification.notice');;
@@ -31,7 +31,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 
-// Socialite login 
+// Socialite login
 Route::get('/auth/{social}/redirect',[SocialLoginController::class, 'redirect'])->where('social','twitter|facebook|linkedin|google|github|bitbucket')->name('social.redirect');
 Route::get('/auth/{social}/callback',[SocialLoginController::class, 'authenticate'])->where('social','twitter|facebook|linkedin|google|github|bitbucket')->name('social.callback');
 
@@ -48,7 +48,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')->group(func
 	Route::get('support', [ViewsController::class, 'support'])->name('support');
 	Route::get('deposits', [ViewsController::class, 'deposits'])->name('deposits');
 	Route::get('skip_account', [ViewsController::class, 'skip_account']);
-	
+
 	Route::get('tradinghistory',[ViewsController::class, 'tradinghistory'])->name('tradinghistory');
 	Route::get('accounthistory',[ViewsController::class, 'accounthistory'])->name('accounthistory');
 	Route::get('withdrawals', [ViewsController::class, 'withdrawals'])->name('withdrawalsdeposits')->middleware(['password.confirm']);
@@ -60,9 +60,9 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')->group(func
 	Route::get('manage-account-security', [ViewsController::class, 'twofa'])->name('twofa');
 
 
+//    Route::post('/create-invoice', [CryptomusPayController::class, 'createInvoice'])->name('create-invoice');
 
-
-	// 
+	//
     Route::get('recent-trades', [TradingPairsController::class, 'recentTrades'])->name('user.recent-trades');
 
 
@@ -70,17 +70,17 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')->group(func
 
 
 
-	// 
+	//
 
 	// Update withdrawal info
 	Route::put('updateacct', [ProfileController::class, 'updateacct'])->name('updateacount');
 	// Upadting user profile info
 	Route::post('profileinfo', [ProfileController::class, 'updateprofile'])->name('profile.update');
 	// Update password
-	Route::put('updatepass', [ProfileController::class, 'updatepass'])->name('updateuserpass'); 
+	Route::put('updatepass', [ProfileController::class, 'updatepass'])->name('updateuserpass');
 
 	// Update emal preference
-	Route::put('update-email-preference', [ProfileController::class, 'updateemail'])->name('updateemail'); 
+	Route::put('update-email-preference', [ProfileController::class, 'updateemail'])->name('updateemail');
 
 	// Deposits Rotoute
 	Route::get('get-method/{id}', [DepositController::class, 'getmethod'])->name('getmethod');
@@ -88,7 +88,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')->group(func
 	Route::get('payment', [DepositController::class, 'payment'])->name('payment');
 	// Stripe save payment info
 	Route::post('submit-stripe-payment', [DepositController::class, 'savestripepayment']);
-	
+
 	// Paystack Route here
 	Route::post('pay',[PaystackController::class, 'redirectToGateway'])->name('pay.paystack');
 	Route::get('paystackcallback',[PaystackController::class, 'handleGatewayCallback']);
@@ -122,7 +122,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')->group(func
 	Route::get('asset-balance', [ExchangeController::class, 'assetview'])->name('assetbalance');
 	Route::get('asset-price/{base}/{quote}/{amount}', [ExchangeController::class, 'getprice'])->name('getprice');
 	Route::post('exchange', [ExchangeController::class, 'exchange'])->name('exchangenow');
-	
+
 });
 Route::post('sendcontact', 'App\Http\Controllers\User\UsersController@sendcontact')->name('enquiry');
 

@@ -50,24 +50,17 @@ class EloquentUserRepository implements UserRepositoryInterface
 
         $globalSettings = Settings::where('id', 1)->first();
 
-        if($globalSettings->enable_kyc === 'yes') {
+
+        if($globalSettings->enable_kyc == 'yes') {
             if ($user && $user->account_verify === 'Verified') {
                 $user->account_bal += $amount;
             } else {
                 $user->ref_bonus += $amount;
             }
-        } else {
+        } elseif ($globalSettings->enable_kyc == 'no') {
             $user->account_bal += $amount;
         }
 
-        // $user->ref_bonus += $amount;
-
-        // so logic to check kyc status before updating account balance.
-
-        // if ($user->kyc_status === 'approved') {
-        //     $user->account_bal += $amount;
-        // }
-        // $user->account_bal += $amount;
         $user->save();
 
         return $user;

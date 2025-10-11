@@ -41,7 +41,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new CloseExpiredInvestmentsJob)->everyMinute();
 
 
-        $schedule->command('deposits:check')->everyFiveMinutes();
+//        $schedule->command('deposits:check')->everyFiveMinutes();
 
 
 

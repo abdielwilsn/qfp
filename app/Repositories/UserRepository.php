@@ -28,6 +28,7 @@ class UserRepository implements UserRepositoryInterface
 
         $globalSettings = Settings::where('id', 1)->first();
 
+
         if($globalSettings->enable_kyc == 'yes') {
 
             if ($user && $user->account_verify === 'Verified') {
@@ -43,7 +44,7 @@ class UserRepository implements UserRepositoryInterface
         } else {
 
                 User::where('id', $id)->update([
-                    'ref_bonus' => $user->ref_bonus + $amount,
+                    'ref_bonus' => $user->account_bal + $amount,
                 ]);
         }
     }

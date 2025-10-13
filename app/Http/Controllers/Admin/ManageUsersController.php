@@ -254,7 +254,8 @@ class ManageUsersController extends Controller
         $user = User::where('id', $id)->first();
         $deposits = Deposit::where('user', $id)->orderByDesc('id')->get();
         $withdrawals = Withdrawal::where('user_id', $id)->orderByDesc('id')->get();
-        $totalDeposits = $deposits->sum('amount'); 
+        $totalDeposits = $deposits->sum('amount');
+        $totalWithdrawals = $withdrawals->sum('amount');
 
 
 
@@ -266,6 +267,7 @@ class ManageUsersController extends Controller
             'deposits' => $deposits,
             'withdrawals' => $withdrawals,
             'totalDeposits' => $totalDeposits,
+            'totalWithdrawals' => $totalWithdrawals,
         ]);
     }
      //block user

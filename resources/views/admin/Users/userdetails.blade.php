@@ -88,10 +88,13 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                     <h5>Total Deposits</h5>
                                     <p>{{$settings->currency}}{{$totalDeposits}}</p>
                                     </div>
+                                @if (Auth('admin')->User()->type == "Super Admin")
+
                                 <div class="col-md-3">
                                     <h5>Total Withdrawals</h5>
                                     <p>{{$settings->currency}}{{$totalWithdrawals}}</p>
                                 </div>
+                                @endif
                                 <div class="col-md-3">
                                     <h5>Bonus</h5>
                                     <p>{{$settings->currency}}{{number_format($user->bonus)}}</p>

@@ -177,6 +177,22 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                    <h5>{{$user->country}}</h5>
                                 </div>
                             </div>
+
+                            <!-- Add this after the Nationality row -->
+                            <div class="p-3 border row text-{{$text}}">
+                                <div class="col-md-4 border-right">
+                                    <h5>Referred By</h5>
+                                </div>
+                                <div class="col-md-8">
+                                    <h5>
+                                        @if ($referrer)
+                                            {{$referrer->name}} ({{$referrer->username}})
+                                        @else
+                                            None
+                                        @endif
+                                    </h5>
+                                </div>
+                            </div>
                             <div class="p-3 border row text-{{$text}}">
                                 <div class="col-md-4 border-right">
                                     <h5>Registered</h5>

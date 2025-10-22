@@ -250,6 +250,7 @@ class ManageUsersController extends Controller
 
         return $pagination;
     }
+
     public function viewuser($id){
         $user = User::where('id', $id)->first();
         $deposits = Deposit::where('user', $id)->orderByDesc('id')->get();
@@ -257,7 +258,8 @@ class ManageUsersController extends Controller
         $totalDeposits = $deposits->sum('amount');
         $totalWithdrawals = $withdrawals->sum('amount');
 
-
+        // Fetch the referrer (if any)
+        $referrer = $user->ref_by ? User::where('username', $user->ref_by)->first() : null;
 
         return view('admin.Users.userdetails', [
             'user' => $user,
@@ -268,8 +270,29 @@ class ManageUsersController extends Controller
             'withdrawals' => $withdrawals,
             'totalDeposits' => $totalDeposits,
             'totalWithdrawals' => $totalWithdrawals,
+            'referrer' => $referrer, // Pass referrer to the view
         ]);
     }
+//    public function viewuser($id){
+//        $user = User::where('id', $id)->first();
+//        $deposits = Deposit::where('user', $id)->orderByDesc('id')->get();
+//        $withdrawals = Withdrawal::where('user_id', $id)->orderByDesc('id')->get();
+//        $totalDeposits = $deposits->sum('amount');
+//        $totalWithdrawals = $withdrawals->sum('amount');
+//
+//
+//
+//        return view('admin.Users.userdetails', [
+//            'user' => $user,
+//            'pl' => Plans::orderByDesc('id')->get(),
+//            'settings' => Settings::where('id', '1')->first(),
+//            'title' => "Manage $user->name",
+//            'deposits' => $deposits,
+//            'withdrawals' => $withdrawals,
+//            'totalDeposits' => $totalDeposits,
+//            'totalWithdrawals' => $totalWithdrawals,
+//        ]);
+//    }
      //block user
     public function ublock($id){
         User::where('id',$id)->update([

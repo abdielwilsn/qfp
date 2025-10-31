@@ -259,7 +259,11 @@ class ManageUsersController extends Controller
         $totalWithdrawals = $withdrawals->sum('amount');
 
         // Fetch the referrer (if any)
-        $referrer = $user->ref_by ? User::where('username', $user->ref_by)->first() : null;
+        $referrer = $user->ref_by ? User::where('id', $user->ref_by)->first() : null;
+
+
+        $ref = $referrer->name;
+
 
         return view('admin.Users.userdetails', [
             'user' => $user,
@@ -270,7 +274,7 @@ class ManageUsersController extends Controller
             'withdrawals' => $withdrawals,
             'totalDeposits' => $totalDeposits,
             'totalWithdrawals' => $totalWithdrawals,
-            'referrer' => $referrer, // Pass referrer to the view
+            'ref' => $ref,
         ]);
     }
 //    public function viewuser($id){

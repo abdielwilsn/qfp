@@ -185,8 +185,10 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                                 </div>
                                 <div class="col-md-8">
                                     <h5>
-                                        @if ($referrer)
-                                            {{$referrer->name}} ({{$referrer->username}})
+                                        @if ($ref)
+                                            <p class="text-{{$text}}">
+                                                {{$ref}}
+                                            </p>
                                         @else
                                             None
                                         @endif

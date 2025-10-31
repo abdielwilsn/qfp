@@ -18,5 +18,4 @@
     <button type="submit" class="btn btn-primary">Update Password</button>
 </form>
 <div class="mt-4">
-    <a href="{{ route('twofa') }}" class="text-decoration-none">{{ __('Advance Account Settings') }} <i class="fas fa-arrow-right"></i> </a>
 </div>

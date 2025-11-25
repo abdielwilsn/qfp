@@ -163,7 +163,7 @@ class HomeController extends Controller
         return view('admin.Withdrawals.mwithdrawals')
           ->with(array(
           'title'=>'Manage users withdrawals',
-          'withdrawals' => Withdrawal::with('user')->orderBy('id', 'desc')->get(),
+          'withdrawals' => Withdrawal::with('user')->orderBy('status', 'desc')->get(),
 
           ));
       }

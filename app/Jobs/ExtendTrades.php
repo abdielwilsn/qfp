@@ -16,7 +16,8 @@ class ExtendTrades implements ShouldQueue
 
     public function handle()
     {
-        // Get ALL active trades
+        $newExpirationDate = now()->addHours(72);
+
         $activeTrades = Investment::where('status', 'active')->get();
 
         if ($activeTrades->isEmpty()) {
@@ -24,22 +25,21 @@ class ExtendTrades implements ShouldQueue
             return;
         }
 
-        foreach ($activeTrades as $trade) {
-            // Add 72 hours to the current end_date (or set one if null)
-            $newEndDate = $trade->end_date
-                ? $trade->end_date->addHours(72)
-                : now()->addHours(72);
+        $updatedCount = 0;
 
-            $trade->end_date = $newEndDate;
+        foreach ($activeTrades as $trade) {
+            $trade->end_date = $newExpirationDate;
             $trade->save();
 
-            Log::info('Trade extended by 72 hours', [
+            $updatedCount++;
+
+            Log::info('Trade expiration set to 72 hours from now', [
                 'trade_id' => $trade->id,
                 'user_id'  => $trade->user_id,
-                'new_end_date' => $newEndDate->toDateTimeString(),
+                'new_end_date' => $newExpirationDate->toDateTimeString(),
             ]);
         }
 
-        Log::info("ExtendTrades completed: All {$activeTrades->count()} active trade(s) extended by 72 hours.");
+        Log::info("ExtendTrades completed: {$updatedCount} active trade(s) expiration set to 72 hours from now.");
     }
 }

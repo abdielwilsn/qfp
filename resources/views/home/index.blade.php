@@ -392,10 +392,10 @@
     <div class="container">
         <a class="navbar-brand" href="#">Tr<span>hay</span>der</a>
         <div class="d-none d-md-flex align-items-center gap-4">
-            <a href="#" class="nav-link">Features</a>
-            <a href="#" class="nav-link">Pricing</a>
-            <a href="#" class="nav-link">Security</a>
-            <a href="#" class="nav-link">Support</a>
+{{--            <a href="#" class="nav-link">Features</a>--}}
+{{--            <a href="#" class="nav-link">Pricing</a>--}}
+{{--            <a href="#" class="nav-link">Security</a>--}}
+{{--            <a href="#" class="nav-link">Support</a>--}}
         </div>
     </div>
 </nav>

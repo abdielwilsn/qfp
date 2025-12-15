@@ -128,4 +128,22 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Investment::class);
     }
 
+    // In User.php model
+
+    /**
+     * Get users referred by this user
+     */
+    public function refs()
+    {
+        return $this->hasMany(User::class, 'ref_by', 'username');
+    }
+
+    /**
+     * Get the user who referred this user
+     */
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'ref_by', 'username');
+    }
+
 }

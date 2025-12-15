@@ -49,22 +49,6 @@ if (Auth::user()->dashboard_style == "light") {
             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 
                 <!-- Theme Toggle -->
-                <li class="nav-item">
-                    <form action="javascript:void(0)" method="post" id="styleform" class="theme-toggle-form">
-                        <label class="theme-toggle">
-                            <input name="style" id="style" type="checkbox" value="true" class="modes">
-                            <span class="toggle-track">
-                                <span class="toggle-icon sun"><i class="fa fa-sun"></i></span>
-                                <span class="toggle-icon moon"><i class="fa fa-moon"></i></span>
-                                <span class="toggle-thumb"></span>
-                            </span>
-                        </label>
-                        @if(Auth::user()->dashboard_style == 'dark')
-                            <script>document.getElementById("style").checked = true;</script>
-                        @endif
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    </form>
-                </li>
 
                 <!-- Google Translate -->
                 @if($settings->google_translate == 'on')

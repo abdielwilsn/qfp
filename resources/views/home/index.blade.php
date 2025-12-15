@@ -10,9 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #65f163;
-            --primary-light: #81f8ca;
-            --primary-dark: #46e55e;
+            --primary: #6f42c1;
+            --primary-light: #8187f8;
+            --primary-dark: #464ee5;
             --accent: #22d3ee;
             --bg-primary: #0a0a0f;
             --bg-secondary: #12121a;

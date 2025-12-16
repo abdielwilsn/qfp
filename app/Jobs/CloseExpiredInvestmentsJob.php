@@ -17,14 +17,14 @@ class CloseExpiredInvestmentsJob implements ShouldQueue
 
     public function handle()
     {
-
         try {
-            $investments = Investment::with('tradingPair')
+            // Get active investments where start_date + duration has passed
+            $investments = Investment::with(['tradingPair', 'user'])
                 ->where('status', 'active')
-                ->whereNotNull('end_date')
-                ->where('end_date', '<=', now())
+                ->whereNotNull('start_date')
+                ->whereNotNull('duration')
+                ->whereRaw('DATE_ADD(start_date, INTERVAL duration DAY) <= NOW()')
                 ->get();
-
 
             if ($investments->isEmpty()) {
                 Log::info('No expired investments found.');
@@ -37,50 +37,47 @@ class CloseExpiredInvestmentsJob implements ShouldQueue
                     continue;
                 }
 
+                $user = $investment->user;
+                if (!$user) {
+                    Log::warning("Investment ID {$investment->id} has no associated user. Skipping.");
+                    continue;
+                }
 
                 // Calculate profit (random between min and max return percentage)
                 $minReturn = $investment->tradingPair->min_return_percentage / 100;
                 $maxReturn = $investment->tradingPair->max_return_percentage / 100;
-                $returnRate = mt_rand($minReturn * 10000, $maxReturn * 10000) / 10000;
-                $profit = $investment->amount * $returnRate;
+                $returnRate = mt_rand((int)($minReturn * 10000), (int)($maxReturn * 10000)) / 10000;
+
+                // Daily profit multiplied by number of days
+                $dailyProfit = $investment->amount * $returnRate;
+                $profit = $dailyProfit * $investment->duration;
                 $totalReturn = $investment->amount + $profit;
 
                 // Update user balance
-                $user = $investment->user;
-                if ($user) {
-                    $user->increment('account_bal', $totalReturn);
+                $user->increment('account_bal', $totalReturn);
+                $user->increment('roi', $profit);
 
-                    // $user->increment('roi', $totalReturn);
+                Log::info("User ID {$user->id} balance updated: +{$totalReturn} (Investment ID {$investment->id})");
 
-
-                    $user->increment('roi', $profit);
-
-                    // dd($user);
-                    // Log::info("user total return {$totalReturn}");
-                    // Log::info("user")
-                    Log::info("User ID {$user->id} balance updated: +{$totalReturn} (Investment ID {$investment->id})");
-                } else {
-                    Log::warning("Investment ID {$investment->id} has no associated user. Skipping balance update.");
-                    continue;
-                }
-
-                // dd($user->roi);
-
-                // dd($profit);
+                // Calculate actual end date for record keeping
+                $endDate = $investment->start_date->addDays($investment->duration);
 
                 // Update investment
                 $investment->update([
                     'status' => 'completed',
                     'profit' => $profit,
+                    'end_date' => $endDate,
                     'updated_at' => now()
                 ]);
-                // dd($investment);
 
-                Log::info("Investment ID {$investment->id} closed. Profit: {$profit}, Total Return: {$totalReturn}");
+                Log::info("Investment ID {$investment->id} closed. Duration: {$investment->duration} days, Daily Rate: " . ($returnRate * 100) . "%, Total Profit: {$profit}, Total Return: {$totalReturn}");
             }
+
+            Log::info("Processed " . $investments->count() . " expired investments.");
+
         } catch (\Exception $e) {
             Log::error('Error in CloseExpiredInvestmentsJob: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
         }
     }
 }
-?>

@@ -17,6 +17,8 @@ class CreateInvestmentsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('trading_pair_id')->constrained()->onDelete('cascade');
+            $table->integer('duration')->nullable(); // Duration in days
+
             $table->decimal('amount', 15, 2);
             $table->string('status')->default('active');
             $table->timestamp('start_date');
@@ -26,7 +28,7 @@ class CreateInvestmentsTable extends Migration
     }
 
 
- 
+
 
     /**
      * Reverse the migrations.

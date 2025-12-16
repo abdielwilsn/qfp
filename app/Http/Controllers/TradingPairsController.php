@@ -62,6 +62,8 @@ class TradingPairsController extends Controller
                 'min_return_percentage' => $request->min_return_percentage,
                 'max_return_percentage' => $request->max_return_percentage,
                 'investment_duration' => $request->investment_duration,
+                'max_investment_duration' => $request->max_investment_duration,
+
                 'is_active' => $request->boolean('is_active', true)
             ]);
 
@@ -92,6 +94,8 @@ class TradingPairsController extends Controller
             'min_return_percentage' => 'required|numeric|min:0',
             'max_return_percentage' => 'required|numeric|gt:min_return_percentage',
             'investment_duration' => 'required|integer|min:1',
+            'max_investment_duration' => 'required|integer|min:1',
+
             'is_active' => 'boolean'
         ]);
 
@@ -126,6 +130,8 @@ class TradingPairsController extends Controller
                 'min_return_percentage' => $request->min_return_percentage,
                 'max_return_percentage' => $request->max_return_percentage,
                 'investment_duration' => $request->investment_duration,
+                'max_investment_duration' => $request->max_investment_duration,
+
                 'is_active' => $request->boolean('is_active', true)
             ]);
 
@@ -306,8 +312,6 @@ class TradingPairsController extends Controller
     {
         $user = Auth::user();
 
-        // dd($user->)
-
         $validator = Validator::make($request->all(), [
             'amount' => [
                 'required',
@@ -319,6 +323,12 @@ class TradingPairsController extends Controller
                         $fail('Insufficient balance for this trade.');
                     }
                 }
+            ],
+            'duration' => [
+                'required',
+                'integer',
+                'min:' . ($tradingPair->min_investment_duration ?? 1),
+                'max:' . $tradingPair->max_investment_duration,
             ]
         ]);
 
@@ -326,26 +336,14 @@ class TradingPairsController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // $recentTrades = Investment::where('user_id', $user->id)->get();
-
-
-        // if ($recentTrades->trading_pair_id === $tradingPair->id)
-        // {
-        //     return back()->withErrors(['message' => 'Already invested in this today wait till tomorrow']);
-        // }
-
-        // dd($recentTrades);
-
-       $alreadyUsed = Investment::where('user_id', $user->id)
+        $alreadyUsed = Investment::where('user_id', $user->id)
             ->where('trading_pair_id', $tradingPair->id)
             ->where('status', 'active')
             ->exists();
 
-
         if ($alreadyUsed) {
-            return back()->withErrors(['message' => 'Already traded in this today wait till tomorrow']);
+            return back()->withErrors(['message' => 'Already traded in this today, wait till tomorrow']);
         }
-
 
         try {
             \DB::beginTransaction();
@@ -353,14 +351,18 @@ class TradingPairsController extends Controller
             // Deduct amount from user balance
             $user->decrement('account_bal', $request->amount);
 
+            // Get duration from request (user selected)
+            $duration = (int) $request->duration;
+
             // Create investment
             Investment::create([
                 'user_id' => auth()->id(),
                 'trading_pair_id' => $tradingPair->id,
                 'amount' => $request->amount,
+                'duration' => $duration, // Store the selected duration
                 'status' => 'active',
                 'start_date' => now(),
-                'end_date' => now()->addDays($tradingPair->investment_duration)
+                'end_date' => now()->addDays($duration), // Use user-selected duration
             ]);
 
             \DB::commit();
@@ -372,7 +374,6 @@ class TradingPairsController extends Controller
             return back()->with('error', 'Failed to place investment.');
         }
     }
-
     public function viewUserTrades(User $user)
     {
         $investments = Investment::with(['tradingPair'])

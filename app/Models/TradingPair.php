@@ -28,6 +28,7 @@ class TradingPair extends Model
         'min_return_percentage',
         'max_return_percentage',
         'investment_duration',
+        'max_investment_duration',
         'is_active',
         'sort_order'
     ];
@@ -77,7 +78,7 @@ class TradingPair extends Model
 
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 $this->update([
                     'base_symbol' => strtoupper($data['symbol'] ?? $this->base_symbol),
                     'base_name' => $data['name'] ?? $this->base_name,
@@ -105,7 +106,7 @@ class TradingPair extends Model
     {
         $pairs = self::active()->get();
         $coingeckoIds = $pairs->pluck('coingecko_id')->implode(',');
-        
+
         if (empty($coingeckoIds)) {
             return;
         }
@@ -121,11 +122,11 @@ class TradingPair extends Model
 
             if ($response->successful()) {
                 $priceData = $response->json();
-                
+
                 foreach ($pairs as $pair) {
                     if (isset($priceData[$pair->coingecko_id])) {
                         $data = $priceData[$pair->coingecko_id];
-                        
+
                         $pair->update([
                             'current_price' => $data['usd'] ?? $pair->current_price,
                             'price_change_24h' => $data['usd_24h_change'] ?? $pair->price_change_24h,
@@ -151,7 +152,7 @@ class TradingPair extends Model
      */
     public function isPriceStale()
     {
-        return !$this->price_last_updated || 
+        return !$this->price_last_updated ||
                $this->price_last_updated->diffInMinutes(now()) > 5;
     }
 
@@ -186,7 +187,7 @@ class TradingPair extends Model
     {
         $minReturn = $investmentAmount * ($this->min_return_percentage / 100);
         $maxReturn = $investmentAmount * ($this->max_return_percentage / 100);
-        
+
         return [
             'min_return' => $minReturn,
             'max_return' => $maxReturn,
@@ -209,19 +210,19 @@ class TradingPair extends Model
     public function getInvestmentValidationErrors($amount)
     {
         $errors = [];
-        
+
         if ($amount < $this->min_investment) {
             $errors[] = "Minimum investment amount is " . number_format($this->min_investment, 2);
         }
-        
+
         if ($amount > $this->max_investment) {
             $errors[] = "Maximum investment amount is " . number_format($this->max_investment, 2);
         }
-        
+
         if (!$this->is_active) {
             $errors[] = "This trading pair is currently inactive";
         }
-        
+
         return $errors;
     }
 

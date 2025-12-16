@@ -345,8 +345,6 @@
         box-shadow: 0 4px 12px -4px rgba(99, 102, 241, 0.5);
     }
 
-
-
     .sidebar-redesign .nav-item.active > .nav-link .nav-icon {
         background: rgba(255, 255, 255, 0.2);
     }
@@ -487,6 +485,136 @@
     .sidebar-redesign .scroll-element .scroll-bar {
         background: rgba(99, 102, 241, 0.3) !important;
         border-radius: 4px;
+    }
+</style>
+
+<!-- ============================================
+     BURGER MENU GLOBAL STYLES - FIXED THREE EQUAL DASHES
+     ============================================ -->
+<style>
+    /* Force all burger/toggle buttons to be visible */
+    .navbar-toggler,
+    .burger-btn,
+    .toggle-sidebar,
+    .sidenav-toggler,
+    .navbar-toggle,
+    [data-toggle="sidebar"],
+    .nav-toggle,
+    .sidebar-toggle,
+    .menu-toggle,
+    button.navbar-toggler,
+    .topbar-toggler,
+    .btn-toggle {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        border: none !important;
+        background: transparent !important;
+
+        padding: 8px !important;
+        cursor: pointer;
+    }
+
+    /* Sidenav Toggler Structure */
+    .sidenav-toggler {
+        cursor: pointer;
+        padding: 8px;
+    }
+
+    .sidenav-toggler-inner {
+        position: relative;
+        width: 20px;
+        height: 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .sidenav-toggler-line {
+        width: 100% !important; /* Force all lines equal */
+        height: 2px;
+        border-radius: 1px;
+        display: block !important;
+        transition: all 0.2s ease;
+        background-color: inherit !important;
+    }
+
+    /* Remove the shorter middle line */
+    .sidenav-toggler-line:nth-child(2) {
+        width: 100% !important;
+    }
+
+    /* =====================
+       LIGHT MODE (Default)
+       ===================== */
+    .sidenav-toggler-line {
+        background-color: #475569 !important;
+    }
+
+    .navbar-toggler span:not(.sr-only),
+    .burger-btn span,
+    .toggle-sidebar span,
+    .topbar-toggler span {
+        background-color: #475569 !important;
+        display: block !important;
+        height: 2px !important;
+        border-radius: 1px !important;
+    }
+
+    /* Fixed three equal dashes for Bootstrap toggler */
+    .navbar-toggler-icon {
+        width: 20px !important;
+        height: 16px !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3e%3cpath stroke='%23475569' stroke-linecap='round' stroke-width='2' d='M2 4h20M2 10h20M2 16h20'/%3e%3c/svg%3e") !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+    }
+
+    /* =====================
+       DARK MODE
+       ===================== */
+    body.dark .sidenav-toggler-line,
+    .wrapper.dark .sidenav-toggler-line,
+    .bg-dark .sidenav-toggler-line,
+    .navbar-header[data-background-color="dark"] .sidenav-toggler-line,
+    .navbar-header[data-background-color="dark2"] .sidenav-toggler-line,
+    .logo-header[data-background-color="dark"] .sidenav-toggler-line,
+    .logo-header[data-background-color="dark2"] .sidenav-toggler-line,
+    .main-header[data-background-color="dark"] .sidenav-toggler-line,
+    .main-header.bg-dark .sidenav-toggler-line,
+    .topbar.bg-dark .sidenav-toggler-line {
+        background-color: #94a3b8 !important;
+    }
+
+    body.dark .navbar-toggler span:not(.sr-only),
+    .wrapper.dark .navbar-toggler span:not(.sr-only),
+    .bg-dark .navbar-toggler span:not(.sr-only) {
+        background-color: #94a3b8 !important;
+    }
+
+    body.dark .navbar-toggler-icon,
+    .wrapper.dark .navbar-toggler-icon,
+    .bg-dark .navbar-toggler-icon,
+    .navbar-dark .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-width='2' d='M2 4h20M2 10h20M2 16h20'/%3e%3c/svg%3e") !important;
+    }
+
+    /* Hover state - indigo for both modes */
+    .sidenav-toggler:hover .sidenav-toggler-line {
+        background-color: #6366f1 !important;
+    }
+
+    .navbar-toggler:hover .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3e%3cpath stroke='%236366f1' stroke-linecap='round' stroke-width='2' d='M2 4h20M2 10h20M2 16h20'/%3e%3c/svg%3e") !important;
+    }
+
+    /* Mobile specific */
+    @media (max-width: 991px) {
+        .sidenav-toggler,
+        .navbar-toggler {
+            display: flex !important;
+            visibility: visible !important;
+        }
     }
 </style>
 

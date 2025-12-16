@@ -205,12 +205,12 @@ if (Auth::user()->dashboard_style == "light") {
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="pt-1 col-12">
-                        <h3>Personal Trading Chart</h3>
-                        @include('includes.chart')
-                    </div>
-                </div>
+{{--                <div class="row">--}}
+{{--                    <div class="pt-1 col-12">--}}
+{{--                        <h3>Personal Trading Chart</h3>--}}
+{{--                        @include('includes.chart')--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
                 <!-- Contact Us Button (Fixed Position, Telegram Channel) -->
                 @if (!empty($settings->telegram_channel))

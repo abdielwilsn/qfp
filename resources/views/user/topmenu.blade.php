@@ -13,18 +13,29 @@ if (Auth::user()->dashboard_style == "light") {
 <div class="main-header header-redesign" data-theme="{{ $bg }}">
     <!-- Logo Header -->
     <div class="logo-header" data-background-color="{{ $bgmenu }}">
+
+        <!-- Burger Menu Button -->
+        <button class="burger-menu-btn sidenav-toggler" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+            <div class="burger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+
         <a href="/dashboard" class="logo">
             <span class="logo-text">{{ $settings->site_name }}</span>
         </a>
-        <button class="ml-auto navbar-toggler sidenav-toggler" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon">
-                <i class="icon-menu"></i>
-            </span>
-        </button>
-        <button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
-        <div class="nav-toggle">
-            <button class="btn btn-toggle toggle-sidebar">
-                <i class="icon-menu"></i>
+
+        <button class="topbar-toggler more d-lg-none"><i class="icon-options-vertical"></i></button>
+
+        <div class="nav-toggle d-none d-lg-block">
+            <button class="btn btn-toggle toggle-sidebar burger-menu-btn">
+                <div class="burger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </button>
         </div>
     </div>
@@ -47,8 +58,6 @@ if (Auth::user()->dashboard_style == "light") {
             </div>
 
             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-
-                <!-- Theme Toggle -->
 
                 <!-- Google Translate -->
                 @if($settings->google_translate == 'on')
@@ -73,12 +82,12 @@ if (Auth::user()->dashboard_style == "light") {
                                 <h6>KYC Verification</h6>
                                 @if(Auth::user()->account_verify == 'Verified')
                                     <span class="kyc-status verified">
-                                    <i class="fa fa-check-circle"></i> Verified
-                                </span>
+                                        <i class="fa fa-check-circle"></i> Verified
+                                    </span>
                                 @else
                                     <span class="kyc-status pending">
-                                    <i class="fa fa-clock"></i> {{ Auth::user()->account_verify }}
-                                </span>
+                                        <i class="fa fa-clock"></i> {{ Auth::user()->account_verify }}
+                                    </span>
                                 @endif
                             </div>
                             @if(Auth::user()->account_verify != 'Verified')
@@ -172,6 +181,7 @@ if (Auth::user()->dashboard_style == "light") {
         --dropdown-bg: #12121a;
         --dropdown-border: rgba(99, 102, 241, 0.15);
         --divider: rgba(255, 255, 255, 0.08);
+        --burger-color: #94a3b8;
     }
 
     .header-redesign[data-theme="light"] {
@@ -184,16 +194,76 @@ if (Auth::user()->dashboard_style == "light") {
         --dropdown-bg: #ffffff;
         --dropdown-border: #e2e8f0;
         --divider: #e2e8f0;
+        --burger-color: #475569;
     }
 
     .header-redesign .logo-header {
         background: var(--header-bg) !important;
         border-bottom: 1px solid var(--header-border);
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
     }
 
     .header-redesign .navbar-header {
         background: var(--header-bg) !important;
         border-bottom: 1px solid var(--header-border);
+    }
+
+    /* ============================================
+       BURGER MENU BUTTON
+       ============================================ */
+    .header-redesign .burger-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        margin-right: 12px;
+        background: transparent;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .header-redesign .burger-menu-btn:hover {
+        background: var(--hover-bg);
+    }
+
+    .header-redesign .burger-menu-btn:focus {
+        outline: none;
+    }
+
+    .header-redesign .burger-icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 20px;
+        height: 14px;
+    }
+
+    .header-redesign .burger-icon span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: var(--burger-color);
+        border-radius: 1px;
+        transition: all 0.2s ease;
+    }
+
+    .header-redesign .burger-icon span:nth-child(2) {
+        width: 65%;
+    }
+
+    .header-redesign .burger-menu-btn:hover .burger-icon span {
+        background-color: #6366f1;
+    }
+
+    /* Hide old icon-menu styles */
+    .header-redesign .icon-menu {
+        display: none !important;
     }
 
     /* Logo */
@@ -212,6 +282,17 @@ if (Auth::user()->dashboard_style == "light") {
 
     .header-redesign .logo-text::first-letter {
         color: #6366f1;
+    }
+
+    /* Nav Toggle (Desktop) */
+    .header-redesign .nav-toggle {
+        margin-left: auto;
+    }
+
+    .header-redesign .nav-toggle .btn-toggle {
+        background: transparent;
+        border: none;
+        padding: 0;
     }
 
     /* Header Action Buttons */
@@ -256,80 +337,6 @@ if (Auth::user()->dashboard_style == "light") {
 
     .header-redesign .header-action-btn i {
         font-size: 12px;
-    }
-
-    /* Theme Toggle */
-    .header-redesign .theme-toggle-form {
-        margin: 0;
-        display: flex;
-        align-items: center;
-    }
-
-    .header-redesign .theme-toggle {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
-        margin: 0;
-    }
-
-    .header-redesign .theme-toggle input {
-        display: none;
-    }
-
-    .header-redesign .toggle-track {
-        display: flex;
-        align-items: center;
-        width: 56px;
-        height: 28px;
-        background: var(--hover-bg);
-        border-radius: 14px;
-        padding: 2px;
-        position: relative;
-        transition: background 0.3s ease;
-    }
-
-    .header-redesign .toggle-icon {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 12px;
-        z-index: 1;
-        transition: opacity 0.2s ease;
-    }
-
-    .header-redesign .toggle-icon.sun {
-        left: 8px;
-        color: #f59e0b;
-        opacity: 1;
-    }
-
-    .header-redesign .toggle-icon.moon {
-        right: 8px;
-        color: #6366f1;
-        opacity: 0.4;
-    }
-
-    .header-redesign .theme-toggle input:checked ~ .toggle-track .sun {
-        opacity: 0.4;
-    }
-
-    .header-redesign .theme-toggle input:checked ~ .toggle-track .moon {
-        opacity: 1;
-    }
-
-    .header-redesign .toggle-thumb {
-        width: 22px;
-        height: 22px;
-        background: white;
-        border-radius: 50%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease;
-        position: relative;
-        z-index: 2;
-    }
-
-    .header-redesign .theme-toggle input:checked ~ .toggle-track .toggle-thumb {
-        transform: translateX(28px);
     }
 
     /* Header Icon Button */
@@ -574,7 +581,40 @@ if (Auth::user()->dashboard_style == "light") {
         color: #ef4444;
     }
 
+    /* Topbar toggler (mobile more options) */
+    .header-redesign .topbar-toggler {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        padding: 8px;
+        margin-left: auto;
+    }
+
     /* Responsive */
+    @media (max-width: 991px) {
+        .header-redesign .logo-header {
+            justify-content: flex-start;
+        }
+
+        .header-redesign .burger-menu-btn.sidenav-toggler {
+            display: flex !important;
+        }
+
+        .header-redesign .nav-toggle {
+            display: none !important;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .header-redesign .burger-menu-btn.sidenav-toggler {
+            display: none;
+        }
+
+        .header-redesign .nav-toggle {
+            display: block !important;
+        }
+    }
+
     @media (max-width: 767px) {
         .header-redesign .header-actions {
             display: none;

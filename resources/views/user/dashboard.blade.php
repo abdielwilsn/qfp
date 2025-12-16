@@ -380,6 +380,7 @@ if (Auth::user()->dashboard_style == "light") {
             margin-bottom: 28px;
             flex-wrap: wrap;
             gap: 16px;
+            margin-top: 5dvh;
         }
 
         .welcome-text h1 {

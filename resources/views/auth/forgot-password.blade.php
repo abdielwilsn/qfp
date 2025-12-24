@@ -22,7 +22,7 @@
         --danger: #ef4444;
     }
 
-    
+
 
     * {
         margin: 0;
@@ -418,7 +418,7 @@
         <div class="back-link">
             <i class="fa fa-arrow-left" style="color: var(--text-muted); font-size: 12px;"></i>
             <span>Remember your password?</span>
-            <a href="{{ route('login') }}">Back to Login</a>
+            <a href="{{ route('home') }}">Back to Login</a>
         </div>
     </div>
 

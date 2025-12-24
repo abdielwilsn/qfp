@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth:admin', 'issuperadmin']], function () {
 
 Route::get('/payment', function () {
     return view('payment.form');
-})->middleware('auth')->name('payment.form'); 
+})->middleware('auth')->name('payment.form');
 
 Route::post('/crypto-pay', [CryptoPaymentController::class, 'create'])->name('crypto.create');
 Route::post('/crypto-callback', [CryptoPaymentController::class, 'callback'])->name('crypto.callback');
@@ -60,7 +60,7 @@ Route::middleware(['isadmin'])->prefix('admin')->name('admin.')->group(function 
 
     // Route::get('/trading-pairs', [TradeController::class, 'managePairs'])->name('trading-pairs');
     // Route::post('/trading-pairs', [TradeController::class, 'storeTradingPair'])->name('store-trading-pairs');
-    
+
     // Route::patch('/trading-pairs/toggle/{id}', [TradeController::class, 'togglePair'])->name('trading-pairs.toggle');
 });
 Route::get('/api/price/{symbol}', [TradeController::class, 'getApiPrice'])->name('api.price');
@@ -91,7 +91,7 @@ Route::get('/test-email', function () {
     Route::post('trading-pairs/{tradingPair}/invest', [TradingPairsController::class, 'storeInvestment'])->name('user.trading-pairs.store-investment');
 
 
-    
+
 
 // });
 
@@ -106,3 +106,8 @@ Route::any('/revoke', function () {
 	return view('revoke.index');
 });
 
+
+
+// Route::get('/login', function () {
+//     return redirect('home', 301);
+// });

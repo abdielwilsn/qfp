@@ -55,6 +55,9 @@ if (Auth::user()->dashboard_style == "light") {
                             <form action="{{ route('withdrawamount') }}" method="POST" id="withdrawalForm">
                                 @csrf
 
+                                <!-- Hidden field for the NET amount (what user actually receives - this gets submitted) -->
+                                <input type="hidden" name="amount" id="netAmount" value="0">
+
                                 <!-- Amount Input -->
                                 <div class="form-section">
                                     <label class="section-label">
@@ -65,8 +68,7 @@ if (Auth::user()->dashboard_style == "light") {
                                         <span class="currency-symbol">{{ $settings->currency }}</span>
                                         <input
                                             type="number"
-                                            name="amount"
-                                            id="amount"
+                                            id="grossAmount"
                                             class="amount-input"
                                             placeholder="0.00"
                                             min="1"
@@ -86,11 +88,15 @@ if (Auth::user()->dashboard_style == "light") {
                                     <!-- Fee Calculation -->
                                     <div class="fee-breakdown">
                                         <div class="fee-row">
+                                            <span class="fee-label">Requested Amount</span>
+                                            <span class="fee-value" id="requestedAmount">{{ $settings->currency }}0.00</span>
+                                        </div>
+                                        <div class="fee-row">
                                             <span class="fee-label">Service Fee ({{ $settings->withdrawal_percentage }}%)</span>
-                                            <span class="fee-value" id="feeAmount">{{ $settings->currency }}0.00</span>
+                                            <span class="fee-value negative" id="feeAmount">-{{ $settings->currency }}0.00</span>
                                         </div>
                                         <div class="fee-row total">
-                                            <span class="fee-label">You'll Receive</span>
+                                            <span class="fee-label">You'll Receive (Amount Sent)</span>
                                             <span class="fee-value" id="receiveAmount">{{ $settings->currency }}0.00</span>
                                         </div>
                                     </div>
@@ -504,6 +510,10 @@ if (Auth::user()->dashboard_style == "light") {
             color: var(--text-primary);
         }
 
+        .fee-value.negative {
+            color: #ef4444;
+        }
+
         .fee-row.total .fee-value {
             color: #10b981;
             font-size: 1rem;
@@ -538,7 +548,7 @@ if (Auth::user()->dashboard_style == "light") {
         /* Network Options */
         .network-options {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
 
@@ -800,8 +810,10 @@ if (Auth::user()->dashboard_style == "light") {
     </style>
 
     <script>
-        const amountInput = document.getElementById('amount');
+        const grossAmountInput = document.getElementById('grossAmount');
+        const netAmountInput = document.getElementById('netAmount');
         const quickAmountBtns = document.querySelectorAll('.quick-amount-btn');
+        const requestedAmount = document.getElementById('requestedAmount');
         const feeAmount = document.getElementById('feeAmount');
         const receiveAmount = document.getElementById('receiveAmount');
         const networkOptions = document.querySelectorAll('.network-option');
@@ -809,14 +821,19 @@ if (Auth::user()->dashboard_style == "light") {
         const userBalance = {{ Auth::user()->account_bal }};
         const currency = '{{ $settings->currency }}';
 
-        // Calculate fees
+        // Calculate fees and update hidden input with NET amount
         function calculateFees() {
-            const amount = parseFloat(amountInput.value) || 0;
-            const fee = (amount * feePercentage) / 100;
-            const receive = amount - fee;
+            const gross = parseFloat(grossAmountInput.value) || 0;
+            const fee = (gross * feePercentage) / 100;
+            const net = gross - fee;
 
-            feeAmount.textContent = `${currency}${fee.toFixed(2)}`;
-            receiveAmount.textContent = `${currency}${receive.toFixed(2)}`;
+            // Update display
+            requestedAmount.textContent = `${currency}${gross.toFixed(2)}`;
+            feeAmount.textContent = `-${currency}${fee.toFixed(2)}`;
+            receiveAmount.textContent = `${currency}${net.toFixed(2)}`;
+
+            // Update hidden input with NET amount (this is what gets submitted)
+            netAmountInput.value = net.toFixed(2);
         }
 
         // Quick amount buttons
@@ -825,9 +842,9 @@ if (Auth::user()->dashboard_style == "light") {
                 const amount = this.dataset.amount;
 
                 if (amount === 'all') {
-                    amountInput.value = userBalance;
+                    grossAmountInput.value = userBalance;
                 } else {
-                    amountInput.value = amount;
+                    grossAmountInput.value = amount;
                 }
 
                 quickAmountBtns.forEach(b => b.classList.remove('active'));
@@ -837,7 +854,7 @@ if (Auth::user()->dashboard_style == "light") {
         });
 
         // Amount input change
-        amountInput.addEventListener('input', function() {
+        grossAmountInput.addEventListener('input', function() {
             quickAmountBtns.forEach(b => b.classList.remove('active'));
             calculateFees();
         });
@@ -849,6 +866,30 @@ if (Auth::user()->dashboard_style == "light") {
                 this.classList.add('selected');
                 this.querySelector('input').checked = true;
             });
+        });
+
+        // Form validation before submit
+        document.getElementById('withdrawalForm').addEventListener('submit', function(e) {
+            const gross = parseFloat(grossAmountInput.value) || 0;
+            const net = parseFloat(netAmountInput.value) || 0;
+
+            if (gross <= 0) {
+                e.preventDefault();
+                alert('Please enter a valid withdrawal amount.');
+                return;
+            }
+
+            if (gross > userBalance) {
+                e.preventDefault();
+                alert('Insufficient balance. Your available balance is ' + currency + userBalance.toFixed(2));
+                return;
+            }
+
+            if (net <= 0) {
+                e.preventDefault();
+                alert('The amount after fees must be greater than zero.');
+                return;
+            }
         });
 
         // Initial calculation

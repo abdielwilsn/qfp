@@ -66,6 +66,21 @@ if (Auth::user()->dashboard_style == "light") {
                     </li>
                 @endif
 
+                <!-- Dark Mode Toggle -->
+                <li class="nav-item">
+                    <div class="theme-toggle" title="Toggle {{ $bg == 'dark' ? 'Light' : 'Dark' }} Mode">
+                        <div class="toggle-track">
+                            <span class="toggle-icon sun">
+                                <i class="fa fa-sun"></i>
+                            </span>
+                            <span class="toggle-icon moon">
+                                <i class="fa fa-moon"></i>
+                            </span>
+                            <div class="toggle-thumb {{ $bg == 'dark' ? 'dark-active' : '' }}"></div>
+                        </div>
+                    </div>
+                </li>
+
                 <!-- KYC Status -->
                 @if($settings->enable_kyc == "yes")
                     <li class="nav-item dropdown">
@@ -182,6 +197,7 @@ if (Auth::user()->dashboard_style == "light") {
         --dropdown-border: rgba(99, 102, 241, 0.15);
         --divider: rgba(255, 255, 255, 0.08);
         --burger-color: #94a3b8;
+        --toggle-bg: rgba(99, 102, 241, 0.2);
     }
 
     .header-redesign[data-theme="light"] {
@@ -195,6 +211,7 @@ if (Auth::user()->dashboard_style == "light") {
         --dropdown-border: #e2e8f0;
         --divider: #e2e8f0;
         --burger-color: #475569;
+        --toggle-bg: #e2e8f0;
     }
 
     .header-redesign .logo-header {
@@ -337,6 +354,83 @@ if (Auth::user()->dashboard_style == "light") {
 
     .header-redesign .header-action-btn i {
         font-size: 12px;
+    }
+
+    /* ============================================
+       THEME TOGGLE
+       ============================================ */
+    .header-redesign .theme-toggle {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 20px;
+        transition: all 0.2s ease;
+    }
+
+    .header-redesign .theme-toggle:hover {
+        background: var(--hover-bg);
+    }
+
+    .header-redesign .toggle-track {
+        display: flex;
+        align-items: center;
+        width: 56px;
+        height: 30px;
+        background: var(--toggle-bg);
+        border-radius: 15px;
+        padding: 3px;
+        position: relative;
+        transition: background 0.3s ease;
+    }
+
+    .header-redesign .toggle-icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        z-index: 1;
+        transition: all 0.3s ease;
+    }
+
+    .header-redesign .toggle-icon.sun {
+        left: 8px;
+        color: #f59e0b;
+        opacity: 1;
+    }
+
+    .header-redesign .toggle-icon.moon {
+        right: 8px;
+        color: #6366f1;
+        opacity: 0.4;
+    }
+
+    /* Dark mode active state */
+    .header-redesign[data-theme="dark"] .toggle-icon.sun {
+        opacity: 0.4;
+    }
+
+    .header-redesign[data-theme="dark"] .toggle-icon.moon {
+        opacity: 1;
+    }
+
+    .header-redesign .toggle-thumb {
+        width: 24px;
+        height: 24px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s cubic-bezier(0.68, -0.15, 0.27, 1.15);
+        position: relative;
+        z-index: 2;
+    }
+
+    .header-redesign .toggle-thumb.dark-active {
+        transform: translateX(26px);
+    }
+
+    .header-redesign .theme-toggle:active .toggle-track {
+        transform: scale(0.95);
     }
 
     /* Header Icon Button */
@@ -619,22 +713,60 @@ if (Auth::user()->dashboard_style == "light") {
         .header-redesign .header-actions {
             display: none;
         }
+
+        .header-redesign .toggle-track {
+            width: 48px;
+            height: 26px;
+        }
+
+        .header-redesign .toggle-thumb {
+            width: 20px;
+            height: 20px;
+        }
+
+        .header-redesign .theme-toggle input:checked ~ .toggle-track .toggle-thumb {
+            transform: translateX(22px);
+        }
+
+        .header-redesign .toggle-icon {
+            font-size: 10px;
+        }
+
+        .header-redesign .toggle-icon.sun {
+            left: 6px;
+        }
+
+        .header-redesign .toggle-icon.moon {
+            right: 6px;
+        }
     }
 </style>
 
 <script type="text/javascript">
-    // Theme toggle
-    $("#styleform").on('change', function() {
-        $.ajax({
-            url: "{{ url('/dashboard/changetheme') }}",
-            type: 'POST',
-            data: $("#styleform").serialize(),
-            success: function(data) {
-                location.reload(true);
-            },
-            error: function(data) {
-                console.log(data);
-            },
+    $(document).ready(function() {
+        // Theme toggle - click on toggle triggers theme change
+        $('.theme-toggle').on('click', function(e) {
+            e.preventDefault();
+
+            var currentTheme = '{{ $bg }}';
+            var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            $.ajax({
+                url: "{{ url('/dashboard/changetheme') }}",
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    dashboard_style: newTheme
+                },
+                success: function(data) {
+                    console.log('Theme changed to: ' + newTheme);
+                    location.reload(true);
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error changing theme:', error);
+                    console.log('Response:', xhr.responseText);
+                },
+            });
         });
     });
 </script>

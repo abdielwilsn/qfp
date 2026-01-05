@@ -2,9 +2,11 @@
 if (Auth::check() && Auth::user()->dashboard_style == "light") {
 	$text = "dark";
 	$bg = "light";
+	$theme = "light";
 } else {
 	$text = "light";
 	$bg = "dark";
+	$theme = "dark";
 }
 ?>
 
@@ -20,10 +22,526 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
     <title>{{$settings->site_name}} | {{$title}}</title>
     <link rel="icon" href="{{ asset('storage/app/public/photos/'.$settings->favicon)}}" type="image/png"/>
 
+	<!-- Google Fonts - Inter -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+	<!-- ============================================
+	     GLOBAL THEME STYLES
+	     ============================================ -->
+	<style>
+		/* CSS Variables for theming */
+		:root {
+			/* Light theme (default) */
+			--bg-primary: #f8fafc;
+			--bg-secondary: #f1f5f9;
+			--bg-card: #ffffff;
+			--text-primary: #0f172a;
+			--text-secondary: #64748b;
+			--text-muted: #94a3b8;
+			--border-color: #e2e8f0;
+			--input-bg: #f1f5f9;
+			--hover-bg: rgba(99, 102, 241, 0.05);
+			--divider: #e2e8f0;
+			--shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.1);
+
+			/* Brand colors */
+			--primary: #6366f1;
+			--primary-light: #818cf8;
+			--primary-dark: #4f46e5;
+			--success: #10b981;
+			--warning: #f59e0b;
+			--danger: #ef4444;
+			--info: #0ea5e9;
+		}
+
+		/* Dark theme */
+		[data-theme="dark"] {
+			--bg-primary: #0a0a0f;
+			--bg-secondary: #12121a;
+			--bg-card: rgba(18, 18, 26, 0.95);
+			--text-primary: #f8fafc;
+			--text-secondary: #94a3b8;
+			--text-muted: #64748b;
+			--border-color: rgba(99, 102, 241, 0.15);
+			--input-bg: #12121a;
+			--hover-bg: rgba(99, 102, 241, 0.08);
+			--divider: rgba(255, 255, 255, 0.08);
+			--shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.4);
+		}
+
+		/* Base styles */
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+			background: var(--bg-primary) !important;
+			color: var(--text-primary) !important;
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+
+		/* Remove default background image */
+		body[data-theme="dark"],
+		body[data-theme="light"] {
+			background-image: none !important;
+		}
+
+		/* Main content areas */
+		.main-panel,
+		.main-panel .content,
+		.wrapper {
+			background: var(--bg-primary) !important;
+		}
+
+		.page-inner {
+			background: transparent !important;
+		}
+
+		/* Cards */
+		.card {
+			background: var(--bg-card) !important;
+			border: 1px solid var(--border-color) !important;
+			border-radius: 14px !important;
+			box-shadow: var(--shadow) !important;
+		}
+
+		.card-header {
+			background: transparent !important;
+			border-bottom: 1px solid var(--border-color) !important;
+			color: var(--text-primary) !important;
+		}
+
+		.card-title {
+			color: var(--text-primary) !important;
+		}
+
+		.card-body {
+			color: var(--text-primary) !important;
+		}
+
+		.card-footer {
+			background: transparent !important;
+			border-top: 1px solid var(--border-color) !important;
+		}
+
+		/* Forms */
+		.form-control,
+		input[type="text"],
+		input[type="email"],
+		input[type="password"],
+		input[type="number"],
+		input[type="tel"],
+		input[type="url"],
+		input[type="search"],
+		select,
+		textarea {
+			background: var(--input-bg) !important;
+			border: 1px solid var(--border-color) !important;
+			color: var(--text-primary) !important;
+			border-radius: 10px !important;
+			padding: 12px 16px !important;
+			transition: all 0.2s ease !important;
+		}
+
+		.form-control:focus,
+		input:focus,
+		select:focus,
+		textarea:focus {
+			background: var(--input-bg) !important;
+			border-color: var(--primary) !important;
+			box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+			color: var(--text-primary) !important;
+			outline: none !important;
+		}
+
+		.form-control::placeholder,
+		input::placeholder,
+		textarea::placeholder {
+			color: var(--text-muted) !important;
+		}
+
+		.form-group label,
+		label {
+			color: var(--text-secondary) !important;
+			font-weight: 500 !important;
+		}
+
+		/* Tables */
+		.table {
+			color: var(--text-primary) !important;
+		}
+
+		.table thead th {
+			background: var(--bg-secondary) !important;
+			border-color: var(--border-color) !important;
+			color: var(--text-secondary) !important;
+			font-weight: 600 !important;
+			padding: 14px 16px !important;
+		}
+
+		.table tbody td {
+			border-color: var(--border-color) !important;
+			color: var(--text-primary) !important;
+			padding: 14px 16px !important;
+		}
+
+		.table tbody tr:hover {
+			background: var(--hover-bg) !important;
+		}
+
+		.table-striped tbody tr:nth-of-type(odd) {
+			background: var(--bg-secondary) !important;
+		}
+
+		/* DataTables */
+		.dataTables_wrapper .dataTables_length select,
+		.dataTables_wrapper .dataTables_filter input {
+			background: var(--input-bg) !important;
+			border: 1px solid var(--border-color) !important;
+			color: var(--text-primary) !important;
+			border-radius: 8px !important;
+		}
+
+		.dataTables_wrapper .dataTables_info,
+		.dataTables_wrapper .dataTables_length label,
+		.dataTables_wrapper .dataTables_filter label {
+			color: var(--text-secondary) !important;
+		}
+
+		.dataTables_wrapper .dataTables_paginate .paginate_button {
+			background: var(--bg-card) !important;
+			border: 1px solid var(--border-color) !important;
+			color: var(--text-secondary) !important;
+			border-radius: 8px !important;
+		}
+
+		.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+			background: var(--hover-bg) !important;
+			border-color: var(--primary) !important;
+			color: var(--primary) !important;
+		}
+
+		.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+			background: var(--primary) !important;
+			border-color: var(--primary) !important;
+			color: white !important;
+		}
+
+		/* Buttons */
+		.btn {
+			border-radius: 10px !important;
+			font-weight: 600 !important;
+			padding: 10px 20px !important;
+			transition: all 0.2s ease !important;
+		}
+
+		.btn-primary {
+			background: var(--primary) !important;
+			border-color: var(--primary) !important;
+			color: white !important;
+		}
+
+		.btn-primary:hover {
+			background: var(--primary-dark) !important;
+			border-color: var(--primary-dark) !important;
+			transform: translateY(-1px) !important;
+			box-shadow: 0 4px 12px -4px rgba(99, 102, 241, 0.5) !important;
+		}
+
+		.btn-secondary {
+			background: var(--bg-secondary) !important;
+			border-color: var(--border-color) !important;
+			color: var(--text-primary) !important;
+		}
+
+		.btn-secondary:hover {
+			background: var(--hover-bg) !important;
+			border-color: var(--primary) !important;
+			color: var(--primary) !important;
+		}
+
+		.btn-success {
+			background: var(--success) !important;
+			border-color: var(--success) !important;
+			color: white !important;
+		}
+
+		.btn-success:hover {
+			background: #0d9668 !important;
+			border-color: #0d9668 !important;
+		}
+
+		.btn-danger {
+			background: var(--danger) !important;
+			border-color: var(--danger) !important;
+			color: white !important;
+		}
+
+		.btn-danger:hover {
+			background: #dc2626 !important;
+			border-color: #dc2626 !important;
+		}
+
+		.btn-warning {
+			background: var(--warning) !important;
+			border-color: var(--warning) !important;
+			color: #000 !important;
+		}
+
+		.btn-info {
+			background: var(--info) !important;
+			border-color: var(--info) !important;
+			color: white !important;
+		}
+
+		/* Dropdowns */
+		.dropdown-menu {
+			background: var(--bg-card) !important;
+			border: 1px solid var(--border-color) !important;
+			border-radius: 12px !important;
+			box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3) !important;
+			padding: 8px !important;
+		}
+
+		.dropdown-item {
+			color: var(--text-secondary) !important;
+			border-radius: 8px !important;
+			padding: 10px 16px !important;
+			transition: all 0.2s ease !important;
+		}
+
+		.dropdown-item:hover,
+		.dropdown-item:focus {
+			background: var(--hover-bg) !important;
+			color: var(--primary) !important;
+		}
+
+		.dropdown-divider {
+			border-color: var(--divider) !important;
+		}
+
+		/* Modals */
+		.modal-content {
+			background: var(--bg-card) !important;
+			border: 1px solid var(--border-color) !important;
+			border-radius: 16px !important;
+		}
+
+		.modal-header {
+			border-bottom: 1px solid var(--border-color) !important;
+		}
+
+		.modal-title {
+			color: var(--text-primary) !important;
+		}
+
+		.modal-body {
+			color: var(--text-primary) !important;
+		}
+
+		.modal-footer {
+			border-top: 1px solid var(--border-color) !important;
+		}
+
+		.close {
+			color: var(--text-muted) !important;
+		}
+
+		/* Alerts */
+		.alert {
+			border-radius: 12px !important;
+			border: none !important;
+			padding: 16px 20px !important;
+		}
+
+		.alert-success {
+			background: rgba(16, 185, 129, 0.15) !important;
+			color: var(--success) !important;
+			border: 1px solid rgba(16, 185, 129, 0.3) !important;
+		}
+
+		.alert-danger {
+			background: rgba(239, 68, 68, 0.15) !important;
+			color: var(--danger) !important;
+			border: 1px solid rgba(239, 68, 68, 0.3) !important;
+		}
+
+		.alert-warning {
+			background: rgba(245, 158, 11, 0.15) !important;
+			color: var(--warning) !important;
+			border: 1px solid rgba(245, 158, 11, 0.3) !important;
+		}
+
+		.alert-info {
+			background: rgba(14, 165, 233, 0.15) !important;
+			color: var(--info) !important;
+			border: 1px solid rgba(14, 165, 233, 0.3) !important;
+		}
+
+		/* Badges */
+		.badge {
+			padding: 5px 10px !important;
+			border-radius: 6px !important;
+			font-weight: 600 !important;
+		}
+
+		.badge-primary, .badge.bg-primary {
+			background: var(--primary) !important;
+		}
+
+		.badge-success, .badge.bg-success {
+			background: var(--success) !important;
+		}
+
+		.badge-danger, .badge.bg-danger {
+			background: var(--danger) !important;
+		}
+
+		.badge-warning, .badge.bg-warning {
+			background: var(--warning) !important;
+			color: #000 !important;
+		}
+
+		/* Pagination */
+		.pagination .page-link {
+			background: var(--bg-card) !important;
+			border-color: var(--border-color) !important;
+			color: var(--text-secondary) !important;
+			border-radius: 8px !important;
+			margin: 0 2px !important;
+		}
+
+		.pagination .page-link:hover {
+			background: var(--hover-bg) !important;
+			color: var(--primary) !important;
+			border-color: var(--primary) !important;
+		}
+
+		.pagination .page-item.active .page-link {
+			background: var(--primary) !important;
+			border-color: var(--primary) !important;
+			color: white !important;
+		}
+
+		/* Text utilities override */
+		[data-theme="dark"] .text-dark {
+			color: var(--text-primary) !important;
+		}
+
+		[data-theme="dark"] .text-muted {
+			color: var(--text-muted) !important;
+		}
+
+		[data-theme="dark"] .bg-light {
+			background: var(--bg-secondary) !important;
+		}
+
+		[data-theme="dark"] .bg-white {
+			background: var(--bg-card) !important;
+		}
+
+		/* Sidebar override */
+		.sidebar {
+			background: var(--bg-secondary) !important;
+			border-right: 1px solid var(--border-color) !important;
+		}
+
+		.sidebar .nav > .nav-item a {
+			color: var(--text-secondary) !important;
+		}
+
+		.sidebar .nav > .nav-item a:hover,
+		.sidebar .nav > .nav-item a:focus,
+		.sidebar .nav > .nav-item.active > a {
+			color: var(--primary) !important;
+			background: var(--hover-bg) !important;
+		}
+
+		/* Footer */
+		.footer {
+			background: var(--bg-card) !important;
+			border-top: 1px solid var(--border-color) !important;
+			color: var(--text-secondary) !important;
+		}
+
+		.footer p, .footer a {
+			color: var(--text-secondary) !important;
+		}
+
+		/* Scrollbar for dark theme */
+		[data-theme="dark"] ::-webkit-scrollbar {
+			width: 8px;
+			height: 8px;
+		}
+
+		[data-theme="dark"] ::-webkit-scrollbar-track {
+			background: var(--bg-secondary);
+		}
+
+		[data-theme="dark"] ::-webkit-scrollbar-thumb {
+			background: var(--border-color);
+			border-radius: 4px;
+		}
+
+		[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+			background: var(--primary);
+		}
+
+		/* Stamp icons (for stat cards) */
+		.stamp {
+			border-radius: 12px !important;
+		}
+
+		/* Progress bars */
+		.progress {
+			background: var(--bg-secondary) !important;
+			border-radius: 10px !important;
+		}
+
+		.progress-bar {
+			background: var(--primary) !important;
+		}
+
+		/* Nav tabs */
+		.nav-tabs {
+			border-color: var(--border-color) !important;
+		}
+
+		.nav-tabs .nav-link {
+			color: var(--text-secondary) !important;
+			border-radius: 10px 10px 0 0 !important;
+		}
+
+		.nav-tabs .nav-link:hover {
+			border-color: var(--border-color) !important;
+			color: var(--primary) !important;
+		}
+
+		.nav-tabs .nav-link.active {
+			background: var(--bg-card) !important;
+			border-color: var(--border-color) var(--border-color) var(--bg-card) !important;
+			color: var(--primary) !important;
+		}
+
+		/* List groups */
+		.list-group-item {
+			background: var(--bg-card) !important;
+			border-color: var(--border-color) !important;
+			color: var(--text-primary) !important;
+		}
+
+		.list-group-item:hover {
+			background: var(--hover-bg) !important;
+		}
+	</style>
+
 	@section('styles')
-			<!-- Fonts and icons -->
+		<!-- Fonts and icons -->
 		<script src="{{asset('dash/js/plugin/webfont/webfont.min.js')}}"></script>
-	<!-- Sweet Alert -->
+		<!-- Sweet Alert -->
 		<script src="{{ asset('dash/js/plugin/sweetalert/sweetalert.min.js')}} "></script>
 		<!-- CSS Files -->
 		<link rel="stylesheet" href="{{asset('dash/css/bootstrap.min.css')}}">
@@ -31,7 +549,6 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 		<link rel="stylesheet" href="{{asset('dash/css/atlantis.min.css')}}">
 		<link rel="stylesheet" href="{{asset('dash/css/customs.css')}}">
 		<link rel="stylesheet" href="{{asset('dash/css/style.css')}}">
-		<link rel="stylesheet" href="{{asset('dash/css/atlantis.min.css')}}">
 		<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
 		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.21/af-2.3.5/b-1.6.3/b-flash-1.6.3/b-html5-1.6.3/b-print-1.6.3/r-2.2.5/datatables.min.css"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -44,48 +561,34 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 		<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.1/dist/alpine.min.js" defer></script>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
 		@livewireStyles
-
-		 <!--PayPal-->
-		 {{-- <script>
-            // Add your client ID and secret
-            var PAYPAL_CLIENT = '{{$settings->pp_ci}}';
-            var PAYPAL_SECRET = '{{$settings->pp_cs}}';
-
-            // Point your server to the PayPal API
-            var PAYPAL_ORDER_API = 'https://api.paypal.com/v2/checkout/orders/';
-        </script>
-        <script src="https://www.paypal.com/sdk/js?client-id={{$settings->pp_ci}}"></script> --}}
 	@show
 
 </head>
-<body  style="background:url(https://metacryptofx.com/images/auth.jpg) !important">
-{{--    <div id="google_translate_element"></div>--}}
+<body data-theme="{{ $theme }}">
     <div id="app">
-
-        <!--/PayPal-->
 
         <!--Start of Tawk.to Script-->
         {{-- <script type="text/javascript">
         {{!! $settings->tawk_to !!}}
         </script> --}}
         <!--End of Tawk.to Script-->
+
 		<div class="wrapper">
 			@yield('content')
-				<footer class="footer bg-{{$bg}} text-{{$text}}">
-					<div class="container-fluid">
-						<div class="text-center row copyright text-align-center">
-							<p>All Rights Reserved &copy; {{$settings->site_name}} <?php echo date("Y")?></p>
-						</div>
+
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="text-center row copyright text-align-center">
+						<p>All Rights Reserved &copy; {{$settings->site_name}} <?php echo date("Y")?></p>
 					</div>
-				</footer>
-			</div>
+				</div>
+			</footer>
 		</div>
 	</div>
 
 	@section('scripts')
-			<!--   Core JS Files   -->
+		<!--   Core JS Files   -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		{{-- <script src="{{ asset('dash/js/core/jquery.3.2.1.min.js')}} "></script> --}}
 		<script src="{{ asset('dash/js/core/popper.min.js')}}"></script>
 		<script src="{{ asset('dash/js/core/bootstrap.min.js')}} "></script>
 		<script src="{{ asset('dash/js/customs.js')}}"></script>
@@ -110,62 +613,45 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 		<script src="{{asset('dash/js/atlantis.min.js')}}"></script>
 		<script src="{{asset('dash/js/atlantis.js')}}"></script>
 
-		{{-- <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> --}}
-		{{-- <script type="text/javascript">
-			function googleTranslateElementInit() {
-			new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-			}
-		</script> --}}
-
 		<script type="text/javascript">
 			var badWords = [
 				'<!--Start of Tawk.to Script-->',
 				'<script type="text/javascript">',
 				'<!--End of Tawk.to Script-->'
-						];
+			];
 			$(':input').on('blur', function(){
 				var value = $(this).val();
 				$.each(badWords, function(idx, word){
 					value = value.replace(word, '');
 				});
-				$(this).val( value);
+				$(this).val(value);
 			});
 		</script>
+
 		<script>
-			$(document).ready( function () {
+			$(document).ready(function() {
 				$('#ShipTable').DataTable({
-					order: [ [0, 'desc'] ],
+					order: [[0, 'desc']],
 					dom: 'Bfrtip',
-					buttons: [
-					'copy', 'csv', 'print', 'excel','pdf'
-				]
+					buttons: ['copy', 'csv', 'print', 'excel', 'pdf']
 				});
-
-
-				$(".dataTables_length select").addClass("bg-{{$bg}} text-{{$text}}");
-				$(".dataTables_filter input").addClass("bg-{{$bg}} text-{{$text}}");
-			} );
+			});
 		</script>
+
 		<script>
-			$(document).ready( function () {
+			$(document).ready(function() {
 				$('.UserTable').DataTable({
-					order: [ [0, 'desc'] ]
+					order: [[0, 'desc']]
 				});
-				$(".dataTables_length select").addClass("bg-{{$bg}} text-{{$text}}");
-				$(".dataTables_filter input").addClass("bg-{{$bg}} text-{{$text}}");
-			} );
+			});
 		</script>
 
 		<style>
-
-
-
-	.dataTables_length select {
-    padding-left: 8px !important;
-    padding-right: 24px !important;
-}
-
-	</style>
+			.dataTables_length select {
+				padding-left: 8px !important;
+				padding-right: 24px !important;
+			}
+		</style>
 
 		@stack('modals')
 		@stack('scripts')
@@ -174,4 +660,3 @@ if (Auth::check() && Auth::user()->dashboard_style == "light") {
 
 </body>
 </html>
-

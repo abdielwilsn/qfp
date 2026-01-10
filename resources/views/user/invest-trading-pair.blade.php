@@ -67,7 +67,7 @@ if (Auth::user()->dashboard_style == "light") {
                                     Investment Amount
                                 </label>
                                 <div class="amount-input-wrapper">
-                                    <span class="currency-symbol">{{ $settings->currency }}</span>
+                                    <span class="currency-symbol ">{{ $settings->currency }}</span>
                                     <input
                                         type="number"
                                         name="amount"
@@ -452,7 +452,7 @@ if (Auth::user()->dashboard_style == "light") {
 
         .currency-symbol {
             position: absolute;
-            left: 18px;
+            left: 2px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 1.35rem;

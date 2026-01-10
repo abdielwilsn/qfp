@@ -506,6 +506,10 @@
                                 <label class="form-label">Username</label>
                                 <input type="text" name="username" class="form-control" placeholder="Choose a username">
                             </div>
+                              <div class="mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" name="phone" class="form-control" placeholder="+1 (901) 234 5893">
+                            </div>
                             <div class="row">
                                 <div class="col-6 mb-3">
                                     <label class="form-label">Password</label>

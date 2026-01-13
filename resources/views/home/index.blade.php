@@ -441,7 +441,7 @@
                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
-                    <span>SOC 2 Compliant</span>
+                    {{-- <span>SOC 2 Compliant</span> --}}
                 </div>
                 <div class="badge-item">
                     <div class="badge-icon">
@@ -472,8 +472,8 @@
                         <form action="{{ route('login') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label">Email or Username</label>
-                                <input type="text" name="login" class="form-control" placeholder="Enter your email or username" required>
+                                <label class="form-label">Email Address</label>
+                                <input type="email" name="email" class="form-control" placeholder="Enter your email address" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Password</label>

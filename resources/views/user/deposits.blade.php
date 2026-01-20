@@ -371,7 +371,7 @@ if (Auth::user()->dashboard_style == "light") {
 
         .currency-symbol {
             position: absolute;
-            left: 20px;
+            left: 2px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 1.5rem;

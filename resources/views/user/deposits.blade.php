@@ -380,7 +380,6 @@ if (Auth::user()->dashboard_style == "light") {
         }
 
         .amount-input {
-            margin-left: 20px;
             width: 100%;
             background: var(--input-bg);
             border: 2px solid var(--border-color);
@@ -692,7 +691,7 @@ if (Auth::user()->dashboard_style == "light") {
 
             .currency-symbol {
                 font-size: 1.25rem;
-                left: 16px;
+                left: 1px;
             }
 
             .payment-methods-grid {

@@ -371,7 +371,7 @@ if (Auth::user()->dashboard_style == "light") {
 
         .currency-symbol {
             position: absolute;
-            left: 2px;
+            left: 1px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 1.5rem;
@@ -380,6 +380,7 @@ if (Auth::user()->dashboard_style == "light") {
         }
 
         .amount-input {
+            margin-left: 20px;
             width: 100%;
             background: var(--input-bg);
             border: 2px solid var(--border-color);

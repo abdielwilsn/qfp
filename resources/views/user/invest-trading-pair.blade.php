@@ -257,13 +257,13 @@ if (Auth::user()->dashboard_style == "light") {
                         </div>
 
                         <!-- Risk Notice -->
-                        <div class="info-card risk">
+                        {{-- <div class="info-card risk">
                             <h4>
                                 <i class="fa fa-shield-alt"></i>
                                 Risk Notice
                             </h4>
                             <p>Cryptocurrency trading involves risk. Past performance does not guarantee future results. Only invest what you can afford to lose.</p>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 

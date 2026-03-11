@@ -80,11 +80,11 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="investment_duration" class="form-label text-{{ $text }}"> Min Investment Duration (Days) *</label>
+                                        <label for="investment_duration" class="form-label text-{{ $text }}"> Min Trade Duration (Days) *</label>
                                         <input type="number" class="form-control" id="investment_duration" name="investment_duration" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="max_investment_duration" class="form-label text-{{ $text }}">Max Investment Duration (Days) *</label>
+                                        <label for="max_investment_duration" class="form-label text-{{ $text }}">Max Trade Duration (Days) *</label>
                                         <input type="number" class="form-control" id="max_investment_duration" name="max_investment_duration" required>
                                     </div>
                                 </div>

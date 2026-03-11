@@ -276,8 +276,8 @@ if (Auth('admin')->User()->dashboard_style == "light") {
                             { label: 'Maximum Investment *', name: 'max_investment', type: 'number', value: pair.max_investment || 0, step: '0.01', required: true },
                             { label: 'Minimum Return (%) *', name: 'min_return_percentage', type: 'number', value: pair.min_return_percentage || 0, step: '0.1', required: true },
                             { label: 'Maximum Return (%) *', name: 'max_return_percentage', type: 'number', value: pair.max_return_percentage || 0, step: '0.1', required: true },
-                            { label: 'Investment Duration (Days) *', name: 'investment_duration', type: 'number', value: pair.investment_duration || 0, required: true },
-                            { label: 'MAx Investment Duration (Days) *', name: 'max_investment_duration', type: 'number', value: pair.max_investment_duration || 0, required: true },
+                            { label: 'Trade Duration (Days) *', name: 'investment_duration', type: 'number', value: pair.investment_duration || 0, required: true },
+                            { label: 'Max Trade Duration (Days) *', name: 'max_investment_duration', type: 'number', value: pair.max_investment_duration || 0, required: true },
 
                             { label: 'Status', name: 'is_active', type: 'select', options: [
                                 { value: '1', text: 'Active', selected: pair.is_active },

@@ -64,7 +64,7 @@ if (Auth::user()->dashboard_style == "light") {
                             <div class="form-section">
                                 <label class="section-label">
                                     <i class="fa fa-coins"></i>
-                                    Investment Amount
+                                    Trade Amount
                                 </label>
                                 <div class="amount-input-wrapper">
                                     <span class="currency-symbol ">{{ $settings->currency }}</span>
@@ -101,7 +101,7 @@ if (Auth::user()->dashboard_style == "light") {
                             <div class="form-section">
                                 <label class="section-label">
                                     <i class="fa fa-clock"></i>
-                                    Investment Duration
+                                    Trade Duration
                                 </label>
                                 <div class="duration-options">
                                     @for ($i = $tradingPair->investment_duration; $i <= $tradingPair->max_investment_duration; $i++)
@@ -131,7 +131,7 @@ if (Auth::user()->dashboard_style == "light") {
                                 </div>
                                 <div class="preview-content">
                                     <div class="preview-row">
-                                        <span class="preview-label">Investment Amount</span>
+                                        <span class="preview-label">Trade Amount</span>
                                         <span class="preview-value" id="previewAmount">{{ $settings->currency }}{{ number_format($tradingPair->min_investment, 2) }}</span>
                                     </div>
                                     <div class="preview-row">
@@ -146,7 +146,7 @@ if (Auth::user()->dashboard_style == "light") {
                                     <div class="preview-row highlight">
                                         <span class="preview-label">Potential Profit</span>
                                         <span class="preview-value profit" id="previewProfit">
-                                            {{ $settings->currency }}{{ number_format($tradingPair->min_investment * $tradingPair->min_return_percentage / 100, 2) }} — {{ $settings->currency }}{{ number_format($tradingPair->min_investment * $tradingPair->max_return_percentage / 100, 2) }}
+                                            {{ $settings->currency }}{{ number_format($tradingPair->min_investment * $tradingPair->min_return_percentage / 100 * $tradingPair->investment_duration, 2) }} — {{ $settings->currency }}{{ number_format($tradingPair->min_investment * $tradingPair->max_return_percentage / 100 * $tradingPair->investment_duration, 2) }}
                                         </span>
                                     </div>
                                 </div>
@@ -186,15 +186,15 @@ if (Auth::user()->dashboard_style == "light") {
                         <div class="info-card params">
                             <h4>
                                 <i class="fa fa-sliders-h"></i>
-                                Investment Parameters
+                                Trade Parameters
                             </h4>
                             <div class="param-list">
                                 <div class="param-item">
-                                    <span class="param-label">Min Investment</span>
+                                    <span class="param-label">Min Amount</span>
                                     <span class="param-value">{{ $settings->currency }}{{ number_format($tradingPair->min_investment, 2) }}</span>
                                 </div>
                                 <div class="param-item">
-                                    <span class="param-label">Max Investment</span>
+                                    <span class="param-label">Max Amount</span>
                                     <span class="param-value">{{ $settings->currency }}{{ number_format($tradingPair->max_investment, 2) }}</span>
                                 </div>
                                 <div class="param-item">
@@ -221,7 +221,7 @@ if (Auth::user()->dashboard_style == "light") {
                             @if(Auth::user()->account_bal < $tradingPair->min_investment)
                                 <div class="balance-warning">
                                     <i class="fa fa-exclamation-triangle"></i>
-                                    <span>Insufficient balance for minimum investment</span>
+                                    <span>Insufficient balance for minimum trade</span>
                                 </div>
                                 <a href="{{ route('deposits') }}" class="deposit-btn">
                                     <i class="fa fa-plus"></i>
@@ -239,11 +239,11 @@ if (Auth::user()->dashboard_style == "light") {
                             <div class="steps-list">
                                 <div class="step-item">
                                     <span class="step-number">1</span>
-                                    <span class="step-text">Enter your investment amount</span>
+                                    <span class="step-text">Enter your trade amount</span>
                                 </div>
                                 <div class="step-item">
                                     <span class="step-number">2</span>
-                                    <span class="step-text">Select investment duration</span>
+                                    <span class="step-text">Select trade duration</span>
                                 </div>
                                 <div class="step-item">
                                     <span class="step-number">3</span>
@@ -944,8 +944,8 @@ if (Auth::user()->dashboard_style == "light") {
             previewAmount.textContent = `${currency}${amount.toFixed(2)}`;
             previewDuration.textContent = `${duration} day${duration > 1 ? 's' : ''}`;
 
-            const minProfit = (amount * minReturn / 100).toFixed(2);
-            const maxProfit = (amount * maxReturn / 100).toFixed(2);
+            const minProfit = (amount * minReturn / 100 * duration).toFixed(2);
+            const maxProfit = (amount * maxReturn / 100 * duration).toFixed(2);
             previewProfit.textContent = `${currency}${minProfit} — ${currency}${maxProfit}`;
         }
 

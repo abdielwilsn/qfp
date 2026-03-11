@@ -171,7 +171,7 @@ if (Auth::user()->dashboard_style == "light") {
                             <div class="form-actions">
                                 <button type="submit" class="submit-btn">
                                     <i class="fa fa-check-circle"></i>
-                                    Confirm Investment
+                                    Confirm Trade
                                 </button>
                                 <a href="{{ route('trading.pairs') }}" class="cancel-btn">
                                     Cancel

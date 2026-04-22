@@ -418,11 +418,12 @@ if (Auth::user()->dashboard_style == "light") {
         .amount-input-wrapper {
             position: relative;
             margin-bottom: 14px;
+            right: 5px;
         }
 
         .currency-symbol {
             position: absolute;
-            left: 18px;
+            left: 5px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 1.35rem;
